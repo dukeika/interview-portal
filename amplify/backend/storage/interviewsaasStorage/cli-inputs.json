@@ -1,0 +1,14 @@
+{
+  "resourceName": "interviewsaasStorage",
+  "policyUUID": "2fe3b22e",
+  "bucketName": "interview-saas-storage-bucket",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

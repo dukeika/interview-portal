@@ -1,0 +1,14 @@
+[
+  {
+    "groupName": "superAdmins",
+    "precedence": 1
+  },
+  {
+    "groupName": "companyAdmins",
+    "precedence": 2
+  },
+  {
+    "groupName": "candidates",
+    "precedence": 3
+  }
+]

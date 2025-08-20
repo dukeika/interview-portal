@@ -1,0 +1,160 @@
+# Interview Management Platform GraphQL Schema
+
+type Company @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  name: String!
+  email: String!
+  phone: String
+  address: String
+  website: String
+  logo: String
+  description: String
+  isActive: Boolean!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+
+  # Relationships
+  admins: [CompanyAdmin] @hasMany(indexName: "byCompany", fields: ["id"])
+  jobs: [Job] @hasMany(indexName: "byCompany", fields: ["id"])
+}
+
+type CompanyAdmin @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  cognitoId: String! @index(name: "byCognitoId")
+  email: String!
+  firstName: String!
+  lastName: String!
+  phone: String
+  isActive: Boolean!
+  companyId: ID! @index(name: "byCompany")
+
+  # Relationships
+  company: Company @belongsTo(fields: ["companyId"])
+}
+
+type SuperAdmin @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  cognitoId: String! @index(name: "byCognitoId")
+  email: String!
+  firstName: String!
+  lastName: String!
+  phone: String
+}
+
+type Job @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  title: String!
+  description: String!
+  requirements: String
+  location: String
+  jobType: String
+  salaryRange: String
+  isActive: Boolean!
+  companyId: ID! @index(name: "byCompany")
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+
+  # Relationships
+  company: Company @belongsTo(fields: ["companyId"])
+  applications: [Application] @hasMany(indexName: "byJob", fields: ["id"])
+  questions: [Question] @hasMany(indexName: "byJob", fields: ["id"])
+}
+
+type Application @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  candidateId: ID! @index(name: "byCandidate")
+  jobId: ID! @index(name: "byJob")
+  status: ApplicationStatus!
+  currentStage: Int!
+  appliedAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+
+  # Application details
+  coverLetter: String
+  resumeUrl: String
+
+  # Stage results
+  writtenTestScore: Float
+  writtenTestSubmittedAt: AWSDateTime
+  videoTestUrl: String
+  videoTestSubmittedAt: AWSDateTime
+  interviewLink: String
+  interviewScheduledAt: AWSDateTime
+  finalDecision: String
+
+  # Relationships
+  candidate: Candidate @belongsTo(fields: ["candidateId"])
+  job: Job @belongsTo(fields: ["jobId"])
+  testResponses: [TestResponse]
+    @hasMany(indexName: "byApplication", fields: ["id"])
+}
+
+type Candidate @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  cognitoId: String! @index(name: "byCognitoId")
+  email: String!
+  firstName: String!
+  lastName: String!
+  phone: String
+  address: String
+  linkedin: String
+  portfolio: String
+  bio: String
+  skills: [String]
+  experience: String
+  education: String
+  createdAt: AWSDateTime!
+
+  # Relationships
+  applications: [Application] @hasMany(indexName: "byCandidate", fields: ["id"])
+}
+
+type Question @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  jobId: ID! @index(name: "byJob")
+  stage: Int! # 2 = written, 3 = video
+  questionText: String!
+  questionType: QuestionType!
+  options: [String] # For multiple choice questions
+  correctAnswer: String # For written test
+  timeLimit: Int # In seconds, for video questions
+  order: Int!
+  isActive: Boolean!
+
+  # Relationships
+  job: Job @belongsTo(fields: ["jobId"])
+  responses: [TestResponse] @hasMany(indexName: "byQuestion", fields: ["id"])
+}
+
+type TestResponse @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  applicationId: ID! @index(name: "byApplication")
+  questionId: ID! @index(name: "byQuestion")
+  response: String
+  videoUrl: String # For video responses
+  isCorrect: Boolean # For written test
+  submittedAt: AWSDateTime!
+
+  # Relationships
+  application: Application @belongsTo(fields: ["applicationId"])
+  question: Question @belongsTo(fields: ["questionId"])
+}
+
+enum ApplicationStatus {
+  APPLIED
+  WRITTEN_TEST_PENDING
+  WRITTEN_TEST_COMPLETED
+  VIDEO_TEST_PENDING
+  VIDEO_TEST_COMPLETED
+  INTERVIEW_SCHEDULED
+  INTERVIEW_COMPLETED
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  TEXT
+  VIDEO
+}

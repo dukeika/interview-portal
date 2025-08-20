@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-interviewsaas-dev-69431-authRole",
+      "UnauthRoleArn": "arn:aws:iam::032397978068:role/amplify-interviewsaas-dev-69431-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::032397978068:role/amplify-interviewsaas-dev-69431-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-interviewsaas-dev-69431-deployment",
+      "UnauthRoleName": "amplify-interviewsaas-dev-69431-unauthRole",
+      "StackName": "amplify-interviewsaas-dev-69431",
+      "StackId": "arn:aws:cloudformation:us-east-1:032397978068:stack/amplify-interviewsaas-dev-69431/4079a9e0-7d56-11f0-ad38-12c045b694a5",
+      "AmplifyAppId": "d1hkdpm0v972cl"
+    },
+    "categories": {
+      "auth": {
+        "interviewsaasa01f72f6": {}
+      },
+      "api": {
+        "interviewsaas": {}
+      },
+      "storage": {
+        "interviewsaasStorage": {}
+      }
+    }
+  }
+}

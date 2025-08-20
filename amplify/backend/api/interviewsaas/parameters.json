@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "interviewsaas",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authinterviewsaasa01f72f6",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
