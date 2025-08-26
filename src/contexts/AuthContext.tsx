@@ -45,28 +45,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        // Check if we have a demo user in localStorage first
+        // Skip demo mode - we want to use real authentication now
         if (typeof window !== 'undefined') {
-          const demoUser = localStorage.getItem('demo_user');
-          if (demoUser) {
-            console.log("🎭 Found demo user in localStorage, restoring session");
-            const mockUser = JSON.parse(demoUser);
-            setUser(mockUser);
-            
-            // Set role based on demo email pattern
-            let role: "super_admin" | "company_admin" | "candidate" = "candidate";
-            if (mockUser.username === 'admin@abhh.demo') {
-              role = "super_admin";
-            } else if (mockUser.username === 'company@techcorp.demo') {
-              role = "company_admin";
-            } else if (mockUser.username === 'candidate@demo.com') {
-              role = "candidate";
-            }
-            
-            setUserRoleState(role);
-            setLoading(false);
-            return;
-          }
+          localStorage.removeItem('demo_user');
         }
 
         // Try to initialize real Amplify
@@ -108,10 +89,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         attributes = await amplifyAuth.fetchUserAttributes();
         console.log("📋 User attributes:", attributes);
         
-        // Check for custom role attribute
+        // Check for custom role attribute first
         const roleAttribute = attributes["custom:role"];
         if (roleAttribute) {
           role = roleAttribute as "super_admin" | "company_admin" | "candidate";
+        }
+
+        // If no custom role, check Cognito groups
+        if (!role) {
+          try {
+            const amplifyAuth = await import('aws-amplify/auth');
+            const cognitoUser = await amplifyAuth.getCurrentUser();
+            const session = await amplifyAuth.fetchAuthSession();
+            
+            // Check groups from the JWT token
+            const groups = (session as any)?.tokens?.accessToken?.payload?.["cognito:groups"] || [];
+            console.log("🔍 User groups from JWT:", groups);
+            
+            if (groups.includes("super_admin")) {
+              role = "super_admin";
+            } else if (groups.includes("company_admin")) {
+              role = "company_admin";
+            } else if (groups.includes("candidate")) {
+              role = "candidate";
+            }
+          } catch (groupError) {
+            console.warn("⚠️ Could not fetch user groups:", groupError);
+          }
         }
       } catch (attrError) {
         console.log("⚠️ Could not fetch user attributes:", attrError);
@@ -314,6 +318,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     password: string,
     attributes = {}
   ) => {
+    console.log("🔐 Attempting user registration for:", email);
     if (amplifyReady) {
       try {
         const amplifyAuth = await import("aws-amplify/auth");

@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import CreateAdminModal from "./CreateAdminModal";
 import {
   Plus,
   Search,
@@ -22,17 +23,20 @@ import { CompanyAdmin } from "./types";
 interface AdminUsersTabProps {
   companyAdmins: CompanyAdmin[];
   companies: any[];
+  onRefresh?: () => void;
 }
 
 export default function AdminUsersTab({
   companyAdmins,
   companies,
+  onRefresh,
 }: AdminUsersTabProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "inactive"
   >("all");
   const [companyFilter, setCompanyFilter] = useState<string>("all");
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   const filteredAdmins = companyAdmins.filter((admin) => {
     const matchesSearch =
@@ -97,6 +101,20 @@ export default function AdminUsersTab({
     );
   };
 
+  const handleCreateAdmin = async (adminData: any) => {
+    try {
+      console.log("Creating admin:", adminData);
+      // TODO: Implement actual admin creation with GraphQL
+      // For now, just refresh the list
+      if (onRefresh) {
+        onRefresh();
+      }
+    } catch (error) {
+      console.error("Error creating admin:", error);
+      throw error;
+    }
+  };
+
   const handleToggleStatus = (adminId: string, currentStatus: boolean) => {
     // TODO: Implement status toggle
     console.log(
@@ -114,7 +132,7 @@ export default function AdminUsersTab({
             Manage company administrators and their permissions
           </p>
         </div>
-        <Button>
+        <Button onClick={() => setShowCreateModal(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Create Admin
         </Button>
@@ -291,7 +309,7 @@ export default function AdminUsersTab({
               statusFilter === "all" &&
               companyFilter === "all" && (
                 <div className="mt-6">
-                  <Button>
+                  <Button onClick={() => setShowCreateModal(true)}>
                     <Plus className="mr-2 h-4 w-4" />
                     Create Admin
                   </Button>
@@ -371,6 +389,14 @@ export default function AdminUsersTab({
           </div>
         </div>
       </div>
+
+      {/* Create Admin Modal */}
+      <CreateAdminModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSubmit={handleCreateAdmin}
+        companies={companies}
+      />
     </div>
   );
 }

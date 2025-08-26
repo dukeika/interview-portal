@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import AddCompanyModal from "./AddCompanyModal";
 import {
   Plus,
   Search,
@@ -21,15 +22,18 @@ import { Company } from "./types";
 
 interface AdminCompaniesTabProps {
   companies: Company[];
+  onRefresh?: () => void;
 }
 
 export default function AdminCompaniesTab({
   companies,
+  onRefresh,
 }: AdminCompaniesTabProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "inactive"
   >("all");
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const filteredCompanies = companies.filter((company) => {
     const matchesSearch =
@@ -41,6 +45,20 @@ export default function AdminCompaniesTab({
       (statusFilter === "inactive" && !company.isActive);
     return matchesSearch && matchesStatus;
   });
+
+  const handleAddCompany = async (companyData: any) => {
+    try {
+      console.log("Creating company:", companyData);
+      // TODO: Implement actual company creation with GraphQL
+      // For now, just refresh the list
+      if (onRefresh) {
+        onRefresh();
+      }
+    } catch (error) {
+      console.error("Error creating company:", error);
+      throw error;
+    }
+  };
 
   const getStatusBadge = (isActive: boolean) => {
     if (isActive) {
@@ -79,7 +97,7 @@ export default function AdminCompaniesTab({
             Manage registered companies and their settings
           </p>
         </div>
-        <Button>
+        <Button onClick={() => setShowAddModal(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Add Company
         </Button>
@@ -297,6 +315,13 @@ export default function AdminCompaniesTab({
           </div>
         </div>
       </div>
+
+      {/* Add Company Modal */}
+      <AddCompanyModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSubmit={handleAddCompany}
+      />
     </div>
   );
 }

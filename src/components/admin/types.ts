@@ -79,5 +79,7 @@ export type AdminTabType =
   | "companies"
   | "users"
   | "pending"
-  | "settings"
-  | "analytics";
+  | "reports"
+  | "analytics"
+  | "notifications"
+  | "settings";

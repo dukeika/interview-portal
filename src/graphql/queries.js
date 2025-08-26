@@ -30,6 +30,13 @@ export const getUser = /* GraphQL */ `
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       applications {
         nextToken
@@ -71,6 +78,13 @@ export const listUsers = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -107,6 +121,13 @@ export const usersBySub = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -143,6 +164,13 @@ export const usersByEmail = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -179,6 +207,56 @@ export const usersByCompanyId = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
+        resume
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const usersByApprovalStatus = /* GraphQL */ `
+  query UsersByApprovalStatus(
+    $approvalStatus: ApprovalStatus!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    usersByApprovalStatus(
+      approvalStatus: $approvalStatus
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        sub
+        email
+        firstName
+        lastName
+        phone
+        role
+        companyId
+        isActive
+        lastLoginAt
+        createdAt
+        updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -407,6 +485,13 @@ export const getApplication = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -696,6 +781,13 @@ export const getTestAttempt = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -1000,6 +1092,13 @@ export const getVideoTestAttempt = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -1192,6 +1291,13 @@ export const getInterview = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }

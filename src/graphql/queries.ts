@@ -36,6 +36,13 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     lastLoginAt
     createdAt
     updatedAt
+    approvalStatus
+    approvedAt
+    approvedBy
+    approvalNotes
+    rejectedAt
+    rejectedBy
+    rejectionReason
     resume
     applications {
       nextToken
@@ -76,6 +83,13 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -111,6 +125,13 @@ export const usersBySub = /* GraphQL */ `query UsersBySub(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -149,6 +170,13 @@ export const usersByEmail = /* GraphQL */ `query UsersByEmail(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -187,6 +215,13 @@ export const usersByCompanyId = /* GraphQL */ `query UsersByCompanyId(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -197,6 +232,51 @@ export const usersByCompanyId = /* GraphQL */ `query UsersByCompanyId(
 ` as GeneratedQuery<
   APITypes.UsersByCompanyIdQueryVariables,
   APITypes.UsersByCompanyIdQuery
+>;
+export const usersByApprovalStatus = /* GraphQL */ `query UsersByApprovalStatus(
+  $approvalStatus: ApprovalStatus!
+  $sortDirection: ModelSortDirection
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  usersByApprovalStatus(
+    approvalStatus: $approvalStatus
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
+      resume
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.UsersByApprovalStatusQueryVariables,
+  APITypes.UsersByApprovalStatusQuery
 >;
 export const getCompany = /* GraphQL */ `query GetCompany($id: ID!) {
   getCompany(id: $id) {
@@ -419,6 +499,13 @@ export const getApplication = /* GraphQL */ `query GetApplication($id: ID!) {
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -716,6 +803,13 @@ export const getTestAttempt = /* GraphQL */ `query GetTestAttempt($id: ID!) {
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -1036,6 +1130,13 @@ export const getVideoTestAttempt = /* GraphQL */ `query GetVideoTestAttempt($id:
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -1234,6 +1335,13 @@ export const getInterview = /* GraphQL */ `query GetInterview($id: ID!) {
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }

@@ -10,6 +10,9 @@ import AdminOverviewTab from "@/components/admin/AdminOverviewTab";
 import AdminCompaniesTab from "@/components/admin/AdminCompaniesTab";
 import AdminUsersTab from "@/components/admin/AdminUsersTab";
 import PendingUsersTab from "@/components/admin/PendingUsersTab";
+import PlatformReportsTab from "@/components/admin/PlatformReportsTab";
+import AnalyticsTab from "@/components/admin/AnalyticsTab";
+import NotificationsSettingsTab from "@/components/admin/NotificationsSettingsTab";
 import { AdminTabType } from "@/components/admin/types";
 
 export default function SuperAdminDashboard() {
@@ -53,10 +56,14 @@ export default function SuperAdminDashboard() {
           />
         );
       case "companies":
-        return <AdminCompaniesTab companies={companies} />;
+        return <AdminCompaniesTab companies={companies} onRefresh={() => window.location.reload()} />;
       case "users":
         return (
-          <AdminUsersTab companyAdmins={companyAdmins} companies={companies} />
+          <AdminUsersTab 
+            companyAdmins={companyAdmins} 
+            companies={companies}
+            onRefresh={() => window.location.reload()}
+          />
         );
       case "pending":
         return (
@@ -81,20 +88,12 @@ export default function SuperAdminDashboard() {
             onRejectUser={rejectUser}
           />
         );
+      case "reports":
+        return <PlatformReportsTab />;
       case "analytics":
-        return (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-abhh-yellow-100 rounded-xl flex items-center justify-center mb-4 mx-auto">
-              <span className="text-2xl">📊</span>
-            </div>
-            <h3 className="text-lg font-medium text-abhh-teal-700">
-              Analytics Dashboard
-            </h3>
-            <p className="text-abhh-teal-500 mt-2">
-              Advanced analytics and reporting features coming soon...
-            </p>
-          </div>
-        );
+        return <AnalyticsTab />;
+      case "notifications":
+        return <NotificationsSettingsTab />;
       case "settings":
         return (
           <div className="text-center py-12">

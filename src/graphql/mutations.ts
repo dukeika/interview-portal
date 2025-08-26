@@ -39,6 +39,13 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     lastLoginAt
     createdAt
     updatedAt
+    approvalStatus
+    approvedAt
+    approvedBy
+    approvalNotes
+    rejectedAt
+    rejectedBy
+    rejectionReason
     resume
     applications {
       nextToken
@@ -94,6 +101,13 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     lastLoginAt
     createdAt
     updatedAt
+    approvalStatus
+    approvedAt
+    approvedBy
+    approvalNotes
+    rejectedAt
+    rejectedBy
+    rejectionReason
     resume
     applications {
       nextToken
@@ -149,6 +163,13 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     lastLoginAt
     createdAt
     updatedAt
+    approvalStatus
+    approvedAt
+    approvedBy
+    approvalNotes
+    rejectedAt
+    rejectedBy
+    rejectionReason
     resume
     applications {
       nextToken
@@ -445,6 +466,13 @@ export const createApplication = /* GraphQL */ `mutation CreateApplication(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -517,6 +545,13 @@ export const updateApplication = /* GraphQL */ `mutation UpdateApplication(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -589,6 +624,13 @@ export const deleteApplication = /* GraphQL */ `mutation DeleteApplication(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -815,6 +857,13 @@ export const createTestAttempt = /* GraphQL */ `mutation CreateTestAttempt(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -889,6 +938,13 @@ export const updateTestAttempt = /* GraphQL */ `mutation UpdateTestAttempt(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -963,6 +1019,13 @@ export const deleteTestAttempt = /* GraphQL */ `mutation DeleteTestAttempt(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -1167,6 +1230,13 @@ export const createVideoTestAttempt = /* GraphQL */ `mutation CreateVideoTestAtt
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -1238,6 +1308,13 @@ export const updateVideoTestAttempt = /* GraphQL */ `mutation UpdateVideoTestAtt
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -1309,6 +1386,13 @@ export const deleteVideoTestAttempt = /* GraphQL */ `mutation DeleteVideoTestAtt
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -1366,6 +1450,13 @@ export const createInterview = /* GraphQL */ `mutation CreateInterview(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -1426,6 +1517,13 @@ export const updateInterview = /* GraphQL */ `mutation UpdateInterview(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }
@@ -1486,6 +1584,13 @@ export const deleteInterview = /* GraphQL */ `mutation DeleteInterview(
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       __typename
     }

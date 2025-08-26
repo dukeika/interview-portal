@@ -33,6 +33,13 @@ export const onCreateUser = /* GraphQL */ `
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       applications {
         nextToken
@@ -86,6 +93,13 @@ export const onUpdateUser = /* GraphQL */ `
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       applications {
         nextToken
@@ -139,6 +153,13 @@ export const onDeleteUser = /* GraphQL */ `
       lastLoginAt
       createdAt
       updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
       resume
       applications {
         nextToken
@@ -403,6 +424,13 @@ export const onCreateApplication = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -473,6 +501,13 @@ export const onUpdateApplication = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -543,6 +578,13 @@ export const onDeleteApplication = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -752,6 +794,13 @@ export const onCreateTestAttempt = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -824,6 +873,13 @@ export const onUpdateTestAttempt = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -896,6 +952,13 @@ export const onDeleteTestAttempt = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -1089,6 +1152,13 @@ export const onCreateVideoTestAttempt = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -1158,6 +1228,13 @@ export const onUpdateVideoTestAttempt = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -1227,6 +1304,13 @@ export const onDeleteVideoTestAttempt = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -1282,6 +1366,13 @@ export const onCreateInterview = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -1340,6 +1431,13 @@ export const onUpdateInterview = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
@@ -1398,6 +1496,13 @@ export const onDeleteInterview = /* GraphQL */ `
         lastLoginAt
         createdAt
         updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
         resume
         __typename
       }
