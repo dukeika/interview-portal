@@ -8,6 +8,171 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createUser = /* GraphQL */ `mutation CreateUser(
+  $input: CreateUserInput!
+  $condition: ModelUserConditionInput
+) {
+  createUser(input: $input, condition: $condition) {
+    id
+    sub
+    email
+    firstName
+    lastName
+    phone
+    role
+    companyId
+    company {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    isActive
+    lastLoginAt
+    createdAt
+    updatedAt
+    resume
+    applications {
+      nextToken
+      __typename
+    }
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
+      nextToken
+      __typename
+    }
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateUserMutationVariables,
+  APITypes.CreateUserMutation
+>;
+export const updateUser = /* GraphQL */ `mutation UpdateUser(
+  $input: UpdateUserInput!
+  $condition: ModelUserConditionInput
+) {
+  updateUser(input: $input, condition: $condition) {
+    id
+    sub
+    email
+    firstName
+    lastName
+    phone
+    role
+    companyId
+    company {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    isActive
+    lastLoginAt
+    createdAt
+    updatedAt
+    resume
+    applications {
+      nextToken
+      __typename
+    }
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
+      nextToken
+      __typename
+    }
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateUserMutationVariables,
+  APITypes.UpdateUserMutation
+>;
+export const deleteUser = /* GraphQL */ `mutation DeleteUser(
+  $input: DeleteUserInput!
+  $condition: ModelUserConditionInput
+) {
+  deleteUser(input: $input, condition: $condition) {
+    id
+    sub
+    email
+    firstName
+    lastName
+    phone
+    role
+    companyId
+    company {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    isActive
+    lastLoginAt
+    createdAt
+    updatedAt
+    resume
+    applications {
+      nextToken
+      __typename
+    }
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
+      nextToken
+      __typename
+    }
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteUserMutationVariables,
+  APITypes.DeleteUserMutation
+>;
 export const createCompany = /* GraphQL */ `mutation CreateCompany(
   $input: CreateCompanyInput!
   $condition: ModelCompanyConditionInput
@@ -22,8 +187,6 @@ export const createCompany = /* GraphQL */ `mutation CreateCompany(
     logo
     description
     isActive
-    createdAt
-    updatedAt
     admins {
       nextToken
       __typename
@@ -32,6 +195,8 @@ export const createCompany = /* GraphQL */ `mutation CreateCompany(
       nextToken
       __typename
     }
+    createdAt
+    updatedAt
     __typename
   }
 }
@@ -53,8 +218,6 @@ export const updateCompany = /* GraphQL */ `mutation UpdateCompany(
     logo
     description
     isActive
-    createdAt
-    updatedAt
     admins {
       nextToken
       __typename
@@ -63,6 +226,8 @@ export const updateCompany = /* GraphQL */ `mutation UpdateCompany(
       nextToken
       __typename
     }
+    createdAt
+    updatedAt
     __typename
   }
 }
@@ -84,8 +249,6 @@ export const deleteCompany = /* GraphQL */ `mutation DeleteCompany(
     logo
     description
     isActive
-    createdAt
-    updatedAt
     admins {
       nextToken
       __typename
@@ -94,180 +257,14 @@ export const deleteCompany = /* GraphQL */ `mutation DeleteCompany(
       nextToken
       __typename
     }
+    createdAt
+    updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
   APITypes.DeleteCompanyMutationVariables,
   APITypes.DeleteCompanyMutation
->;
-export const createCompanyAdmin = /* GraphQL */ `mutation CreateCompanyAdmin(
-  $input: CreateCompanyAdminInput!
-  $condition: ModelCompanyAdminConditionInput
-) {
-  createCompanyAdmin(input: $input, condition: $condition) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    isActive
-    companyId
-    company {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      createdAt
-      updatedAt
-      __typename
-    }
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateCompanyAdminMutationVariables,
-  APITypes.CreateCompanyAdminMutation
->;
-export const updateCompanyAdmin = /* GraphQL */ `mutation UpdateCompanyAdmin(
-  $input: UpdateCompanyAdminInput!
-  $condition: ModelCompanyAdminConditionInput
-) {
-  updateCompanyAdmin(input: $input, condition: $condition) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    isActive
-    companyId
-    company {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      createdAt
-      updatedAt
-      __typename
-    }
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateCompanyAdminMutationVariables,
-  APITypes.UpdateCompanyAdminMutation
->;
-export const deleteCompanyAdmin = /* GraphQL */ `mutation DeleteCompanyAdmin(
-  $input: DeleteCompanyAdminInput!
-  $condition: ModelCompanyAdminConditionInput
-) {
-  deleteCompanyAdmin(input: $input, condition: $condition) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    isActive
-    companyId
-    company {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      createdAt
-      updatedAt
-      __typename
-    }
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteCompanyAdminMutationVariables,
-  APITypes.DeleteCompanyAdminMutation
->;
-export const createSuperAdmin = /* GraphQL */ `mutation CreateSuperAdmin(
-  $input: CreateSuperAdminInput!
-  $condition: ModelSuperAdminConditionInput
-) {
-  createSuperAdmin(input: $input, condition: $condition) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateSuperAdminMutationVariables,
-  APITypes.CreateSuperAdminMutation
->;
-export const updateSuperAdmin = /* GraphQL */ `mutation UpdateSuperAdmin(
-  $input: UpdateSuperAdminInput!
-  $condition: ModelSuperAdminConditionInput
-) {
-  updateSuperAdmin(input: $input, condition: $condition) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateSuperAdminMutationVariables,
-  APITypes.UpdateSuperAdminMutation
->;
-export const deleteSuperAdmin = /* GraphQL */ `mutation DeleteSuperAdmin(
-  $input: DeleteSuperAdminInput!
-  $condition: ModelSuperAdminConditionInput
-) {
-  deleteSuperAdmin(input: $input, condition: $condition) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteSuperAdminMutationVariables,
-  APITypes.DeleteSuperAdminMutation
 >;
 export const createJob = /* GraphQL */ `mutation CreateJob(
   $input: CreateJobInput!
@@ -276,15 +273,16 @@ export const createJob = /* GraphQL */ `mutation CreateJob(
   createJob(input: $input, condition: $condition) {
     id
     title
+    department
+    location
+    type
+    salary
     description
     requirements
-    location
-    jobType
-    salaryRange
-    isActive
+    responsibilities
+    benefits
+    status
     companyId
-    createdAt
-    updatedAt
     company {
       id
       name
@@ -303,10 +301,17 @@ export const createJob = /* GraphQL */ `mutation CreateJob(
       nextToken
       __typename
     }
-    questions {
+    tests {
       nextToken
       __typename
     }
+    videoTests {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    closingDate
     __typename
   }
 }
@@ -321,15 +326,16 @@ export const updateJob = /* GraphQL */ `mutation UpdateJob(
   updateJob(input: $input, condition: $condition) {
     id
     title
+    department
+    location
+    type
+    salary
     description
     requirements
-    location
-    jobType
-    salaryRange
-    isActive
+    responsibilities
+    benefits
+    status
     companyId
-    createdAt
-    updatedAt
     company {
       id
       name
@@ -348,10 +354,17 @@ export const updateJob = /* GraphQL */ `mutation UpdateJob(
       nextToken
       __typename
     }
-    questions {
+    tests {
       nextToken
       __typename
     }
+    videoTests {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    closingDate
     __typename
   }
 }
@@ -366,15 +379,16 @@ export const deleteJob = /* GraphQL */ `mutation DeleteJob(
   deleteJob(input: $input, condition: $condition) {
     id
     title
+    department
+    location
+    type
+    salary
     description
     requirements
-    location
-    jobType
-    salaryRange
-    isActive
+    responsibilities
+    benefits
+    status
     companyId
-    createdAt
-    updatedAt
     company {
       id
       name
@@ -393,10 +407,17 @@ export const deleteJob = /* GraphQL */ `mutation DeleteJob(
       nextToken
       __typename
     }
-    questions {
+    tests {
       nextToken
       __typename
     }
+    videoTests {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    closingDate
     __typename
   }
 }
@@ -411,57 +432,64 @@ export const createApplication = /* GraphQL */ `mutation CreateApplication(
   createApplication(input: $input, condition: $condition) {
     id
     candidateId
-    jobId
-    status
-    currentStage
-    appliedAt
-    updatedAt
-    coverLetter
-    resumeUrl
-    writtenTestScore
-    writtenTestSubmittedAt
-    videoTestUrl
-    videoTestSubmittedAt
-    interviewLink
-    interviewScheduledAt
-    finalDecision
     candidate {
       id
-      cognitoId
+      sub
       email
       firstName
       lastName
       phone
-      address
-      linkedin
-      portfolio
-      bio
-      skills
-      experience
-      education
+      role
+      companyId
+      isActive
+      lastLoginAt
       createdAt
       updatedAt
+      resume
       __typename
     }
+    jobId
     job {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
-    testResponses {
+    appliedAt
+    currentStage
+    overallStatus
+    applicationStatus
+    writtenTestStatus
+    videoTestStatus
+    interviewStatus
+    feedback
+    internalNotes
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
       nextToken
       __typename
     }
     createdAt
+    updatedAt
     __typename
   }
 }
@@ -476,57 +504,64 @@ export const updateApplication = /* GraphQL */ `mutation UpdateApplication(
   updateApplication(input: $input, condition: $condition) {
     id
     candidateId
-    jobId
-    status
-    currentStage
-    appliedAt
-    updatedAt
-    coverLetter
-    resumeUrl
-    writtenTestScore
-    writtenTestSubmittedAt
-    videoTestUrl
-    videoTestSubmittedAt
-    interviewLink
-    interviewScheduledAt
-    finalDecision
     candidate {
       id
-      cognitoId
+      sub
       email
       firstName
       lastName
       phone
-      address
-      linkedin
-      portfolio
-      bio
-      skills
-      experience
-      education
+      role
+      companyId
+      isActive
+      lastLoginAt
       createdAt
       updatedAt
+      resume
       __typename
     }
+    jobId
     job {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
-    testResponses {
+    appliedAt
+    currentStage
+    overallStatus
+    applicationStatus
+    writtenTestStatus
+    videoTestStatus
+    interviewStatus
+    feedback
+    internalNotes
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
       nextToken
       __typename
     }
     createdAt
+    updatedAt
     __typename
   }
 }
@@ -541,57 +576,64 @@ export const deleteApplication = /* GraphQL */ `mutation DeleteApplication(
   deleteApplication(input: $input, condition: $condition) {
     id
     candidateId
-    jobId
-    status
-    currentStage
-    appliedAt
-    updatedAt
-    coverLetter
-    resumeUrl
-    writtenTestScore
-    writtenTestSubmittedAt
-    videoTestUrl
-    videoTestSubmittedAt
-    interviewLink
-    interviewScheduledAt
-    finalDecision
     candidate {
       id
-      cognitoId
+      sub
       email
       firstName
       lastName
       phone
-      address
-      linkedin
-      portfolio
-      bio
-      skills
-      experience
-      education
+      role
+      companyId
+      isActive
+      lastLoginAt
       createdAt
       updatedAt
+      resume
       __typename
     }
+    jobId
     job {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
-    testResponses {
+    appliedAt
+    currentStage
+    overallStatus
+    applicationStatus
+    writtenTestStatus
+    videoTestStatus
+    interviewStatus
+    feedback
+    internalNotes
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
       nextToken
       __typename
     }
     createdAt
+    updatedAt
     __typename
   }
 }
@@ -599,382 +641,399 @@ export const deleteApplication = /* GraphQL */ `mutation DeleteApplication(
   APITypes.DeleteApplicationMutationVariables,
   APITypes.DeleteApplicationMutation
 >;
-export const createCandidate = /* GraphQL */ `mutation CreateCandidate(
-  $input: CreateCandidateInput!
-  $condition: ModelCandidateConditionInput
+export const createTest = /* GraphQL */ `mutation CreateTest(
+  $input: CreateTestInput!
+  $condition: ModelTestConditionInput
 ) {
-  createCandidate(input: $input, condition: $condition) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    address
-    linkedin
-    portfolio
-    bio
-    skills
-    experience
-    education
-    createdAt
-    applications {
-      nextToken
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateCandidateMutationVariables,
-  APITypes.CreateCandidateMutation
->;
-export const updateCandidate = /* GraphQL */ `mutation UpdateCandidate(
-  $input: UpdateCandidateInput!
-  $condition: ModelCandidateConditionInput
-) {
-  updateCandidate(input: $input, condition: $condition) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    address
-    linkedin
-    portfolio
-    bio
-    skills
-    experience
-    education
-    createdAt
-    applications {
-      nextToken
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateCandidateMutationVariables,
-  APITypes.UpdateCandidateMutation
->;
-export const deleteCandidate = /* GraphQL */ `mutation DeleteCandidate(
-  $input: DeleteCandidateInput!
-  $condition: ModelCandidateConditionInput
-) {
-  deleteCandidate(input: $input, condition: $condition) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    address
-    linkedin
-    portfolio
-    bio
-    skills
-    experience
-    education
-    createdAt
-    applications {
-      nextToken
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteCandidateMutationVariables,
-  APITypes.DeleteCandidateMutation
->;
-export const createQuestion = /* GraphQL */ `mutation CreateQuestion(
-  $input: CreateQuestionInput!
-  $condition: ModelQuestionConditionInput
-) {
-  createQuestion(input: $input, condition: $condition) {
+  createTest(input: $input, condition: $condition) {
     id
     jobId
-    stage
-    questionText
-    questionType
-    options
-    correctAnswer
-    timeLimit
-    order
-    isActive
     job {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
+      createdAt
+      updatedAt
+      closingDate
+      __typename
+    }
+    title
+    description
+    instructions
+    timeLimit
+    totalPoints
+    passingScore
+    isActive
+    questions
+    attempts {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateTestMutationVariables,
+  APITypes.CreateTestMutation
+>;
+export const updateTest = /* GraphQL */ `mutation UpdateTest(
+  $input: UpdateTestInput!
+  $condition: ModelTestConditionInput
+) {
+  updateTest(input: $input, condition: $condition) {
+    id
+    jobId
+    job {
+      id
+      title
+      department
+      location
+      type
+      salary
+      description
+      requirements
+      responsibilities
+      benefits
+      status
+      companyId
+      createdAt
+      updatedAt
+      closingDate
+      __typename
+    }
+    title
+    description
+    instructions
+    timeLimit
+    totalPoints
+    passingScore
+    isActive
+    questions
+    attempts {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateTestMutationVariables,
+  APITypes.UpdateTestMutation
+>;
+export const deleteTest = /* GraphQL */ `mutation DeleteTest(
+  $input: DeleteTestInput!
+  $condition: ModelTestConditionInput
+) {
+  deleteTest(input: $input, condition: $condition) {
+    id
+    jobId
+    job {
+      id
+      title
+      department
+      location
+      type
+      salary
+      description
+      requirements
+      responsibilities
+      benefits
+      status
+      companyId
+      createdAt
+      updatedAt
+      closingDate
+      __typename
+    }
+    title
+    description
+    instructions
+    timeLimit
+    totalPoints
+    passingScore
+    isActive
+    questions
+    attempts {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteTestMutationVariables,
+  APITypes.DeleteTestMutation
+>;
+export const createTestAttempt = /* GraphQL */ `mutation CreateTestAttempt(
+  $input: CreateTestAttemptInput!
+  $condition: ModelTestAttemptConditionInput
+) {
+  createTestAttempt(input: $input, condition: $condition) {
+    id
+    testId
+    test {
+      id
+      jobId
+      title
+      description
+      instructions
+      timeLimit
+      totalPoints
+      passingScore
+      isActive
+      questions
       createdAt
       updatedAt
       __typename
     }
-    responses {
-      nextToken
-      __typename
-    }
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateQuestionMutationVariables,
-  APITypes.CreateQuestionMutation
->;
-export const updateQuestion = /* GraphQL */ `mutation UpdateQuestion(
-  $input: UpdateQuestionInput!
-  $condition: ModelQuestionConditionInput
-) {
-  updateQuestion(input: $input, condition: $condition) {
-    id
-    jobId
-    stage
-    questionText
-    questionType
-    options
-    correctAnswer
-    timeLimit
-    order
-    isActive
-    job {
+    candidateId
+    candidate {
       id
-      title
-      description
-      requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
       companyId
+      isActive
+      lastLoginAt
       createdAt
       updatedAt
+      resume
       __typename
     }
-    responses {
-      nextToken
-      __typename
-    }
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateQuestionMutationVariables,
-  APITypes.UpdateQuestionMutation
->;
-export const deleteQuestion = /* GraphQL */ `mutation DeleteQuestion(
-  $input: DeleteQuestionInput!
-  $condition: ModelQuestionConditionInput
-) {
-  deleteQuestion(input: $input, condition: $condition) {
-    id
-    jobId
-    stage
-    questionText
-    questionType
-    options
-    correctAnswer
-    timeLimit
-    order
-    isActive
-    job {
-      id
-      title
-      description
-      requirements
-      location
-      jobType
-      salaryRange
-      isActive
-      companyId
-      createdAt
-      updatedAt
-      __typename
-    }
-    responses {
-      nextToken
-      __typename
-    }
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteQuestionMutationVariables,
-  APITypes.DeleteQuestionMutation
->;
-export const createTestResponse = /* GraphQL */ `mutation CreateTestResponse(
-  $input: CreateTestResponseInput!
-  $condition: ModelTestResponseConditionInput
-) {
-  createTestResponse(input: $input, condition: $condition) {
-    id
     applicationId
-    questionId
-    response
-    videoUrl
-    isCorrect
-    submittedAt
     application {
       id
       candidateId
       jobId
-      status
-      currentStage
       appliedAt
-      updatedAt
-      coverLetter
-      resumeUrl
-      writtenTestScore
-      writtenTestSubmittedAt
-      videoTestUrl
-      videoTestSubmittedAt
-      interviewLink
-      interviewScheduledAt
-      finalDecision
-      createdAt
-      __typename
-    }
-    question {
-      id
-      jobId
-      stage
-      questionText
-      questionType
-      options
-      correctAnswer
-      timeLimit
-      order
-      isActive
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
       createdAt
       updatedAt
       __typename
     }
+    startedAt
+    completedAt
+    timeRemaining
+    status
+    answers
+    score
+    percentage
+    passed
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateTestResponseMutationVariables,
-  APITypes.CreateTestResponseMutation
+  APITypes.CreateTestAttemptMutationVariables,
+  APITypes.CreateTestAttemptMutation
 >;
-export const updateTestResponse = /* GraphQL */ `mutation UpdateTestResponse(
-  $input: UpdateTestResponseInput!
-  $condition: ModelTestResponseConditionInput
+export const updateTestAttempt = /* GraphQL */ `mutation UpdateTestAttempt(
+  $input: UpdateTestAttemptInput!
+  $condition: ModelTestAttemptConditionInput
 ) {
-  updateTestResponse(input: $input, condition: $condition) {
+  updateTestAttempt(input: $input, condition: $condition) {
     id
+    testId
+    test {
+      id
+      jobId
+      title
+      description
+      instructions
+      timeLimit
+      totalPoints
+      passingScore
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
     applicationId
-    questionId
-    response
-    videoUrl
-    isCorrect
-    submittedAt
     application {
       id
       candidateId
       jobId
-      status
-      currentStage
       appliedAt
-      updatedAt
-      coverLetter
-      resumeUrl
-      writtenTestScore
-      writtenTestSubmittedAt
-      videoTestUrl
-      videoTestSubmittedAt
-      interviewLink
-      interviewScheduledAt
-      finalDecision
-      createdAt
-      __typename
-    }
-    question {
-      id
-      jobId
-      stage
-      questionText
-      questionType
-      options
-      correctAnswer
-      timeLimit
-      order
-      isActive
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
       createdAt
       updatedAt
       __typename
     }
+    startedAt
+    completedAt
+    timeRemaining
+    status
+    answers
+    score
+    percentage
+    passed
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateTestResponseMutationVariables,
-  APITypes.UpdateTestResponseMutation
+  APITypes.UpdateTestAttemptMutationVariables,
+  APITypes.UpdateTestAttemptMutation
 >;
-export const deleteTestResponse = /* GraphQL */ `mutation DeleteTestResponse(
-  $input: DeleteTestResponseInput!
-  $condition: ModelTestResponseConditionInput
+export const deleteTestAttempt = /* GraphQL */ `mutation DeleteTestAttempt(
+  $input: DeleteTestAttemptInput!
+  $condition: ModelTestAttemptConditionInput
 ) {
-  deleteTestResponse(input: $input, condition: $condition) {
+  deleteTestAttempt(input: $input, condition: $condition) {
     id
+    testId
+    test {
+      id
+      jobId
+      title
+      description
+      instructions
+      timeLimit
+      totalPoints
+      passingScore
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
     applicationId
-    questionId
-    response
-    videoUrl
-    isCorrect
-    submittedAt
     application {
       id
       candidateId
       jobId
-      status
-      currentStage
       appliedAt
-      updatedAt
-      coverLetter
-      resumeUrl
-      writtenTestScore
-      writtenTestSubmittedAt
-      videoTestUrl
-      videoTestSubmittedAt
-      interviewLink
-      interviewScheduledAt
-      finalDecision
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
       createdAt
+      updatedAt
       __typename
     }
-    question {
+    startedAt
+    completedAt
+    timeRemaining
+    status
+    answers
+    score
+    percentage
+    passed
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteTestAttemptMutationVariables,
+  APITypes.DeleteTestAttemptMutation
+>;
+export const createVideoTest = /* GraphQL */ `mutation CreateVideoTest(
+  $input: CreateVideoTestInput!
+  $condition: ModelVideoTestConditionInput
+) {
+  createVideoTest(input: $input, condition: $condition) {
+    id
+    jobId
+    job {
       id
-      jobId
-      stage
-      questionText
-      questionType
-      options
-      correctAnswer
-      timeLimit
-      order
-      isActive
+      title
+      department
+      location
+      type
+      salary
+      description
+      requirements
+      responsibilities
+      benefits
+      status
+      companyId
       createdAt
       updatedAt
+      closingDate
+      __typename
+    }
+    title
+    description
+    instructions
+    totalPoints
+    isActive
+    questions
+    attempts {
+      nextToken
       __typename
     }
     createdAt
@@ -983,6 +1042,487 @@ export const deleteTestResponse = /* GraphQL */ `mutation DeleteTestResponse(
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteTestResponseMutationVariables,
-  APITypes.DeleteTestResponseMutation
+  APITypes.CreateVideoTestMutationVariables,
+  APITypes.CreateVideoTestMutation
+>;
+export const updateVideoTest = /* GraphQL */ `mutation UpdateVideoTest(
+  $input: UpdateVideoTestInput!
+  $condition: ModelVideoTestConditionInput
+) {
+  updateVideoTest(input: $input, condition: $condition) {
+    id
+    jobId
+    job {
+      id
+      title
+      department
+      location
+      type
+      salary
+      description
+      requirements
+      responsibilities
+      benefits
+      status
+      companyId
+      createdAt
+      updatedAt
+      closingDate
+      __typename
+    }
+    title
+    description
+    instructions
+    totalPoints
+    isActive
+    questions
+    attempts {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateVideoTestMutationVariables,
+  APITypes.UpdateVideoTestMutation
+>;
+export const deleteVideoTest = /* GraphQL */ `mutation DeleteVideoTest(
+  $input: DeleteVideoTestInput!
+  $condition: ModelVideoTestConditionInput
+) {
+  deleteVideoTest(input: $input, condition: $condition) {
+    id
+    jobId
+    job {
+      id
+      title
+      department
+      location
+      type
+      salary
+      description
+      requirements
+      responsibilities
+      benefits
+      status
+      companyId
+      createdAt
+      updatedAt
+      closingDate
+      __typename
+    }
+    title
+    description
+    instructions
+    totalPoints
+    isActive
+    questions
+    attempts {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteVideoTestMutationVariables,
+  APITypes.DeleteVideoTestMutation
+>;
+export const createVideoTestAttempt = /* GraphQL */ `mutation CreateVideoTestAttempt(
+  $input: CreateVideoTestAttemptInput!
+  $condition: ModelVideoTestAttemptConditionInput
+) {
+  createVideoTestAttempt(input: $input, condition: $condition) {
+    id
+    videoTestId
+    videoTest {
+      id
+      jobId
+      title
+      description
+      instructions
+      totalPoints
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    startedAt
+    completedAt
+    status
+    currentQuestionIndex
+    recordings
+    totalScore
+    feedback
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateVideoTestAttemptMutationVariables,
+  APITypes.CreateVideoTestAttemptMutation
+>;
+export const updateVideoTestAttempt = /* GraphQL */ `mutation UpdateVideoTestAttempt(
+  $input: UpdateVideoTestAttemptInput!
+  $condition: ModelVideoTestAttemptConditionInput
+) {
+  updateVideoTestAttempt(input: $input, condition: $condition) {
+    id
+    videoTestId
+    videoTest {
+      id
+      jobId
+      title
+      description
+      instructions
+      totalPoints
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    startedAt
+    completedAt
+    status
+    currentQuestionIndex
+    recordings
+    totalScore
+    feedback
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateVideoTestAttemptMutationVariables,
+  APITypes.UpdateVideoTestAttemptMutation
+>;
+export const deleteVideoTestAttempt = /* GraphQL */ `mutation DeleteVideoTestAttempt(
+  $input: DeleteVideoTestAttemptInput!
+  $condition: ModelVideoTestAttemptConditionInput
+) {
+  deleteVideoTestAttempt(input: $input, condition: $condition) {
+    id
+    videoTestId
+    videoTest {
+      id
+      jobId
+      title
+      description
+      instructions
+      totalPoints
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    startedAt
+    completedAt
+    status
+    currentQuestionIndex
+    recordings
+    totalScore
+    feedback
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteVideoTestAttemptMutationVariables,
+  APITypes.DeleteVideoTestAttemptMutation
+>;
+export const createInterview = /* GraphQL */ `mutation CreateInterview(
+  $input: CreateInterviewInput!
+  $condition: ModelInterviewConditionInput
+) {
+  createInterview(input: $input, condition: $condition) {
+    id
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    scheduledAt
+    duration
+    type
+    status
+    meetingUrl
+    interviewerNotes
+    candidateFeedback
+    finalScore
+    recommendation
+    interviewers
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateInterviewMutationVariables,
+  APITypes.CreateInterviewMutation
+>;
+export const updateInterview = /* GraphQL */ `mutation UpdateInterview(
+  $input: UpdateInterviewInput!
+  $condition: ModelInterviewConditionInput
+) {
+  updateInterview(input: $input, condition: $condition) {
+    id
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    scheduledAt
+    duration
+    type
+    status
+    meetingUrl
+    interviewerNotes
+    candidateFeedback
+    finalScore
+    recommendation
+    interviewers
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateInterviewMutationVariables,
+  APITypes.UpdateInterviewMutation
+>;
+export const deleteInterview = /* GraphQL */ `mutation DeleteInterview(
+  $input: DeleteInterviewInput!
+  $condition: ModelInterviewConditionInput
+) {
+  deleteInterview(input: $input, condition: $condition) {
+    id
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    scheduledAt
+    duration
+    type
+    status
+    meetingUrl
+    interviewerNotes
+    candidateFeedback
+    finalScore
+    recommendation
+    interviewers
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteInterviewMutationVariables,
+  APITypes.DeleteInterviewMutation
 >;

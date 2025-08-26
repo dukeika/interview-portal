@@ -1,3 +1,5 @@
+//src/components/company/types.ts
+
 export interface Job {
   id: string;
   title: string;

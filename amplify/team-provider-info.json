@@ -13,7 +13,33 @@
     },
     "categories": {
       "auth": {
-        "interviewsaasa01f72f6": {}
+        "interviewsaasa01f72f6": {},
+        "userPoolGroups": {}
+      },
+      "api": {
+        "interviewsaas": {}
+      },
+      "storage": {
+        "interviewsaasStorage": {}
+      }
+    }
+  },
+  "abbhsaas": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-interviewsaas-abbhsaas-1fa42-authRole",
+      "UnauthRoleArn": "arn:aws:iam::032397978068:role/amplify-interviewsaas-abbhsaas-1fa42-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::032397978068:role/amplify-interviewsaas-abbhsaas-1fa42-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-interviewsaas-abbhsaas-1fa42-deployment",
+      "UnauthRoleName": "amplify-interviewsaas-abbhsaas-1fa42-unauthRole",
+      "StackName": "amplify-interviewsaas-abbhsaas-1fa42",
+      "StackId": "arn:aws:cloudformation:us-west-1:032397978068:stack/amplify-interviewsaas-abbhsaas-1fa42/e91f3e30-8124-11f0-88d4-062d288b2755",
+      "AmplifyAppId": "d1vn851qbifr87"
+    },
+    "categories": {
+      "auth": {
+        "interviewsaasa01f72f6": {},
+        "userPoolGroups": {}
       },
       "api": {
         "interviewsaas": {}

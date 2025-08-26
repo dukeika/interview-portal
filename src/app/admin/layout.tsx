@@ -12,25 +12,37 @@ export default function AdminLayout({
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-abhh-teal-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-abhh-teal-50 to-white">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-abhh-yellow-500 rounded-xl flex items-center justify-center mb-4 mx-auto shadow-abhh animate-pulse">
+            <div className="w-8 h-8 border-2 border-abhh-teal-600 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <p className="text-abhh-teal-600 font-medium">
+            Loading ABHH Platform...
+          </p>
+        </div>
       </div>
     );
   }
 
   if (!user || (userRole && !["super_admin"].includes(userRole))) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-abhh-teal-50 to-white">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Unauthorized</h1>
-          <p className="text-gray-600 mt-2">
-            You don&apos;t have permission to access this page.
+          <div className="w-16 h-16 bg-red-100 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span className="text-2xl">🚫</span>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            Unauthorized Access
+          </h1>
+          <p className="text-gray-600 mb-6">
+            You don't have permission to access the Super Admin panel.
           </p>
           <button
             onClick={() => {
               window.location.href = "/login";
             }}
-            className="mt-4 px-4 py-2 bg-abhh-teal-600 text-white rounded hover:bg-abhh-teal-700"
+            className="px-6 py-3 bg-abhh-teal-600 text-white rounded-lg hover:bg-abhh-teal-700 transition-colors shadow-abhh"
           >
             Go to Login
           </button>

@@ -2,34 +2,45 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateCompanyInput = {
+export type CreateUserInput = {
   id?: string | null,
-  name: string,
+  sub: string,
   email: string,
+  firstName: string,
+  lastName: string,
   phone?: string | null,
-  address?: string | null,
-  website?: string | null,
-  logo?: string | null,
-  description?: string | null,
+  role: UserRole,
+  companyId?: string | null,
   isActive: boolean,
+  lastLoginAt?: string | null,
   createdAt?: string | null,
   updatedAt?: string | null,
+  resume?: string | null,
 };
 
-export type ModelCompanyConditionInput = {
-  name?: ModelStringInput | null,
+export enum UserRole {
+  SUPER_ADMIN = "SUPER_ADMIN",
+  COMPANY_ADMIN = "COMPANY_ADMIN",
+  CANDIDATE = "CANDIDATE",
+}
+
+
+export type ModelUserConditionInput = {
+  sub?: ModelStringInput | null,
   email?: ModelStringInput | null,
+  firstName?: ModelStringInput | null,
+  lastName?: ModelStringInput | null,
   phone?: ModelStringInput | null,
-  address?: ModelStringInput | null,
-  website?: ModelStringInput | null,
-  logo?: ModelStringInput | null,
-  description?: ModelStringInput | null,
+  role?: ModelUserRoleInput | null,
+  companyId?: ModelIDInput | null,
   isActive?: ModelBooleanInput | null,
+  lastLoginAt?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-  and?: Array< ModelCompanyConditionInput | null > | null,
-  or?: Array< ModelCompanyConditionInput | null > | null,
-  not?: ModelCompanyConditionInput | null,
+  resume?: ModelStringInput | null,
+  and?: Array< ModelUserConditionInput | null > | null,
+  or?: Array< ModelUserConditionInput | null > | null,
+  not?: ModelUserConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -72,11 +83,54 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type ModelUserRoleInput = {
+  eq?: UserRole | null,
+  ne?: UserRole | null,
+};
+
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
 export type ModelBooleanInput = {
   ne?: boolean | null,
   eq?: boolean | null,
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
+};
+
+export type User = {
+  __typename: "User",
+  id: string,
+  sub: string,
+  email: string,
+  firstName: string,
+  lastName: string,
+  phone?: string | null,
+  role: UserRole,
+  companyId?: string | null,
+  company?: Company | null,
+  isActive: boolean,
+  lastLoginAt?: string | null,
+  createdAt: string,
+  updatedAt: string,
+  resume?: string | null,
+  applications?: ModelApplicationConnection | null,
+  testAttempts?: ModelTestAttemptConnection | null,
+  videoTestAttempts?: ModelVideoTestAttemptConnection | null,
+  interviews?: ModelInterviewConnection | null,
 };
 
 export type Company = {
@@ -90,31 +144,16 @@ export type Company = {
   logo?: string | null,
   description?: string | null,
   isActive: boolean,
-  createdAt: string,
-  updatedAt: string,
-  admins?: ModelCompanyAdminConnection | null,
+  admins?: ModelUserConnection | null,
   jobs?: ModelJobConnection | null,
-};
-
-export type ModelCompanyAdminConnection = {
-  __typename: "ModelCompanyAdminConnection",
-  items:  Array<CompanyAdmin | null >,
-  nextToken?: string | null,
-};
-
-export type CompanyAdmin = {
-  __typename: "CompanyAdmin",
-  id: string,
-  cognitoId: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  phone?: string | null,
-  isActive: boolean,
-  companyId: string,
-  company?: Company | null,
   createdAt: string,
   updatedAt: string,
+};
+
+export type ModelUserConnection = {
+  __typename: "ModelUserConnection",
+  items:  Array<User | null >,
+  nextToken?: string | null,
 };
 
 export type ModelJobConnection = {
@@ -127,19 +166,39 @@ export type Job = {
   __typename: "Job",
   id: string,
   title: string,
+  department: string,
+  location: string,
+  type: JobType,
+  salary?: string | null,
   description: string,
-  requirements?: string | null,
-  location?: string | null,
-  jobType?: string | null,
-  salaryRange?: string | null,
-  isActive: boolean,
+  requirements: Array< string >,
+  responsibilities: Array< string >,
+  benefits?: Array< string > | null,
+  status: JobStatus,
   companyId: string,
+  company: Company,
+  applications?: ModelApplicationConnection | null,
+  tests?: ModelTestConnection | null,
+  videoTests?: ModelVideoTestConnection | null,
   createdAt: string,
   updatedAt: string,
-  company?: Company | null,
-  applications?: ModelApplicationConnection | null,
-  questions?: ModelQuestionConnection | null,
+  closingDate?: string | null,
 };
+
+export enum JobType {
+  FULL_TIME = "FULL_TIME",
+  PART_TIME = "PART_TIME",
+  CONTRACT = "CONTRACT",
+  INTERNSHIP = "INTERNSHIP",
+}
+
+
+export enum JobStatus {
+  ACTIVE = "ACTIVE",
+  PAUSED = "PAUSED",
+  CLOSED = "CLOSED",
+}
+
 
 export type ModelApplicationConnection = {
   __typename: "ModelApplicationConnection",
@@ -151,110 +210,257 @@ export type Application = {
   __typename: "Application",
   id: string,
   candidateId: string,
+  candidate: User,
   jobId: string,
-  status: ApplicationStatus,
-  currentStage: number,
+  job: Job,
   appliedAt: string,
-  updatedAt: string,
-  coverLetter?: string | null,
-  resumeUrl?: string | null,
-  writtenTestScore?: number | null,
-  writtenTestSubmittedAt?: string | null,
-  videoTestUrl?: string | null,
-  videoTestSubmittedAt?: string | null,
-  interviewLink?: string | null,
-  interviewScheduledAt?: string | null,
-  finalDecision?: string | null,
-  candidate?: Candidate | null,
-  job?: Job | null,
-  testResponses?: ModelTestResponseConnection | null,
+  currentStage: number,
+  overallStatus: ApplicationStatus,
+  applicationStatus: StageStatus,
+  writtenTestStatus: StageStatus,
+  videoTestStatus: StageStatus,
+  interviewStatus: StageStatus,
+  feedback?: string | null,
+  internalNotes?: string | null,
+  testAttempts?: ModelTestAttemptConnection | null,
+  videoTestAttempts?: ModelVideoTestAttemptConnection | null,
+  interviews?: ModelInterviewConnection | null,
   createdAt: string,
+  updatedAt: string,
 };
 
 export enum ApplicationStatus {
-  APPLIED = "APPLIED",
-  WRITTEN_TEST_PENDING = "WRITTEN_TEST_PENDING",
-  WRITTEN_TEST_COMPLETED = "WRITTEN_TEST_COMPLETED",
-  VIDEO_TEST_PENDING = "VIDEO_TEST_PENDING",
-  VIDEO_TEST_COMPLETED = "VIDEO_TEST_COMPLETED",
-  INTERVIEW_SCHEDULED = "INTERVIEW_SCHEDULED",
-  INTERVIEW_COMPLETED = "INTERVIEW_COMPLETED",
-  ACCEPTED = "ACCEPTED",
+  ACTIVE = "ACTIVE",
   REJECTED = "REJECTED",
+  HIRED = "HIRED",
   WITHDRAWN = "WITHDRAWN",
 }
 
 
-export type Candidate = {
-  __typename: "Candidate",
-  id: string,
-  cognitoId: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  phone?: string | null,
-  address?: string | null,
-  linkedin?: string | null,
-  portfolio?: string | null,
-  bio?: string | null,
-  skills?: Array< string | null > | null,
-  experience?: string | null,
-  education?: string | null,
-  createdAt: string,
-  applications?: ModelApplicationConnection | null,
-  updatedAt: string,
-};
-
-export type ModelTestResponseConnection = {
-  __typename: "ModelTestResponseConnection",
-  items:  Array<TestResponse | null >,
-  nextToken?: string | null,
-};
-
-export type TestResponse = {
-  __typename: "TestResponse",
-  id: string,
-  applicationId: string,
-  questionId: string,
-  response?: string | null,
-  videoUrl?: string | null,
-  isCorrect?: boolean | null,
-  submittedAt: string,
-  application?: Application | null,
-  question?: Question | null,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type Question = {
-  __typename: "Question",
-  id: string,
-  jobId: string,
-  stage: number,
-  questionText: string,
-  questionType: QuestionType,
-  options?: Array< string | null > | null,
-  correctAnswer?: string | null,
-  timeLimit?: number | null,
-  order: number,
-  isActive: boolean,
-  job?: Job | null,
-  responses?: ModelTestResponseConnection | null,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export enum QuestionType {
-  MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
-  TEXT = "TEXT",
-  VIDEO = "VIDEO",
+export enum StageStatus {
+  NOT_STARTED = "NOT_STARTED",
+  PENDING = "PENDING",
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+  SCHEDULED = "SCHEDULED",
 }
 
 
-export type ModelQuestionConnection = {
-  __typename: "ModelQuestionConnection",
-  items:  Array<Question | null >,
+export type ModelTestAttemptConnection = {
+  __typename: "ModelTestAttemptConnection",
+  items:  Array<TestAttempt | null >,
   nextToken?: string | null,
+};
+
+export type TestAttempt = {
+  __typename: "TestAttempt",
+  id: string,
+  testId: string,
+  test: Test,
+  candidateId: string,
+  candidate: User,
+  applicationId: string,
+  application: Application,
+  startedAt: string,
+  completedAt?: string | null,
+  timeRemaining?: number | null,
+  status: TestAttemptStatus,
+  answers?: string | null,
+  score?: number | null,
+  percentage?: number | null,
+  passed?: boolean | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type Test = {
+  __typename: "Test",
+  id: string,
+  jobId: string,
+  job: Job,
+  title: string,
+  description: string,
+  instructions: string,
+  timeLimit: number,
+  totalPoints: number,
+  passingScore: number,
+  isActive: boolean,
+  questions: string,
+  attempts?: ModelTestAttemptConnection | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export enum TestAttemptStatus {
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
+  ABANDONED = "ABANDONED",
+  EXPIRED = "EXPIRED",
+}
+
+
+export type ModelVideoTestAttemptConnection = {
+  __typename: "ModelVideoTestAttemptConnection",
+  items:  Array<VideoTestAttempt | null >,
+  nextToken?: string | null,
+};
+
+export type VideoTestAttempt = {
+  __typename: "VideoTestAttempt",
+  id: string,
+  videoTestId: string,
+  videoTest: VideoTest,
+  candidateId: string,
+  candidate: User,
+  applicationId: string,
+  application: Application,
+  startedAt: string,
+  completedAt?: string | null,
+  status: VideoTestAttemptStatus,
+  currentQuestionIndex: number,
+  recordings?: string | null,
+  totalScore?: number | null,
+  feedback?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type VideoTest = {
+  __typename: "VideoTest",
+  id: string,
+  jobId: string,
+  job: Job,
+  title: string,
+  description: string,
+  instructions: string,
+  totalPoints: number,
+  isActive: boolean,
+  questions: string,
+  attempts?: ModelVideoTestAttemptConnection | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export enum VideoTestAttemptStatus {
+  NOT_STARTED = "NOT_STARTED",
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
+  ABANDONED = "ABANDONED",
+}
+
+
+export type ModelInterviewConnection = {
+  __typename: "ModelInterviewConnection",
+  items:  Array<Interview | null >,
+  nextToken?: string | null,
+};
+
+export type Interview = {
+  __typename: "Interview",
+  id: string,
+  candidateId: string,
+  candidate: User,
+  applicationId: string,
+  application: Application,
+  scheduledAt: string,
+  duration: number,
+  type: InterviewType,
+  status: InterviewStatus,
+  meetingUrl?: string | null,
+  interviewerNotes?: string | null,
+  candidateFeedback?: string | null,
+  finalScore?: number | null,
+  recommendation?: InterviewRecommendation | null,
+  interviewers?: Array< string > | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export enum InterviewType {
+  PHONE = "PHONE",
+  VIDEO = "VIDEO",
+  IN_PERSON = "IN_PERSON",
+}
+
+
+export enum InterviewStatus {
+  SCHEDULED = "SCHEDULED",
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
+  NO_SHOW = "NO_SHOW",
+}
+
+
+export enum InterviewRecommendation {
+  STRONG_HIRE = "STRONG_HIRE",
+  HIRE = "HIRE",
+  NO_HIRE = "NO_HIRE",
+  STRONG_NO_HIRE = "STRONG_NO_HIRE",
+}
+
+
+export type ModelTestConnection = {
+  __typename: "ModelTestConnection",
+  items:  Array<Test | null >,
+  nextToken?: string | null,
+};
+
+export type ModelVideoTestConnection = {
+  __typename: "ModelVideoTestConnection",
+  items:  Array<VideoTest | null >,
+  nextToken?: string | null,
+};
+
+export type UpdateUserInput = {
+  id: string,
+  sub?: string | null,
+  email?: string | null,
+  firstName?: string | null,
+  lastName?: string | null,
+  phone?: string | null,
+  role?: UserRole | null,
+  companyId?: string | null,
+  isActive?: boolean | null,
+  lastLoginAt?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+  resume?: string | null,
+};
+
+export type DeleteUserInput = {
+  id: string,
+};
+
+export type CreateCompanyInput = {
+  id?: string | null,
+  name: string,
+  email: string,
+  phone?: string | null,
+  address?: string | null,
+  website?: string | null,
+  logo?: string | null,
+  description?: string | null,
+  isActive: boolean,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type ModelCompanyConditionInput = {
+  name?: ModelStringInput | null,
+  email?: ModelStringInput | null,
+  phone?: ModelStringInput | null,
+  address?: ModelStringInput | null,
+  website?: ModelStringInput | null,
+  logo?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  isActive?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelCompanyConditionInput | null > | null,
+  or?: Array< ModelCompanyConditionInput | null > | null,
+  not?: ModelCompanyConditionInput | null,
 };
 
 export type UpdateCompanyInput = {
@@ -275,152 +481,70 @@ export type DeleteCompanyInput = {
   id: string,
 };
 
-export type CreateCompanyAdminInput = {
-  id?: string | null,
-  cognitoId: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  phone?: string | null,
-  isActive: boolean,
-  companyId: string,
-};
-
-export type ModelCompanyAdminConditionInput = {
-  cognitoId?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  firstName?: ModelStringInput | null,
-  lastName?: ModelStringInput | null,
-  phone?: ModelStringInput | null,
-  isActive?: ModelBooleanInput | null,
-  companyId?: ModelIDInput | null,
-  and?: Array< ModelCompanyAdminConditionInput | null > | null,
-  or?: Array< ModelCompanyAdminConditionInput | null > | null,
-  not?: ModelCompanyAdminConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-};
-
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
-};
-
-export type UpdateCompanyAdminInput = {
-  id: string,
-  cognitoId?: string | null,
-  email?: string | null,
-  firstName?: string | null,
-  lastName?: string | null,
-  phone?: string | null,
-  isActive?: boolean | null,
-  companyId?: string | null,
-};
-
-export type DeleteCompanyAdminInput = {
-  id: string,
-};
-
-export type CreateSuperAdminInput = {
-  id?: string | null,
-  cognitoId: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  phone?: string | null,
-};
-
-export type ModelSuperAdminConditionInput = {
-  cognitoId?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  firstName?: ModelStringInput | null,
-  lastName?: ModelStringInput | null,
-  phone?: ModelStringInput | null,
-  and?: Array< ModelSuperAdminConditionInput | null > | null,
-  or?: Array< ModelSuperAdminConditionInput | null > | null,
-  not?: ModelSuperAdminConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-};
-
-export type SuperAdmin = {
-  __typename: "SuperAdmin",
-  id: string,
-  cognitoId: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  phone?: string | null,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type UpdateSuperAdminInput = {
-  id: string,
-  cognitoId?: string | null,
-  email?: string | null,
-  firstName?: string | null,
-  lastName?: string | null,
-  phone?: string | null,
-};
-
-export type DeleteSuperAdminInput = {
-  id: string,
-};
-
 export type CreateJobInput = {
   id?: string | null,
   title: string,
+  department: string,
+  location: string,
+  type: JobType,
+  salary?: string | null,
   description: string,
-  requirements?: string | null,
-  location?: string | null,
-  jobType?: string | null,
-  salaryRange?: string | null,
-  isActive: boolean,
+  requirements: Array< string >,
+  responsibilities: Array< string >,
+  benefits?: Array< string > | null,
+  status: JobStatus,
   companyId: string,
   createdAt?: string | null,
   updatedAt?: string | null,
+  closingDate?: string | null,
 };
 
 export type ModelJobConditionInput = {
   title?: ModelStringInput | null,
+  department?: ModelStringInput | null,
+  location?: ModelStringInput | null,
+  type?: ModelJobTypeInput | null,
+  salary?: ModelStringInput | null,
   description?: ModelStringInput | null,
   requirements?: ModelStringInput | null,
-  location?: ModelStringInput | null,
-  jobType?: ModelStringInput | null,
-  salaryRange?: ModelStringInput | null,
-  isActive?: ModelBooleanInput | null,
+  responsibilities?: ModelStringInput | null,
+  benefits?: ModelStringInput | null,
+  status?: ModelJobStatusInput | null,
   companyId?: ModelIDInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+  closingDate?: ModelStringInput | null,
   and?: Array< ModelJobConditionInput | null > | null,
   or?: Array< ModelJobConditionInput | null > | null,
   not?: ModelJobConditionInput | null,
 };
 
+export type ModelJobTypeInput = {
+  eq?: JobType | null,
+  ne?: JobType | null,
+};
+
+export type ModelJobStatusInput = {
+  eq?: JobStatus | null,
+  ne?: JobStatus | null,
+};
+
 export type UpdateJobInput = {
   id: string,
   title?: string | null,
-  description?: string | null,
-  requirements?: string | null,
+  department?: string | null,
   location?: string | null,
-  jobType?: string | null,
-  salaryRange?: string | null,
-  isActive?: boolean | null,
+  type?: JobType | null,
+  salary?: string | null,
+  description?: string | null,
+  requirements?: Array< string > | null,
+  responsibilities?: Array< string > | null,
+  benefits?: Array< string > | null,
+  status?: JobStatus | null,
   companyId?: string | null,
   createdAt?: string | null,
   updatedAt?: string | null,
+  closingDate?: string | null,
 };
 
 export type DeleteJobInput = {
@@ -431,46 +555,36 @@ export type CreateApplicationInput = {
   id?: string | null,
   candidateId: string,
   jobId: string,
-  status: ApplicationStatus,
-  currentStage: number,
   appliedAt: string,
+  currentStage: number,
+  overallStatus: ApplicationStatus,
+  applicationStatus: StageStatus,
+  writtenTestStatus: StageStatus,
+  videoTestStatus: StageStatus,
+  interviewStatus: StageStatus,
+  feedback?: string | null,
+  internalNotes?: string | null,
+  createdAt?: string | null,
   updatedAt?: string | null,
-  coverLetter?: string | null,
-  resumeUrl?: string | null,
-  writtenTestScore?: number | null,
-  writtenTestSubmittedAt?: string | null,
-  videoTestUrl?: string | null,
-  videoTestSubmittedAt?: string | null,
-  interviewLink?: string | null,
-  interviewScheduledAt?: string | null,
-  finalDecision?: string | null,
 };
 
 export type ModelApplicationConditionInput = {
   candidateId?: ModelIDInput | null,
   jobId?: ModelIDInput | null,
-  status?: ModelApplicationStatusInput | null,
-  currentStage?: ModelIntInput | null,
   appliedAt?: ModelStringInput | null,
+  currentStage?: ModelIntInput | null,
+  overallStatus?: ModelApplicationStatusInput | null,
+  applicationStatus?: ModelStageStatusInput | null,
+  writtenTestStatus?: ModelStageStatusInput | null,
+  videoTestStatus?: ModelStageStatusInput | null,
+  interviewStatus?: ModelStageStatusInput | null,
+  feedback?: ModelStringInput | null,
+  internalNotes?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-  coverLetter?: ModelStringInput | null,
-  resumeUrl?: ModelStringInput | null,
-  writtenTestScore?: ModelFloatInput | null,
-  writtenTestSubmittedAt?: ModelStringInput | null,
-  videoTestUrl?: ModelStringInput | null,
-  videoTestSubmittedAt?: ModelStringInput | null,
-  interviewLink?: ModelStringInput | null,
-  interviewScheduledAt?: ModelStringInput | null,
-  finalDecision?: ModelStringInput | null,
   and?: Array< ModelApplicationConditionInput | null > | null,
   or?: Array< ModelApplicationConditionInput | null > | null,
   not?: ModelApplicationConditionInput | null,
-  createdAt?: ModelStringInput | null,
-};
-
-export type ModelApplicationStatusInput = {
-  eq?: ApplicationStatus | null,
-  ne?: ApplicationStatus | null,
 };
 
 export type ModelIntInput = {
@@ -485,6 +599,129 @@ export type ModelIntInput = {
   attributeType?: ModelAttributeTypes | null,
 };
 
+export type ModelApplicationStatusInput = {
+  eq?: ApplicationStatus | null,
+  ne?: ApplicationStatus | null,
+};
+
+export type ModelStageStatusInput = {
+  eq?: StageStatus | null,
+  ne?: StageStatus | null,
+};
+
+export type UpdateApplicationInput = {
+  id: string,
+  candidateId?: string | null,
+  jobId?: string | null,
+  appliedAt?: string | null,
+  currentStage?: number | null,
+  overallStatus?: ApplicationStatus | null,
+  applicationStatus?: StageStatus | null,
+  writtenTestStatus?: StageStatus | null,
+  videoTestStatus?: StageStatus | null,
+  interviewStatus?: StageStatus | null,
+  feedback?: string | null,
+  internalNotes?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type DeleteApplicationInput = {
+  id: string,
+};
+
+export type CreateTestInput = {
+  id?: string | null,
+  jobId: string,
+  title: string,
+  description: string,
+  instructions: string,
+  timeLimit: number,
+  totalPoints: number,
+  passingScore: number,
+  isActive: boolean,
+  questions: string,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type ModelTestConditionInput = {
+  jobId?: ModelIDInput | null,
+  title?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  instructions?: ModelStringInput | null,
+  timeLimit?: ModelIntInput | null,
+  totalPoints?: ModelIntInput | null,
+  passingScore?: ModelIntInput | null,
+  isActive?: ModelBooleanInput | null,
+  questions?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelTestConditionInput | null > | null,
+  or?: Array< ModelTestConditionInput | null > | null,
+  not?: ModelTestConditionInput | null,
+};
+
+export type UpdateTestInput = {
+  id: string,
+  jobId?: string | null,
+  title?: string | null,
+  description?: string | null,
+  instructions?: string | null,
+  timeLimit?: number | null,
+  totalPoints?: number | null,
+  passingScore?: number | null,
+  isActive?: boolean | null,
+  questions?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type DeleteTestInput = {
+  id: string,
+};
+
+export type CreateTestAttemptInput = {
+  id?: string | null,
+  testId: string,
+  candidateId: string,
+  applicationId: string,
+  startedAt: string,
+  completedAt?: string | null,
+  timeRemaining?: number | null,
+  status: TestAttemptStatus,
+  answers?: string | null,
+  score?: number | null,
+  percentage?: number | null,
+  passed?: boolean | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type ModelTestAttemptConditionInput = {
+  testId?: ModelIDInput | null,
+  candidateId?: ModelIDInput | null,
+  applicationId?: ModelIDInput | null,
+  startedAt?: ModelStringInput | null,
+  completedAt?: ModelStringInput | null,
+  timeRemaining?: ModelIntInput | null,
+  status?: ModelTestAttemptStatusInput | null,
+  answers?: ModelStringInput | null,
+  score?: ModelIntInput | null,
+  percentage?: ModelFloatInput | null,
+  passed?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelTestAttemptConditionInput | null > | null,
+  or?: Array< ModelTestAttemptConditionInput | null > | null,
+  not?: ModelTestAttemptConditionInput | null,
+};
+
+export type ModelTestAttemptStatusInput = {
+  eq?: TestAttemptStatus | null,
+  ne?: TestAttemptStatus | null,
+};
+
 export type ModelFloatInput = {
   ne?: number | null,
   eq?: number | null,
@@ -497,176 +734,230 @@ export type ModelFloatInput = {
   attributeType?: ModelAttributeTypes | null,
 };
 
-export type UpdateApplicationInput = {
+export type UpdateTestAttemptInput = {
+  id: string,
+  testId?: string | null,
+  candidateId?: string | null,
+  applicationId?: string | null,
+  startedAt?: string | null,
+  completedAt?: string | null,
+  timeRemaining?: number | null,
+  status?: TestAttemptStatus | null,
+  answers?: string | null,
+  score?: number | null,
+  percentage?: number | null,
+  passed?: boolean | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type DeleteTestAttemptInput = {
+  id: string,
+};
+
+export type CreateVideoTestInput = {
+  id?: string | null,
+  jobId: string,
+  title: string,
+  description: string,
+  instructions: string,
+  totalPoints: number,
+  isActive: boolean,
+  questions: string,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type ModelVideoTestConditionInput = {
+  jobId?: ModelIDInput | null,
+  title?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  instructions?: ModelStringInput | null,
+  totalPoints?: ModelIntInput | null,
+  isActive?: ModelBooleanInput | null,
+  questions?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelVideoTestConditionInput | null > | null,
+  or?: Array< ModelVideoTestConditionInput | null > | null,
+  not?: ModelVideoTestConditionInput | null,
+};
+
+export type UpdateVideoTestInput = {
+  id: string,
+  jobId?: string | null,
+  title?: string | null,
+  description?: string | null,
+  instructions?: string | null,
+  totalPoints?: number | null,
+  isActive?: boolean | null,
+  questions?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type DeleteVideoTestInput = {
+  id: string,
+};
+
+export type CreateVideoTestAttemptInput = {
+  id?: string | null,
+  videoTestId: string,
+  candidateId: string,
+  applicationId: string,
+  startedAt: string,
+  completedAt?: string | null,
+  status: VideoTestAttemptStatus,
+  currentQuestionIndex: number,
+  recordings?: string | null,
+  totalScore?: number | null,
+  feedback?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type ModelVideoTestAttemptConditionInput = {
+  videoTestId?: ModelIDInput | null,
+  candidateId?: ModelIDInput | null,
+  applicationId?: ModelIDInput | null,
+  startedAt?: ModelStringInput | null,
+  completedAt?: ModelStringInput | null,
+  status?: ModelVideoTestAttemptStatusInput | null,
+  currentQuestionIndex?: ModelIntInput | null,
+  recordings?: ModelStringInput | null,
+  totalScore?: ModelIntInput | null,
+  feedback?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelVideoTestAttemptConditionInput | null > | null,
+  or?: Array< ModelVideoTestAttemptConditionInput | null > | null,
+  not?: ModelVideoTestAttemptConditionInput | null,
+};
+
+export type ModelVideoTestAttemptStatusInput = {
+  eq?: VideoTestAttemptStatus | null,
+  ne?: VideoTestAttemptStatus | null,
+};
+
+export type UpdateVideoTestAttemptInput = {
+  id: string,
+  videoTestId?: string | null,
+  candidateId?: string | null,
+  applicationId?: string | null,
+  startedAt?: string | null,
+  completedAt?: string | null,
+  status?: VideoTestAttemptStatus | null,
+  currentQuestionIndex?: number | null,
+  recordings?: string | null,
+  totalScore?: number | null,
+  feedback?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type DeleteVideoTestAttemptInput = {
+  id: string,
+};
+
+export type CreateInterviewInput = {
+  id?: string | null,
+  candidateId: string,
+  applicationId: string,
+  scheduledAt: string,
+  duration: number,
+  type: InterviewType,
+  status: InterviewStatus,
+  meetingUrl?: string | null,
+  interviewerNotes?: string | null,
+  candidateFeedback?: string | null,
+  finalScore?: number | null,
+  recommendation?: InterviewRecommendation | null,
+  interviewers?: Array< string > | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type ModelInterviewConditionInput = {
+  candidateId?: ModelIDInput | null,
+  applicationId?: ModelIDInput | null,
+  scheduledAt?: ModelStringInput | null,
+  duration?: ModelIntInput | null,
+  type?: ModelInterviewTypeInput | null,
+  status?: ModelInterviewStatusInput | null,
+  meetingUrl?: ModelStringInput | null,
+  interviewerNotes?: ModelStringInput | null,
+  candidateFeedback?: ModelStringInput | null,
+  finalScore?: ModelIntInput | null,
+  recommendation?: ModelInterviewRecommendationInput | null,
+  interviewers?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelInterviewConditionInput | null > | null,
+  or?: Array< ModelInterviewConditionInput | null > | null,
+  not?: ModelInterviewConditionInput | null,
+};
+
+export type ModelInterviewTypeInput = {
+  eq?: InterviewType | null,
+  ne?: InterviewType | null,
+};
+
+export type ModelInterviewStatusInput = {
+  eq?: InterviewStatus | null,
+  ne?: InterviewStatus | null,
+};
+
+export type ModelInterviewRecommendationInput = {
+  eq?: InterviewRecommendation | null,
+  ne?: InterviewRecommendation | null,
+};
+
+export type UpdateInterviewInput = {
   id: string,
   candidateId?: string | null,
-  jobId?: string | null,
-  status?: ApplicationStatus | null,
-  currentStage?: number | null,
-  appliedAt?: string | null,
+  applicationId?: string | null,
+  scheduledAt?: string | null,
+  duration?: number | null,
+  type?: InterviewType | null,
+  status?: InterviewStatus | null,
+  meetingUrl?: string | null,
+  interviewerNotes?: string | null,
+  candidateFeedback?: string | null,
+  finalScore?: number | null,
+  recommendation?: InterviewRecommendation | null,
+  interviewers?: Array< string > | null,
+  createdAt?: string | null,
   updatedAt?: string | null,
-  coverLetter?: string | null,
-  resumeUrl?: string | null,
-  writtenTestScore?: number | null,
-  writtenTestSubmittedAt?: string | null,
-  videoTestUrl?: string | null,
-  videoTestSubmittedAt?: string | null,
-  interviewLink?: string | null,
-  interviewScheduledAt?: string | null,
-  finalDecision?: string | null,
 };
 
-export type DeleteApplicationInput = {
+export type DeleteInterviewInput = {
   id: string,
 };
 
-export type CreateCandidateInput = {
-  id?: string | null,
-  cognitoId: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  phone?: string | null,
-  address?: string | null,
-  linkedin?: string | null,
-  portfolio?: string | null,
-  bio?: string | null,
-  skills?: Array< string | null > | null,
-  experience?: string | null,
-  education?: string | null,
-  createdAt?: string | null,
-};
-
-export type ModelCandidateConditionInput = {
-  cognitoId?: ModelStringInput | null,
+export type ModelUserFilterInput = {
+  id?: ModelIDInput | null,
+  sub?: ModelStringInput | null,
   email?: ModelStringInput | null,
   firstName?: ModelStringInput | null,
   lastName?: ModelStringInput | null,
   phone?: ModelStringInput | null,
-  address?: ModelStringInput | null,
-  linkedin?: ModelStringInput | null,
-  portfolio?: ModelStringInput | null,
-  bio?: ModelStringInput | null,
-  skills?: ModelStringInput | null,
-  experience?: ModelStringInput | null,
-  education?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  and?: Array< ModelCandidateConditionInput | null > | null,
-  or?: Array< ModelCandidateConditionInput | null > | null,
-  not?: ModelCandidateConditionInput | null,
-  updatedAt?: ModelStringInput | null,
-};
-
-export type UpdateCandidateInput = {
-  id: string,
-  cognitoId?: string | null,
-  email?: string | null,
-  firstName?: string | null,
-  lastName?: string | null,
-  phone?: string | null,
-  address?: string | null,
-  linkedin?: string | null,
-  portfolio?: string | null,
-  bio?: string | null,
-  skills?: Array< string | null > | null,
-  experience?: string | null,
-  education?: string | null,
-  createdAt?: string | null,
-};
-
-export type DeleteCandidateInput = {
-  id: string,
-};
-
-export type CreateQuestionInput = {
-  id?: string | null,
-  jobId: string,
-  stage: number,
-  questionText: string,
-  questionType: QuestionType,
-  options?: Array< string | null > | null,
-  correctAnswer?: string | null,
-  timeLimit?: number | null,
-  order: number,
-  isActive: boolean,
-};
-
-export type ModelQuestionConditionInput = {
-  jobId?: ModelIDInput | null,
-  stage?: ModelIntInput | null,
-  questionText?: ModelStringInput | null,
-  questionType?: ModelQuestionTypeInput | null,
-  options?: ModelStringInput | null,
-  correctAnswer?: ModelStringInput | null,
-  timeLimit?: ModelIntInput | null,
-  order?: ModelIntInput | null,
+  role?: ModelUserRoleInput | null,
+  companyId?: ModelIDInput | null,
   isActive?: ModelBooleanInput | null,
-  and?: Array< ModelQuestionConditionInput | null > | null,
-  or?: Array< ModelQuestionConditionInput | null > | null,
-  not?: ModelQuestionConditionInput | null,
+  lastLoginAt?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+  resume?: ModelStringInput | null,
+  and?: Array< ModelUserFilterInput | null > | null,
+  or?: Array< ModelUserFilterInput | null > | null,
+  not?: ModelUserFilterInput | null,
 };
 
-export type ModelQuestionTypeInput = {
-  eq?: QuestionType | null,
-  ne?: QuestionType | null,
-};
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
 
-export type UpdateQuestionInput = {
-  id: string,
-  jobId?: string | null,
-  stage?: number | null,
-  questionText?: string | null,
-  questionType?: QuestionType | null,
-  options?: Array< string | null > | null,
-  correctAnswer?: string | null,
-  timeLimit?: number | null,
-  order?: number | null,
-  isActive?: boolean | null,
-};
-
-export type DeleteQuestionInput = {
-  id: string,
-};
-
-export type CreateTestResponseInput = {
-  id?: string | null,
-  applicationId: string,
-  questionId: string,
-  response?: string | null,
-  videoUrl?: string | null,
-  isCorrect?: boolean | null,
-  submittedAt: string,
-};
-
-export type ModelTestResponseConditionInput = {
-  applicationId?: ModelIDInput | null,
-  questionId?: ModelIDInput | null,
-  response?: ModelStringInput | null,
-  videoUrl?: ModelStringInput | null,
-  isCorrect?: ModelBooleanInput | null,
-  submittedAt?: ModelStringInput | null,
-  and?: Array< ModelTestResponseConditionInput | null > | null,
-  or?: Array< ModelTestResponseConditionInput | null > | null,
-  not?: ModelTestResponseConditionInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-};
-
-export type UpdateTestResponseInput = {
-  id: string,
-  applicationId?: string | null,
-  questionId?: string | null,
-  response?: string | null,
-  videoUrl?: string | null,
-  isCorrect?: boolean | null,
-  submittedAt?: string | null,
-};
-
-export type DeleteTestResponseInput = {
-  id: string,
-};
 
 export type ModelCompanyFilterInput = {
   id?: ModelIDInput | null,
@@ -691,60 +982,22 @@ export type ModelCompanyConnection = {
   nextToken?: string | null,
 };
 
-export type ModelCompanyAdminFilterInput = {
-  id?: ModelIDInput | null,
-  cognitoId?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  firstName?: ModelStringInput | null,
-  lastName?: ModelStringInput | null,
-  phone?: ModelStringInput | null,
-  isActive?: ModelBooleanInput | null,
-  companyId?: ModelIDInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelCompanyAdminFilterInput | null > | null,
-  or?: Array< ModelCompanyAdminFilterInput | null > | null,
-  not?: ModelCompanyAdminFilterInput | null,
-};
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
-
-export type ModelSuperAdminFilterInput = {
-  id?: ModelIDInput | null,
-  cognitoId?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  firstName?: ModelStringInput | null,
-  lastName?: ModelStringInput | null,
-  phone?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelSuperAdminFilterInput | null > | null,
-  or?: Array< ModelSuperAdminFilterInput | null > | null,
-  not?: ModelSuperAdminFilterInput | null,
-};
-
-export type ModelSuperAdminConnection = {
-  __typename: "ModelSuperAdminConnection",
-  items:  Array<SuperAdmin | null >,
-  nextToken?: string | null,
-};
-
 export type ModelJobFilterInput = {
   id?: ModelIDInput | null,
   title?: ModelStringInput | null,
+  department?: ModelStringInput | null,
+  location?: ModelStringInput | null,
+  type?: ModelJobTypeInput | null,
+  salary?: ModelStringInput | null,
   description?: ModelStringInput | null,
   requirements?: ModelStringInput | null,
-  location?: ModelStringInput | null,
-  jobType?: ModelStringInput | null,
-  salaryRange?: ModelStringInput | null,
-  isActive?: ModelBooleanInput | null,
+  responsibilities?: ModelStringInput | null,
+  benefits?: ModelStringInput | null,
+  status?: ModelJobStatusInput | null,
   companyId?: ModelIDInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+  closingDate?: ModelStringInput | null,
   and?: Array< ModelJobFilterInput | null > | null,
   or?: Array< ModelJobFilterInput | null > | null,
   not?: ModelJobFilterInput | null,
@@ -754,99 +1007,132 @@ export type ModelApplicationFilterInput = {
   id?: ModelIDInput | null,
   candidateId?: ModelIDInput | null,
   jobId?: ModelIDInput | null,
-  status?: ModelApplicationStatusInput | null,
-  currentStage?: ModelIntInput | null,
   appliedAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  coverLetter?: ModelStringInput | null,
-  resumeUrl?: ModelStringInput | null,
-  writtenTestScore?: ModelFloatInput | null,
-  writtenTestSubmittedAt?: ModelStringInput | null,
-  videoTestUrl?: ModelStringInput | null,
-  videoTestSubmittedAt?: ModelStringInput | null,
-  interviewLink?: ModelStringInput | null,
-  interviewScheduledAt?: ModelStringInput | null,
-  finalDecision?: ModelStringInput | null,
+  currentStage?: ModelIntInput | null,
+  overallStatus?: ModelApplicationStatusInput | null,
+  applicationStatus?: ModelStageStatusInput | null,
+  writtenTestStatus?: ModelStageStatusInput | null,
+  videoTestStatus?: ModelStageStatusInput | null,
+  interviewStatus?: ModelStageStatusInput | null,
+  feedback?: ModelStringInput | null,
+  internalNotes?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelApplicationFilterInput | null > | null,
   or?: Array< ModelApplicationFilterInput | null > | null,
   not?: ModelApplicationFilterInput | null,
 };
 
-export type ModelCandidateFilterInput = {
-  id?: ModelIDInput | null,
-  cognitoId?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  firstName?: ModelStringInput | null,
-  lastName?: ModelStringInput | null,
-  phone?: ModelStringInput | null,
-  address?: ModelStringInput | null,
-  linkedin?: ModelStringInput | null,
-  portfolio?: ModelStringInput | null,
-  bio?: ModelStringInput | null,
-  skills?: ModelStringInput | null,
-  experience?: ModelStringInput | null,
-  education?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  and?: Array< ModelCandidateFilterInput | null > | null,
-  or?: Array< ModelCandidateFilterInput | null > | null,
-  not?: ModelCandidateFilterInput | null,
-};
-
-export type ModelCandidateConnection = {
-  __typename: "ModelCandidateConnection",
-  items:  Array<Candidate | null >,
-  nextToken?: string | null,
-};
-
-export type ModelQuestionFilterInput = {
+export type ModelTestFilterInput = {
   id?: ModelIDInput | null,
   jobId?: ModelIDInput | null,
-  stage?: ModelIntInput | null,
-  questionText?: ModelStringInput | null,
-  questionType?: ModelQuestionTypeInput | null,
-  options?: ModelStringInput | null,
-  correctAnswer?: ModelStringInput | null,
+  title?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  instructions?: ModelStringInput | null,
   timeLimit?: ModelIntInput | null,
-  order?: ModelIntInput | null,
+  totalPoints?: ModelIntInput | null,
+  passingScore?: ModelIntInput | null,
   isActive?: ModelBooleanInput | null,
+  questions?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-  and?: Array< ModelQuestionFilterInput | null > | null,
-  or?: Array< ModelQuestionFilterInput | null > | null,
-  not?: ModelQuestionFilterInput | null,
+  and?: Array< ModelTestFilterInput | null > | null,
+  or?: Array< ModelTestFilterInput | null > | null,
+  not?: ModelTestFilterInput | null,
 };
 
-export type ModelTestResponseFilterInput = {
+export type ModelTestAttemptFilterInput = {
   id?: ModelIDInput | null,
+  testId?: ModelIDInput | null,
+  candidateId?: ModelIDInput | null,
   applicationId?: ModelIDInput | null,
-  questionId?: ModelIDInput | null,
-  response?: ModelStringInput | null,
-  videoUrl?: ModelStringInput | null,
-  isCorrect?: ModelBooleanInput | null,
-  submittedAt?: ModelStringInput | null,
+  startedAt?: ModelStringInput | null,
+  completedAt?: ModelStringInput | null,
+  timeRemaining?: ModelIntInput | null,
+  status?: ModelTestAttemptStatusInput | null,
+  answers?: ModelStringInput | null,
+  score?: ModelIntInput | null,
+  percentage?: ModelFloatInput | null,
+  passed?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-  and?: Array< ModelTestResponseFilterInput | null > | null,
-  or?: Array< ModelTestResponseFilterInput | null > | null,
-  not?: ModelTestResponseFilterInput | null,
+  and?: Array< ModelTestAttemptFilterInput | null > | null,
+  or?: Array< ModelTestAttemptFilterInput | null > | null,
+  not?: ModelTestAttemptFilterInput | null,
 };
 
-export type ModelSubscriptionCompanyFilterInput = {
+export type ModelVideoTestFilterInput = {
+  id?: ModelIDInput | null,
+  jobId?: ModelIDInput | null,
+  title?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  instructions?: ModelStringInput | null,
+  totalPoints?: ModelIntInput | null,
+  isActive?: ModelBooleanInput | null,
+  questions?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelVideoTestFilterInput | null > | null,
+  or?: Array< ModelVideoTestFilterInput | null > | null,
+  not?: ModelVideoTestFilterInput | null,
+};
+
+export type ModelVideoTestAttemptFilterInput = {
+  id?: ModelIDInput | null,
+  videoTestId?: ModelIDInput | null,
+  candidateId?: ModelIDInput | null,
+  applicationId?: ModelIDInput | null,
+  startedAt?: ModelStringInput | null,
+  completedAt?: ModelStringInput | null,
+  status?: ModelVideoTestAttemptStatusInput | null,
+  currentQuestionIndex?: ModelIntInput | null,
+  recordings?: ModelStringInput | null,
+  totalScore?: ModelIntInput | null,
+  feedback?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelVideoTestAttemptFilterInput | null > | null,
+  or?: Array< ModelVideoTestAttemptFilterInput | null > | null,
+  not?: ModelVideoTestAttemptFilterInput | null,
+};
+
+export type ModelInterviewFilterInput = {
+  id?: ModelIDInput | null,
+  candidateId?: ModelIDInput | null,
+  applicationId?: ModelIDInput | null,
+  scheduledAt?: ModelStringInput | null,
+  duration?: ModelIntInput | null,
+  type?: ModelInterviewTypeInput | null,
+  status?: ModelInterviewStatusInput | null,
+  meetingUrl?: ModelStringInput | null,
+  interviewerNotes?: ModelStringInput | null,
+  candidateFeedback?: ModelStringInput | null,
+  finalScore?: ModelIntInput | null,
+  recommendation?: ModelInterviewRecommendationInput | null,
+  interviewers?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelInterviewFilterInput | null > | null,
+  or?: Array< ModelInterviewFilterInput | null > | null,
+  not?: ModelInterviewFilterInput | null,
+};
+
+export type ModelSubscriptionUserFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
   email?: ModelSubscriptionStringInput | null,
+  firstName?: ModelSubscriptionStringInput | null,
+  lastName?: ModelSubscriptionStringInput | null,
   phone?: ModelSubscriptionStringInput | null,
-  address?: ModelSubscriptionStringInput | null,
-  website?: ModelSubscriptionStringInput | null,
-  logo?: ModelSubscriptionStringInput | null,
-  description?: ModelSubscriptionStringInput | null,
+  role?: ModelSubscriptionStringInput | null,
+  companyId?: ModelSubscriptionIDInput | null,
   isActive?: ModelSubscriptionBooleanInput | null,
+  lastLoginAt?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionCompanyFilterInput | null > | null,
-  or?: Array< ModelSubscriptionCompanyFilterInput | null > | null,
+  resume?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionUserFilterInput | null > | null,
+  or?: Array< ModelSubscriptionUserFilterInput | null > | null,
+  sub?: ModelStringInput | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -884,70 +1170,59 @@ export type ModelSubscriptionBooleanInput = {
   eq?: boolean | null,
 };
 
-export type ModelSubscriptionCompanyAdminFilterInput = {
+export type ModelSubscriptionCompanyFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  cognitoId?: ModelSubscriptionStringInput | null,
+  name?: ModelSubscriptionStringInput | null,
   email?: ModelSubscriptionStringInput | null,
-  firstName?: ModelSubscriptionStringInput | null,
-  lastName?: ModelSubscriptionStringInput | null,
   phone?: ModelSubscriptionStringInput | null,
+  address?: ModelSubscriptionStringInput | null,
+  website?: ModelSubscriptionStringInput | null,
+  logo?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
   isActive?: ModelSubscriptionBooleanInput | null,
-  companyId?: ModelSubscriptionIDInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionCompanyAdminFilterInput | null > | null,
-  or?: Array< ModelSubscriptionCompanyAdminFilterInput | null > | null,
-};
-
-export type ModelSubscriptionSuperAdminFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  cognitoId?: ModelSubscriptionStringInput | null,
-  email?: ModelSubscriptionStringInput | null,
-  firstName?: ModelSubscriptionStringInput | null,
-  lastName?: ModelSubscriptionStringInput | null,
-  phone?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionSuperAdminFilterInput | null > | null,
-  or?: Array< ModelSubscriptionSuperAdminFilterInput | null > | null,
+  and?: Array< ModelSubscriptionCompanyFilterInput | null > | null,
+  or?: Array< ModelSubscriptionCompanyFilterInput | null > | null,
 };
 
 export type ModelSubscriptionJobFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   title?: ModelSubscriptionStringInput | null,
+  department?: ModelSubscriptionStringInput | null,
+  location?: ModelSubscriptionStringInput | null,
+  type?: ModelSubscriptionStringInput | null,
+  salary?: ModelSubscriptionStringInput | null,
   description?: ModelSubscriptionStringInput | null,
   requirements?: ModelSubscriptionStringInput | null,
-  location?: ModelSubscriptionStringInput | null,
-  jobType?: ModelSubscriptionStringInput | null,
-  salaryRange?: ModelSubscriptionStringInput | null,
-  isActive?: ModelSubscriptionBooleanInput | null,
+  responsibilities?: ModelSubscriptionStringInput | null,
+  benefits?: ModelSubscriptionStringInput | null,
+  status?: ModelSubscriptionStringInput | null,
   companyId?: ModelSubscriptionIDInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
+  closingDate?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionJobFilterInput | null > | null,
   or?: Array< ModelSubscriptionJobFilterInput | null > | null,
 };
 
 export type ModelSubscriptionApplicationFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  candidateId?: ModelSubscriptionIDInput | null,
   jobId?: ModelSubscriptionIDInput | null,
-  status?: ModelSubscriptionStringInput | null,
-  currentStage?: ModelSubscriptionIntInput | null,
   appliedAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  coverLetter?: ModelSubscriptionStringInput | null,
-  resumeUrl?: ModelSubscriptionStringInput | null,
-  writtenTestScore?: ModelSubscriptionFloatInput | null,
-  writtenTestSubmittedAt?: ModelSubscriptionStringInput | null,
-  videoTestUrl?: ModelSubscriptionStringInput | null,
-  videoTestSubmittedAt?: ModelSubscriptionStringInput | null,
-  interviewLink?: ModelSubscriptionStringInput | null,
-  interviewScheduledAt?: ModelSubscriptionStringInput | null,
-  finalDecision?: ModelSubscriptionStringInput | null,
+  currentStage?: ModelSubscriptionIntInput | null,
+  overallStatus?: ModelSubscriptionStringInput | null,
+  applicationStatus?: ModelSubscriptionStringInput | null,
+  writtenTestStatus?: ModelSubscriptionStringInput | null,
+  videoTestStatus?: ModelSubscriptionStringInput | null,
+  interviewStatus?: ModelSubscriptionStringInput | null,
+  feedback?: ModelSubscriptionStringInput | null,
+  internalNotes?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionApplicationFilterInput | null > | null,
   or?: Array< ModelSubscriptionApplicationFilterInput | null > | null,
+  candidateId?: ModelStringInput | null,
 };
 
 export type ModelSubscriptionIntInput = {
@@ -962,6 +1237,42 @@ export type ModelSubscriptionIntInput = {
   notIn?: Array< number | null > | null,
 };
 
+export type ModelSubscriptionTestFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  jobId?: ModelSubscriptionIDInput | null,
+  title?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
+  instructions?: ModelSubscriptionStringInput | null,
+  timeLimit?: ModelSubscriptionIntInput | null,
+  totalPoints?: ModelSubscriptionIntInput | null,
+  passingScore?: ModelSubscriptionIntInput | null,
+  isActive?: ModelSubscriptionBooleanInput | null,
+  questions?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionTestFilterInput | null > | null,
+  or?: Array< ModelSubscriptionTestFilterInput | null > | null,
+};
+
+export type ModelSubscriptionTestAttemptFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  testId?: ModelSubscriptionIDInput | null,
+  applicationId?: ModelSubscriptionIDInput | null,
+  startedAt?: ModelSubscriptionStringInput | null,
+  completedAt?: ModelSubscriptionStringInput | null,
+  timeRemaining?: ModelSubscriptionIntInput | null,
+  status?: ModelSubscriptionStringInput | null,
+  answers?: ModelSubscriptionStringInput | null,
+  score?: ModelSubscriptionIntInput | null,
+  percentage?: ModelSubscriptionFloatInput | null,
+  passed?: ModelSubscriptionBooleanInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionTestAttemptFilterInput | null > | null,
+  or?: Array< ModelSubscriptionTestAttemptFilterInput | null > | null,
+  candidateId?: ModelStringInput | null,
+};
+
 export type ModelSubscriptionFloatInput = {
   ne?: number | null,
   eq?: number | null,
@@ -974,55 +1285,219 @@ export type ModelSubscriptionFloatInput = {
   notIn?: Array< number | null > | null,
 };
 
-export type ModelSubscriptionCandidateFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  cognitoId?: ModelSubscriptionStringInput | null,
-  email?: ModelSubscriptionStringInput | null,
-  firstName?: ModelSubscriptionStringInput | null,
-  lastName?: ModelSubscriptionStringInput | null,
-  phone?: ModelSubscriptionStringInput | null,
-  address?: ModelSubscriptionStringInput | null,
-  linkedin?: ModelSubscriptionStringInput | null,
-  portfolio?: ModelSubscriptionStringInput | null,
-  bio?: ModelSubscriptionStringInput | null,
-  skills?: ModelSubscriptionStringInput | null,
-  experience?: ModelSubscriptionStringInput | null,
-  education?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionCandidateFilterInput | null > | null,
-  or?: Array< ModelSubscriptionCandidateFilterInput | null > | null,
-};
-
-export type ModelSubscriptionQuestionFilterInput = {
+export type ModelSubscriptionVideoTestFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   jobId?: ModelSubscriptionIDInput | null,
-  stage?: ModelSubscriptionIntInput | null,
-  questionText?: ModelSubscriptionStringInput | null,
-  questionType?: ModelSubscriptionStringInput | null,
-  options?: ModelSubscriptionStringInput | null,
-  correctAnswer?: ModelSubscriptionStringInput | null,
-  timeLimit?: ModelSubscriptionIntInput | null,
-  order?: ModelSubscriptionIntInput | null,
+  title?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
+  instructions?: ModelSubscriptionStringInput | null,
+  totalPoints?: ModelSubscriptionIntInput | null,
   isActive?: ModelSubscriptionBooleanInput | null,
+  questions?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionQuestionFilterInput | null > | null,
-  or?: Array< ModelSubscriptionQuestionFilterInput | null > | null,
+  and?: Array< ModelSubscriptionVideoTestFilterInput | null > | null,
+  or?: Array< ModelSubscriptionVideoTestFilterInput | null > | null,
 };
 
-export type ModelSubscriptionTestResponseFilterInput = {
+export type ModelSubscriptionVideoTestAttemptFilterInput = {
   id?: ModelSubscriptionIDInput | null,
+  videoTestId?: ModelSubscriptionIDInput | null,
   applicationId?: ModelSubscriptionIDInput | null,
-  questionId?: ModelSubscriptionIDInput | null,
-  response?: ModelSubscriptionStringInput | null,
-  videoUrl?: ModelSubscriptionStringInput | null,
-  isCorrect?: ModelSubscriptionBooleanInput | null,
-  submittedAt?: ModelSubscriptionStringInput | null,
+  startedAt?: ModelSubscriptionStringInput | null,
+  completedAt?: ModelSubscriptionStringInput | null,
+  status?: ModelSubscriptionStringInput | null,
+  currentQuestionIndex?: ModelSubscriptionIntInput | null,
+  recordings?: ModelSubscriptionStringInput | null,
+  totalScore?: ModelSubscriptionIntInput | null,
+  feedback?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionTestResponseFilterInput | null > | null,
-  or?: Array< ModelSubscriptionTestResponseFilterInput | null > | null,
+  and?: Array< ModelSubscriptionVideoTestAttemptFilterInput | null > | null,
+  or?: Array< ModelSubscriptionVideoTestAttemptFilterInput | null > | null,
+  candidateId?: ModelStringInput | null,
+};
+
+export type ModelSubscriptionInterviewFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  applicationId?: ModelSubscriptionIDInput | null,
+  scheduledAt?: ModelSubscriptionStringInput | null,
+  duration?: ModelSubscriptionIntInput | null,
+  type?: ModelSubscriptionStringInput | null,
+  status?: ModelSubscriptionStringInput | null,
+  meetingUrl?: ModelSubscriptionStringInput | null,
+  interviewerNotes?: ModelSubscriptionStringInput | null,
+  candidateFeedback?: ModelSubscriptionStringInput | null,
+  finalScore?: ModelSubscriptionIntInput | null,
+  recommendation?: ModelSubscriptionStringInput | null,
+  interviewers?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionInterviewFilterInput | null > | null,
+  or?: Array< ModelSubscriptionInterviewFilterInput | null > | null,
+  candidateId?: ModelStringInput | null,
+};
+
+export type CreateUserMutationVariables = {
+  input: CreateUserInput,
+  condition?: ModelUserConditionInput | null,
+};
+
+export type CreateUserMutation = {
+  createUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+  } | null,
+};
+
+export type UpdateUserMutationVariables = {
+  input: UpdateUserInput,
+  condition?: ModelUserConditionInput | null,
+};
+
+export type UpdateUserMutation = {
+  updateUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+  } | null,
+};
+
+export type DeleteUserMutationVariables = {
+  input: DeleteUserInput,
+  condition?: ModelUserConditionInput | null,
+};
+
+export type DeleteUserMutation = {
+  deleteUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+  } | null,
 };
 
 export type CreateCompanyMutationVariables = {
@@ -1042,16 +1517,16 @@ export type CreateCompanyMutation = {
     logo?: string | null,
     description?: string | null,
     isActive: boolean,
-    createdAt: string,
-    updatedAt: string,
     admins?:  {
-      __typename: "ModelCompanyAdminConnection",
+      __typename: "ModelUserConnection",
       nextToken?: string | null,
     } | null,
     jobs?:  {
       __typename: "ModelJobConnection",
       nextToken?: string | null,
     } | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -1072,16 +1547,16 @@ export type UpdateCompanyMutation = {
     logo?: string | null,
     description?: string | null,
     isActive: boolean,
-    createdAt: string,
-    updatedAt: string,
     admins?:  {
-      __typename: "ModelCompanyAdminConnection",
+      __typename: "ModelUserConnection",
       nextToken?: string | null,
     } | null,
     jobs?:  {
       __typename: "ModelJobConnection",
       nextToken?: string | null,
     } | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -1102,176 +1577,14 @@ export type DeleteCompanyMutation = {
     logo?: string | null,
     description?: string | null,
     isActive: boolean,
-    createdAt: string,
-    updatedAt: string,
     admins?:  {
-      __typename: "ModelCompanyAdminConnection",
+      __typename: "ModelUserConnection",
       nextToken?: string | null,
     } | null,
     jobs?:  {
       __typename: "ModelJobConnection",
       nextToken?: string | null,
     } | null,
-  } | null,
-};
-
-export type CreateCompanyAdminMutationVariables = {
-  input: CreateCompanyAdminInput,
-  condition?: ModelCompanyAdminConditionInput | null,
-};
-
-export type CreateCompanyAdminMutation = {
-  createCompanyAdmin?:  {
-    __typename: "CompanyAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    isActive: boolean,
-    companyId: string,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateCompanyAdminMutationVariables = {
-  input: UpdateCompanyAdminInput,
-  condition?: ModelCompanyAdminConditionInput | null,
-};
-
-export type UpdateCompanyAdminMutation = {
-  updateCompanyAdmin?:  {
-    __typename: "CompanyAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    isActive: boolean,
-    companyId: string,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteCompanyAdminMutationVariables = {
-  input: DeleteCompanyAdminInput,
-  condition?: ModelCompanyAdminConditionInput | null,
-};
-
-export type DeleteCompanyAdminMutation = {
-  deleteCompanyAdmin?:  {
-    __typename: "CompanyAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    isActive: boolean,
-    companyId: string,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateSuperAdminMutationVariables = {
-  input: CreateSuperAdminInput,
-  condition?: ModelSuperAdminConditionInput | null,
-};
-
-export type CreateSuperAdminMutation = {
-  createSuperAdmin?:  {
-    __typename: "SuperAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateSuperAdminMutationVariables = {
-  input: UpdateSuperAdminInput,
-  condition?: ModelSuperAdminConditionInput | null,
-};
-
-export type UpdateSuperAdminMutation = {
-  updateSuperAdmin?:  {
-    __typename: "SuperAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteSuperAdminMutationVariables = {
-  input: DeleteSuperAdminInput,
-  condition?: ModelSuperAdminConditionInput | null,
-};
-
-export type DeleteSuperAdminMutation = {
-  deleteSuperAdmin?:  {
-    __typename: "SuperAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1287,16 +1600,17 @@ export type CreateJobMutation = {
     __typename: "Job",
     id: string,
     title: string,
+    department: string,
+    location: string,
+    type: JobType,
+    salary?: string | null,
     description: string,
-    requirements?: string | null,
-    location?: string | null,
-    jobType?: string | null,
-    salaryRange?: string | null,
-    isActive: boolean,
+    requirements: Array< string >,
+    responsibilities: Array< string >,
+    benefits?: Array< string > | null,
+    status: JobStatus,
     companyId: string,
-    createdAt: string,
-    updatedAt: string,
-    company?:  {
+    company:  {
       __typename: "Company",
       id: string,
       name: string,
@@ -1309,15 +1623,22 @@ export type CreateJobMutation = {
       isActive: boolean,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     applications?:  {
       __typename: "ModelApplicationConnection",
       nextToken?: string | null,
     } | null,
-    questions?:  {
-      __typename: "ModelQuestionConnection",
+    tests?:  {
+      __typename: "ModelTestConnection",
       nextToken?: string | null,
     } | null,
+    videoTests?:  {
+      __typename: "ModelVideoTestConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    closingDate?: string | null,
   } | null,
 };
 
@@ -1331,16 +1652,17 @@ export type UpdateJobMutation = {
     __typename: "Job",
     id: string,
     title: string,
+    department: string,
+    location: string,
+    type: JobType,
+    salary?: string | null,
     description: string,
-    requirements?: string | null,
-    location?: string | null,
-    jobType?: string | null,
-    salaryRange?: string | null,
-    isActive: boolean,
+    requirements: Array< string >,
+    responsibilities: Array< string >,
+    benefits?: Array< string > | null,
+    status: JobStatus,
     companyId: string,
-    createdAt: string,
-    updatedAt: string,
-    company?:  {
+    company:  {
       __typename: "Company",
       id: string,
       name: string,
@@ -1353,15 +1675,22 @@ export type UpdateJobMutation = {
       isActive: boolean,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     applications?:  {
       __typename: "ModelApplicationConnection",
       nextToken?: string | null,
     } | null,
-    questions?:  {
-      __typename: "ModelQuestionConnection",
+    tests?:  {
+      __typename: "ModelTestConnection",
       nextToken?: string | null,
     } | null,
+    videoTests?:  {
+      __typename: "ModelVideoTestConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    closingDate?: string | null,
   } | null,
 };
 
@@ -1375,15 +1704,1146 @@ export type DeleteJobMutation = {
     __typename: "Job",
     id: string,
     title: string,
+    department: string,
+    location: string,
+    type: JobType,
+    salary?: string | null,
     description: string,
-    requirements?: string | null,
-    location?: string | null,
-    jobType?: string | null,
-    salaryRange?: string | null,
-    isActive: boolean,
+    requirements: Array< string >,
+    responsibilities: Array< string >,
+    benefits?: Array< string > | null,
+    status: JobStatus,
     companyId: string,
+    company:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    },
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    tests?:  {
+      __typename: "ModelTestConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTests?:  {
+      __typename: "ModelVideoTestConnection",
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
+    closingDate?: string | null,
+  } | null,
+};
+
+export type CreateApplicationMutationVariables = {
+  input: CreateApplicationInput,
+  condition?: ModelApplicationConditionInput | null,
+};
+
+export type CreateApplicationMutation = {
+  createApplication?:  {
+    __typename: "Application",
+    id: string,
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    jobId: string,
+    job:  {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
+    },
+    appliedAt: string,
+    currentStage: number,
+    overallStatus: ApplicationStatus,
+    applicationStatus: StageStatus,
+    writtenTestStatus: StageStatus,
+    videoTestStatus: StageStatus,
+    interviewStatus: StageStatus,
+    feedback?: string | null,
+    internalNotes?: string | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateApplicationMutationVariables = {
+  input: UpdateApplicationInput,
+  condition?: ModelApplicationConditionInput | null,
+};
+
+export type UpdateApplicationMutation = {
+  updateApplication?:  {
+    __typename: "Application",
+    id: string,
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    jobId: string,
+    job:  {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
+    },
+    appliedAt: string,
+    currentStage: number,
+    overallStatus: ApplicationStatus,
+    applicationStatus: StageStatus,
+    writtenTestStatus: StageStatus,
+    videoTestStatus: StageStatus,
+    interviewStatus: StageStatus,
+    feedback?: string | null,
+    internalNotes?: string | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteApplicationMutationVariables = {
+  input: DeleteApplicationInput,
+  condition?: ModelApplicationConditionInput | null,
+};
+
+export type DeleteApplicationMutation = {
+  deleteApplication?:  {
+    __typename: "Application",
+    id: string,
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    jobId: string,
+    job:  {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
+    },
+    appliedAt: string,
+    currentStage: number,
+    overallStatus: ApplicationStatus,
+    applicationStatus: StageStatus,
+    writtenTestStatus: StageStatus,
+    videoTestStatus: StageStatus,
+    interviewStatus: StageStatus,
+    feedback?: string | null,
+    internalNotes?: string | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateTestMutationVariables = {
+  input: CreateTestInput,
+  condition?: ModelTestConditionInput | null,
+};
+
+export type CreateTestMutation = {
+  createTest?:  {
+    __typename: "Test",
+    id: string,
+    jobId: string,
+    job:  {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    timeLimit: number,
+    totalPoints: number,
+    passingScore: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateTestMutationVariables = {
+  input: UpdateTestInput,
+  condition?: ModelTestConditionInput | null,
+};
+
+export type UpdateTestMutation = {
+  updateTest?:  {
+    __typename: "Test",
+    id: string,
+    jobId: string,
+    job:  {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    timeLimit: number,
+    totalPoints: number,
+    passingScore: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteTestMutationVariables = {
+  input: DeleteTestInput,
+  condition?: ModelTestConditionInput | null,
+};
+
+export type DeleteTestMutation = {
+  deleteTest?:  {
+    __typename: "Test",
+    id: string,
+    jobId: string,
+    job:  {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    timeLimit: number,
+    totalPoints: number,
+    passingScore: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateTestAttemptMutationVariables = {
+  input: CreateTestAttemptInput,
+  condition?: ModelTestAttemptConditionInput | null,
+};
+
+export type CreateTestAttemptMutation = {
+  createTestAttempt?:  {
+    __typename: "TestAttempt",
+    id: string,
+    testId: string,
+    test:  {
+      __typename: "Test",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      timeLimit: number,
+      totalPoints: number,
+      passingScore: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    timeRemaining?: number | null,
+    status: TestAttemptStatus,
+    answers?: string | null,
+    score?: number | null,
+    percentage?: number | null,
+    passed?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateTestAttemptMutationVariables = {
+  input: UpdateTestAttemptInput,
+  condition?: ModelTestAttemptConditionInput | null,
+};
+
+export type UpdateTestAttemptMutation = {
+  updateTestAttempt?:  {
+    __typename: "TestAttempt",
+    id: string,
+    testId: string,
+    test:  {
+      __typename: "Test",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      timeLimit: number,
+      totalPoints: number,
+      passingScore: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    timeRemaining?: number | null,
+    status: TestAttemptStatus,
+    answers?: string | null,
+    score?: number | null,
+    percentage?: number | null,
+    passed?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteTestAttemptMutationVariables = {
+  input: DeleteTestAttemptInput,
+  condition?: ModelTestAttemptConditionInput | null,
+};
+
+export type DeleteTestAttemptMutation = {
+  deleteTestAttempt?:  {
+    __typename: "TestAttempt",
+    id: string,
+    testId: string,
+    test:  {
+      __typename: "Test",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      timeLimit: number,
+      totalPoints: number,
+      passingScore: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    timeRemaining?: number | null,
+    status: TestAttemptStatus,
+    answers?: string | null,
+    score?: number | null,
+    percentage?: number | null,
+    passed?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateVideoTestMutationVariables = {
+  input: CreateVideoTestInput,
+  condition?: ModelVideoTestConditionInput | null,
+};
+
+export type CreateVideoTestMutation = {
+  createVideoTest?:  {
+    __typename: "VideoTest",
+    id: string,
+    jobId: string,
+    job:  {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    totalPoints: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateVideoTestMutationVariables = {
+  input: UpdateVideoTestInput,
+  condition?: ModelVideoTestConditionInput | null,
+};
+
+export type UpdateVideoTestMutation = {
+  updateVideoTest?:  {
+    __typename: "VideoTest",
+    id: string,
+    jobId: string,
+    job:  {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    totalPoints: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteVideoTestMutationVariables = {
+  input: DeleteVideoTestInput,
+  condition?: ModelVideoTestConditionInput | null,
+};
+
+export type DeleteVideoTestMutation = {
+  deleteVideoTest?:  {
+    __typename: "VideoTest",
+    id: string,
+    jobId: string,
+    job:  {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    totalPoints: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateVideoTestAttemptMutationVariables = {
+  input: CreateVideoTestAttemptInput,
+  condition?: ModelVideoTestAttemptConditionInput | null,
+};
+
+export type CreateVideoTestAttemptMutation = {
+  createVideoTestAttempt?:  {
+    __typename: "VideoTestAttempt",
+    id: string,
+    videoTestId: string,
+    videoTest:  {
+      __typename: "VideoTest",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      totalPoints: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    status: VideoTestAttemptStatus,
+    currentQuestionIndex: number,
+    recordings?: string | null,
+    totalScore?: number | null,
+    feedback?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateVideoTestAttemptMutationVariables = {
+  input: UpdateVideoTestAttemptInput,
+  condition?: ModelVideoTestAttemptConditionInput | null,
+};
+
+export type UpdateVideoTestAttemptMutation = {
+  updateVideoTestAttempt?:  {
+    __typename: "VideoTestAttempt",
+    id: string,
+    videoTestId: string,
+    videoTest:  {
+      __typename: "VideoTest",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      totalPoints: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    status: VideoTestAttemptStatus,
+    currentQuestionIndex: number,
+    recordings?: string | null,
+    totalScore?: number | null,
+    feedback?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteVideoTestAttemptMutationVariables = {
+  input: DeleteVideoTestAttemptInput,
+  condition?: ModelVideoTestAttemptConditionInput | null,
+};
+
+export type DeleteVideoTestAttemptMutation = {
+  deleteVideoTestAttempt?:  {
+    __typename: "VideoTestAttempt",
+    id: string,
+    videoTestId: string,
+    videoTest:  {
+      __typename: "VideoTest",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      totalPoints: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    status: VideoTestAttemptStatus,
+    currentQuestionIndex: number,
+    recordings?: string | null,
+    totalScore?: number | null,
+    feedback?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateInterviewMutationVariables = {
+  input: CreateInterviewInput,
+  condition?: ModelInterviewConditionInput | null,
+};
+
+export type CreateInterviewMutation = {
+  createInterview?:  {
+    __typename: "Interview",
+    id: string,
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    scheduledAt: string,
+    duration: number,
+    type: InterviewType,
+    status: InterviewStatus,
+    meetingUrl?: string | null,
+    interviewerNotes?: string | null,
+    candidateFeedback?: string | null,
+    finalScore?: number | null,
+    recommendation?: InterviewRecommendation | null,
+    interviewers?: Array< string > | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateInterviewMutationVariables = {
+  input: UpdateInterviewInput,
+  condition?: ModelInterviewConditionInput | null,
+};
+
+export type UpdateInterviewMutation = {
+  updateInterview?:  {
+    __typename: "Interview",
+    id: string,
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    scheduledAt: string,
+    duration: number,
+    type: InterviewType,
+    status: InterviewStatus,
+    meetingUrl?: string | null,
+    interviewerNotes?: string | null,
+    candidateFeedback?: string | null,
+    finalScore?: number | null,
+    recommendation?: InterviewRecommendation | null,
+    interviewers?: Array< string > | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteInterviewMutationVariables = {
+  input: DeleteInterviewInput,
+  condition?: ModelInterviewConditionInput | null,
+};
+
+export type DeleteInterviewMutation = {
+  deleteInterview?:  {
+    __typename: "Interview",
+    id: string,
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    scheduledAt: string,
+    duration: number,
+    type: InterviewType,
+    status: InterviewStatus,
+    meetingUrl?: string | null,
+    interviewerNotes?: string | null,
+    candidateFeedback?: string | null,
+    finalScore?: number | null,
+    recommendation?: InterviewRecommendation | null,
+    interviewers?: Array< string > | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type GetUserQueryVariables = {
+  id: string,
+};
+
+export type GetUserQuery = {
+  getUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
     company?:  {
       __typename: "Company",
       id: string,
@@ -1398,584 +2858,149 @@ export type DeleteJobMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    resume?: string | null,
     applications?:  {
       __typename: "ModelApplicationConnection",
       nextToken?: string | null,
     } | null,
-    questions?:  {
-      __typename: "ModelQuestionConnection",
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
       nextToken?: string | null,
     } | null,
   } | null,
 };
 
-export type CreateApplicationMutationVariables = {
-  input: CreateApplicationInput,
-  condition?: ModelApplicationConditionInput | null,
+export type ListUsersQueryVariables = {
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
 };
 
-export type CreateApplicationMutation = {
-  createApplication?:  {
-    __typename: "Application",
-    id: string,
-    candidateId: string,
-    jobId: string,
-    status: ApplicationStatus,
-    currentStage: number,
-    appliedAt: string,
-    updatedAt: string,
-    coverLetter?: string | null,
-    resumeUrl?: string | null,
-    writtenTestScore?: number | null,
-    writtenTestSubmittedAt?: string | null,
-    videoTestUrl?: string | null,
-    videoTestSubmittedAt?: string | null,
-    interviewLink?: string | null,
-    interviewScheduledAt?: string | null,
-    finalDecision?: string | null,
-    candidate?:  {
-      __typename: "Candidate",
+export type ListUsersQuery = {
+  listUsers?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
       id: string,
-      cognitoId: string,
+      sub: string,
       email: string,
       firstName: string,
       lastName: string,
       phone?: string | null,
-      address?: string | null,
-      linkedin?: string | null,
-      portfolio?: string | null,
-      bio?: string | null,
-      skills?: Array< string | null > | null,
-      experience?: string | null,
-      education?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    job?:  {
-      __typename: "Job",
-      id: string,
-      title: string,
-      description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
+      role: UserRole,
+      companyId?: string | null,
       isActive: boolean,
-      companyId: string,
+      lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-    } | null,
-    testResponses?:  {
-      __typename: "ModelTestResponseConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
+      resume?: string | null,
+    } | null >,
+    nextToken?: string | null,
   } | null,
 };
 
-export type UpdateApplicationMutationVariables = {
-  input: UpdateApplicationInput,
-  condition?: ModelApplicationConditionInput | null,
+export type UsersBySubQueryVariables = {
+  sub: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
 };
 
-export type UpdateApplicationMutation = {
-  updateApplication?:  {
-    __typename: "Application",
-    id: string,
-    candidateId: string,
-    jobId: string,
-    status: ApplicationStatus,
-    currentStage: number,
-    appliedAt: string,
-    updatedAt: string,
-    coverLetter?: string | null,
-    resumeUrl?: string | null,
-    writtenTestScore?: number | null,
-    writtenTestSubmittedAt?: string | null,
-    videoTestUrl?: string | null,
-    videoTestSubmittedAt?: string | null,
-    interviewLink?: string | null,
-    interviewScheduledAt?: string | null,
-    finalDecision?: string | null,
-    candidate?:  {
-      __typename: "Candidate",
+export type UsersBySubQuery = {
+  usersBySub?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
       id: string,
-      cognitoId: string,
+      sub: string,
       email: string,
       firstName: string,
       lastName: string,
       phone?: string | null,
-      address?: string | null,
-      linkedin?: string | null,
-      portfolio?: string | null,
-      bio?: string | null,
-      skills?: Array< string | null > | null,
-      experience?: string | null,
-      education?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    job?:  {
-      __typename: "Job",
-      id: string,
-      title: string,
-      description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
+      role: UserRole,
+      companyId?: string | null,
       isActive: boolean,
-      companyId: string,
+      lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-    } | null,
-    testResponses?:  {
-      __typename: "ModelTestResponseConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
+      resume?: string | null,
+    } | null >,
+    nextToken?: string | null,
   } | null,
 };
 
-export type DeleteApplicationMutationVariables = {
-  input: DeleteApplicationInput,
-  condition?: ModelApplicationConditionInput | null,
+export type UsersByEmailQueryVariables = {
+  email: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
 };
 
-export type DeleteApplicationMutation = {
-  deleteApplication?:  {
-    __typename: "Application",
-    id: string,
-    candidateId: string,
-    jobId: string,
-    status: ApplicationStatus,
-    currentStage: number,
-    appliedAt: string,
-    updatedAt: string,
-    coverLetter?: string | null,
-    resumeUrl?: string | null,
-    writtenTestScore?: number | null,
-    writtenTestSubmittedAt?: string | null,
-    videoTestUrl?: string | null,
-    videoTestSubmittedAt?: string | null,
-    interviewLink?: string | null,
-    interviewScheduledAt?: string | null,
-    finalDecision?: string | null,
-    candidate?:  {
-      __typename: "Candidate",
+export type UsersByEmailQuery = {
+  usersByEmail?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
       id: string,
-      cognitoId: string,
+      sub: string,
       email: string,
       firstName: string,
       lastName: string,
       phone?: string | null,
-      address?: string | null,
-      linkedin?: string | null,
-      portfolio?: string | null,
-      bio?: string | null,
-      skills?: Array< string | null > | null,
-      experience?: string | null,
-      education?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    job?:  {
-      __typename: "Job",
-      id: string,
-      title: string,
-      description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
+      role: UserRole,
+      companyId?: string | null,
       isActive: boolean,
-      companyId: string,
+      lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-    } | null,
-    testResponses?:  {
-      __typename: "ModelTestResponseConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
+      resume?: string | null,
+    } | null >,
+    nextToken?: string | null,
   } | null,
 };
 
-export type CreateCandidateMutationVariables = {
-  input: CreateCandidateInput,
-  condition?: ModelCandidateConditionInput | null,
+export type UsersByCompanyIdQueryVariables = {
+  companyId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
 };
 
-export type CreateCandidateMutation = {
-  createCandidate?:  {
-    __typename: "Candidate",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    address?: string | null,
-    linkedin?: string | null,
-    portfolio?: string | null,
-    bio?: string | null,
-    skills?: Array< string | null > | null,
-    experience?: string | null,
-    education?: string | null,
-    createdAt: string,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateCandidateMutationVariables = {
-  input: UpdateCandidateInput,
-  condition?: ModelCandidateConditionInput | null,
-};
-
-export type UpdateCandidateMutation = {
-  updateCandidate?:  {
-    __typename: "Candidate",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    address?: string | null,
-    linkedin?: string | null,
-    portfolio?: string | null,
-    bio?: string | null,
-    skills?: Array< string | null > | null,
-    experience?: string | null,
-    education?: string | null,
-    createdAt: string,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteCandidateMutationVariables = {
-  input: DeleteCandidateInput,
-  condition?: ModelCandidateConditionInput | null,
-};
-
-export type DeleteCandidateMutation = {
-  deleteCandidate?:  {
-    __typename: "Candidate",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    address?: string | null,
-    linkedin?: string | null,
-    portfolio?: string | null,
-    bio?: string | null,
-    skills?: Array< string | null > | null,
-    experience?: string | null,
-    education?: string | null,
-    createdAt: string,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateQuestionMutationVariables = {
-  input: CreateQuestionInput,
-  condition?: ModelQuestionConditionInput | null,
-};
-
-export type CreateQuestionMutation = {
-  createQuestion?:  {
-    __typename: "Question",
-    id: string,
-    jobId: string,
-    stage: number,
-    questionText: string,
-    questionType: QuestionType,
-    options?: Array< string | null > | null,
-    correctAnswer?: string | null,
-    timeLimit?: number | null,
-    order: number,
-    isActive: boolean,
-    job?:  {
-      __typename: "Job",
+export type UsersByCompanyIdQuery = {
+  usersByCompanyId?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
       id: string,
-      title: string,
-      description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
       isActive: boolean,
-      companyId: string,
+      lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-    } | null,
-    responses?:  {
-      __typename: "ModelTestResponseConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateQuestionMutationVariables = {
-  input: UpdateQuestionInput,
-  condition?: ModelQuestionConditionInput | null,
-};
-
-export type UpdateQuestionMutation = {
-  updateQuestion?:  {
-    __typename: "Question",
-    id: string,
-    jobId: string,
-    stage: number,
-    questionText: string,
-    questionType: QuestionType,
-    options?: Array< string | null > | null,
-    correctAnswer?: string | null,
-    timeLimit?: number | null,
-    order: number,
-    isActive: boolean,
-    job?:  {
-      __typename: "Job",
-      id: string,
-      title: string,
-      description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
-      isActive: boolean,
-      companyId: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    responses?:  {
-      __typename: "ModelTestResponseConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteQuestionMutationVariables = {
-  input: DeleteQuestionInput,
-  condition?: ModelQuestionConditionInput | null,
-};
-
-export type DeleteQuestionMutation = {
-  deleteQuestion?:  {
-    __typename: "Question",
-    id: string,
-    jobId: string,
-    stage: number,
-    questionText: string,
-    questionType: QuestionType,
-    options?: Array< string | null > | null,
-    correctAnswer?: string | null,
-    timeLimit?: number | null,
-    order: number,
-    isActive: boolean,
-    job?:  {
-      __typename: "Job",
-      id: string,
-      title: string,
-      description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
-      isActive: boolean,
-      companyId: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    responses?:  {
-      __typename: "ModelTestResponseConnection",
-      nextToken?: string | null,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateTestResponseMutationVariables = {
-  input: CreateTestResponseInput,
-  condition?: ModelTestResponseConditionInput | null,
-};
-
-export type CreateTestResponseMutation = {
-  createTestResponse?:  {
-    __typename: "TestResponse",
-    id: string,
-    applicationId: string,
-    questionId: string,
-    response?: string | null,
-    videoUrl?: string | null,
-    isCorrect?: boolean | null,
-    submittedAt: string,
-    application?:  {
-      __typename: "Application",
-      id: string,
-      candidateId: string,
-      jobId: string,
-      status: ApplicationStatus,
-      currentStage: number,
-      appliedAt: string,
-      updatedAt: string,
-      coverLetter?: string | null,
-      resumeUrl?: string | null,
-      writtenTestScore?: number | null,
-      writtenTestSubmittedAt?: string | null,
-      videoTestUrl?: string | null,
-      videoTestSubmittedAt?: string | null,
-      interviewLink?: string | null,
-      interviewScheduledAt?: string | null,
-      finalDecision?: string | null,
-      createdAt: string,
-    } | null,
-    question?:  {
-      __typename: "Question",
-      id: string,
-      jobId: string,
-      stage: number,
-      questionText: string,
-      questionType: QuestionType,
-      options?: Array< string | null > | null,
-      correctAnswer?: string | null,
-      timeLimit?: number | null,
-      order: number,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateTestResponseMutationVariables = {
-  input: UpdateTestResponseInput,
-  condition?: ModelTestResponseConditionInput | null,
-};
-
-export type UpdateTestResponseMutation = {
-  updateTestResponse?:  {
-    __typename: "TestResponse",
-    id: string,
-    applicationId: string,
-    questionId: string,
-    response?: string | null,
-    videoUrl?: string | null,
-    isCorrect?: boolean | null,
-    submittedAt: string,
-    application?:  {
-      __typename: "Application",
-      id: string,
-      candidateId: string,
-      jobId: string,
-      status: ApplicationStatus,
-      currentStage: number,
-      appliedAt: string,
-      updatedAt: string,
-      coverLetter?: string | null,
-      resumeUrl?: string | null,
-      writtenTestScore?: number | null,
-      writtenTestSubmittedAt?: string | null,
-      videoTestUrl?: string | null,
-      videoTestSubmittedAt?: string | null,
-      interviewLink?: string | null,
-      interviewScheduledAt?: string | null,
-      finalDecision?: string | null,
-      createdAt: string,
-    } | null,
-    question?:  {
-      __typename: "Question",
-      id: string,
-      jobId: string,
-      stage: number,
-      questionText: string,
-      questionType: QuestionType,
-      options?: Array< string | null > | null,
-      correctAnswer?: string | null,
-      timeLimit?: number | null,
-      order: number,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteTestResponseMutationVariables = {
-  input: DeleteTestResponseInput,
-  condition?: ModelTestResponseConditionInput | null,
-};
-
-export type DeleteTestResponseMutation = {
-  deleteTestResponse?:  {
-    __typename: "TestResponse",
-    id: string,
-    applicationId: string,
-    questionId: string,
-    response?: string | null,
-    videoUrl?: string | null,
-    isCorrect?: boolean | null,
-    submittedAt: string,
-    application?:  {
-      __typename: "Application",
-      id: string,
-      candidateId: string,
-      jobId: string,
-      status: ApplicationStatus,
-      currentStage: number,
-      appliedAt: string,
-      updatedAt: string,
-      coverLetter?: string | null,
-      resumeUrl?: string | null,
-      writtenTestScore?: number | null,
-      writtenTestSubmittedAt?: string | null,
-      videoTestUrl?: string | null,
-      videoTestSubmittedAt?: string | null,
-      interviewLink?: string | null,
-      interviewScheduledAt?: string | null,
-      finalDecision?: string | null,
-      createdAt: string,
-    } | null,
-    question?:  {
-      __typename: "Question",
-      id: string,
-      jobId: string,
-      stage: number,
-      questionText: string,
-      questionType: QuestionType,
-      options?: Array< string | null > | null,
-      correctAnswer?: string | null,
-      timeLimit?: number | null,
-      order: number,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
+      resume?: string | null,
+    } | null >,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -1995,16 +3020,16 @@ export type GetCompanyQuery = {
     logo?: string | null,
     description?: string | null,
     isActive: boolean,
-    createdAt: string,
-    updatedAt: string,
     admins?:  {
-      __typename: "ModelCompanyAdminConnection",
+      __typename: "ModelUserConnection",
       nextToken?: string | null,
     } | null,
     jobs?:  {
       __typename: "ModelJobConnection",
       nextToken?: string | null,
     } | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -2035,22 +3060,18 @@ export type ListCompaniesQuery = {
   } | null,
 };
 
-export type GetCompanyAdminQueryVariables = {
-  id: string,
+export type CompaniesByEmailQueryVariables = {
+  email: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelCompanyFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
 };
 
-export type GetCompanyAdminQuery = {
-  getCompanyAdmin?:  {
-    __typename: "CompanyAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    isActive: boolean,
-    companyId: string,
-    company?:  {
+export type CompaniesByEmailQuery = {
+  companiesByEmail?:  {
+    __typename: "ModelCompanyConnection",
+    items:  Array< {
       __typename: "Company",
       id: string,
       name: string,
@@ -2061,157 +3082,6 @@ export type GetCompanyAdminQuery = {
       logo?: string | null,
       description?: string | null,
       isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListCompanyAdminsQueryVariables = {
-  filter?: ModelCompanyAdminFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListCompanyAdminsQuery = {
-  listCompanyAdmins?:  {
-    __typename: "ModelCompanyAdminConnection",
-    items:  Array< {
-      __typename: "CompanyAdmin",
-      id: string,
-      cognitoId: string,
-      email: string,
-      firstName: string,
-      lastName: string,
-      phone?: string | null,
-      isActive: boolean,
-      companyId: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type CompanyAdminsByCognitoIdQueryVariables = {
-  cognitoId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelCompanyAdminFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type CompanyAdminsByCognitoIdQuery = {
-  companyAdminsByCognitoId?:  {
-    __typename: "ModelCompanyAdminConnection",
-    items:  Array< {
-      __typename: "CompanyAdmin",
-      id: string,
-      cognitoId: string,
-      email: string,
-      firstName: string,
-      lastName: string,
-      phone?: string | null,
-      isActive: boolean,
-      companyId: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type CompanyAdminsByCompanyIdQueryVariables = {
-  companyId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelCompanyAdminFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type CompanyAdminsByCompanyIdQuery = {
-  companyAdminsByCompanyId?:  {
-    __typename: "ModelCompanyAdminConnection",
-    items:  Array< {
-      __typename: "CompanyAdmin",
-      id: string,
-      cognitoId: string,
-      email: string,
-      firstName: string,
-      lastName: string,
-      phone?: string | null,
-      isActive: boolean,
-      companyId: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type GetSuperAdminQueryVariables = {
-  id: string,
-};
-
-export type GetSuperAdminQuery = {
-  getSuperAdmin?:  {
-    __typename: "SuperAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListSuperAdminsQueryVariables = {
-  filter?: ModelSuperAdminFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListSuperAdminsQuery = {
-  listSuperAdmins?:  {
-    __typename: "ModelSuperAdminConnection",
-    items:  Array< {
-      __typename: "SuperAdmin",
-      id: string,
-      cognitoId: string,
-      email: string,
-      firstName: string,
-      lastName: string,
-      phone?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type SuperAdminsByCognitoIdQueryVariables = {
-  cognitoId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelSuperAdminFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type SuperAdminsByCognitoIdQuery = {
-  superAdminsByCognitoId?:  {
-    __typename: "ModelSuperAdminConnection",
-    items:  Array< {
-      __typename: "SuperAdmin",
-      id: string,
-      cognitoId: string,
-      email: string,
-      firstName: string,
-      lastName: string,
-      phone?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2228,16 +3098,17 @@ export type GetJobQuery = {
     __typename: "Job",
     id: string,
     title: string,
+    department: string,
+    location: string,
+    type: JobType,
+    salary?: string | null,
     description: string,
-    requirements?: string | null,
-    location?: string | null,
-    jobType?: string | null,
-    salaryRange?: string | null,
-    isActive: boolean,
+    requirements: Array< string >,
+    responsibilities: Array< string >,
+    benefits?: Array< string > | null,
+    status: JobStatus,
     companyId: string,
-    createdAt: string,
-    updatedAt: string,
-    company?:  {
+    company:  {
       __typename: "Company",
       id: string,
       name: string,
@@ -2250,15 +3121,22 @@ export type GetJobQuery = {
       isActive: boolean,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     applications?:  {
       __typename: "ModelApplicationConnection",
       nextToken?: string | null,
     } | null,
-    questions?:  {
-      __typename: "ModelQuestionConnection",
+    tests?:  {
+      __typename: "ModelTestConnection",
       nextToken?: string | null,
     } | null,
+    videoTests?:  {
+      __typename: "ModelVideoTestConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    closingDate?: string | null,
   } | null,
 };
 
@@ -2275,15 +3153,19 @@ export type ListJobsQuery = {
       __typename: "Job",
       id: string,
       title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
       description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
-      isActive: boolean,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
       companyId: string,
       createdAt: string,
       updatedAt: string,
+      closingDate?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -2304,15 +3186,19 @@ export type JobsByCompanyIdQuery = {
       __typename: "Job",
       id: string,
       title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
       description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
-      isActive: boolean,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
       companyId: string,
       createdAt: string,
       updatedAt: string,
+      closingDate?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -2327,57 +3213,64 @@ export type GetApplicationQuery = {
     __typename: "Application",
     id: string,
     candidateId: string,
-    jobId: string,
-    status: ApplicationStatus,
-    currentStage: number,
-    appliedAt: string,
-    updatedAt: string,
-    coverLetter?: string | null,
-    resumeUrl?: string | null,
-    writtenTestScore?: number | null,
-    writtenTestSubmittedAt?: string | null,
-    videoTestUrl?: string | null,
-    videoTestSubmittedAt?: string | null,
-    interviewLink?: string | null,
-    interviewScheduledAt?: string | null,
-    finalDecision?: string | null,
-    candidate?:  {
-      __typename: "Candidate",
+    candidate:  {
+      __typename: "User",
       id: string,
-      cognitoId: string,
+      sub: string,
       email: string,
       firstName: string,
       lastName: string,
       phone?: string | null,
-      address?: string | null,
-      linkedin?: string | null,
-      portfolio?: string | null,
-      bio?: string | null,
-      skills?: Array< string | null > | null,
-      experience?: string | null,
-      education?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-    } | null,
-    job?:  {
+      resume?: string | null,
+    },
+    jobId: string,
+    job:  {
       __typename: "Job",
       id: string,
       title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
       description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
-      isActive: boolean,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
       companyId: string,
       createdAt: string,
       updatedAt: string,
+      closingDate?: string | null,
+    },
+    appliedAt: string,
+    currentStage: number,
+    overallStatus: ApplicationStatus,
+    applicationStatus: StageStatus,
+    writtenTestStatus: StageStatus,
+    videoTestStatus: StageStatus,
+    interviewStatus: StageStatus,
+    feedback?: string | null,
+    internalNotes?: string | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
     } | null,
-    testResponses?:  {
-      __typename: "ModelTestResponseConnection",
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
       nextToken?: string | null,
     } | null,
     createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -2395,20 +3288,17 @@ export type ListApplicationsQuery = {
       id: string,
       candidateId: string,
       jobId: string,
-      status: ApplicationStatus,
-      currentStage: number,
       appliedAt: string,
-      updatedAt: string,
-      coverLetter?: string | null,
-      resumeUrl?: string | null,
-      writtenTestScore?: number | null,
-      writtenTestSubmittedAt?: string | null,
-      videoTestUrl?: string | null,
-      videoTestSubmittedAt?: string | null,
-      interviewLink?: string | null,
-      interviewScheduledAt?: string | null,
-      finalDecision?: string | null,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
       createdAt: string,
+      updatedAt: string,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -2430,20 +3320,17 @@ export type ApplicationsByCandidateIdQuery = {
       id: string,
       candidateId: string,
       jobId: string,
-      status: ApplicationStatus,
-      currentStage: number,
       appliedAt: string,
-      updatedAt: string,
-      coverLetter?: string | null,
-      resumeUrl?: string | null,
-      writtenTestScore?: number | null,
-      writtenTestSubmittedAt?: string | null,
-      videoTestUrl?: string | null,
-      videoTestSubmittedAt?: string | null,
-      interviewLink?: string | null,
-      interviewScheduledAt?: string | null,
-      finalDecision?: string | null,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
       createdAt: string,
+      updatedAt: string,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -2465,151 +3352,59 @@ export type ApplicationsByJobIdQuery = {
       id: string,
       candidateId: string,
       jobId: string,
-      status: ApplicationStatus,
-      currentStage: number,
       appliedAt: string,
-      updatedAt: string,
-      coverLetter?: string | null,
-      resumeUrl?: string | null,
-      writtenTestScore?: number | null,
-      writtenTestSubmittedAt?: string | null,
-      videoTestUrl?: string | null,
-      videoTestSubmittedAt?: string | null,
-      interviewLink?: string | null,
-      interviewScheduledAt?: string | null,
-      finalDecision?: string | null,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
       createdAt: string,
+      updatedAt: string,
     } | null >,
     nextToken?: string | null,
   } | null,
 };
 
-export type GetCandidateQueryVariables = {
+export type GetTestQueryVariables = {
   id: string,
 };
 
-export type GetCandidateQuery = {
-  getCandidate?:  {
-    __typename: "Candidate",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    address?: string | null,
-    linkedin?: string | null,
-    portfolio?: string | null,
-    bio?: string | null,
-    skills?: Array< string | null > | null,
-    experience?: string | null,
-    education?: string | null,
-    createdAt: string,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListCandidatesQueryVariables = {
-  filter?: ModelCandidateFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListCandidatesQuery = {
-  listCandidates?:  {
-    __typename: "ModelCandidateConnection",
-    items:  Array< {
-      __typename: "Candidate",
-      id: string,
-      cognitoId: string,
-      email: string,
-      firstName: string,
-      lastName: string,
-      phone?: string | null,
-      address?: string | null,
-      linkedin?: string | null,
-      portfolio?: string | null,
-      bio?: string | null,
-      skills?: Array< string | null > | null,
-      experience?: string | null,
-      education?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type CandidatesByCognitoIdQueryVariables = {
-  cognitoId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelCandidateFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type CandidatesByCognitoIdQuery = {
-  candidatesByCognitoId?:  {
-    __typename: "ModelCandidateConnection",
-    items:  Array< {
-      __typename: "Candidate",
-      id: string,
-      cognitoId: string,
-      email: string,
-      firstName: string,
-      lastName: string,
-      phone?: string | null,
-      address?: string | null,
-      linkedin?: string | null,
-      portfolio?: string | null,
-      bio?: string | null,
-      skills?: Array< string | null > | null,
-      experience?: string | null,
-      education?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type GetQuestionQueryVariables = {
-  id: string,
-};
-
-export type GetQuestionQuery = {
-  getQuestion?:  {
-    __typename: "Question",
+export type GetTestQuery = {
+  getTest?:  {
+    __typename: "Test",
     id: string,
     jobId: string,
-    stage: number,
-    questionText: string,
-    questionType: QuestionType,
-    options?: Array< string | null > | null,
-    correctAnswer?: string | null,
-    timeLimit?: number | null,
-    order: number,
-    isActive: boolean,
-    job?:  {
+    job:  {
       __typename: "Job",
       id: string,
       title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
       description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
-      isActive: boolean,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
       companyId: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
-    responses?:  {
-      __typename: "ModelTestResponseConnection",
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    timeLimit: number,
+    totalPoints: number,
+    passingScore: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelTestAttemptConnection",
       nextToken?: string | null,
     } | null,
     createdAt: string,
@@ -2617,27 +3412,27 @@ export type GetQuestionQuery = {
   } | null,
 };
 
-export type ListQuestionsQueryVariables = {
-  filter?: ModelQuestionFilterInput | null,
+export type ListTestsQueryVariables = {
+  filter?: ModelTestFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListQuestionsQuery = {
-  listQuestions?:  {
-    __typename: "ModelQuestionConnection",
+export type ListTestsQuery = {
+  listTests?:  {
+    __typename: "ModelTestConnection",
     items:  Array< {
-      __typename: "Question",
+      __typename: "Test",
       id: string,
       jobId: string,
-      stage: number,
-      questionText: string,
-      questionType: QuestionType,
-      options?: Array< string | null > | null,
-      correctAnswer?: string | null,
-      timeLimit?: number | null,
-      order: number,
+      title: string,
+      description: string,
+      instructions: string,
+      timeLimit: number,
+      totalPoints: number,
+      passingScore: number,
       isActive: boolean,
+      questions: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2645,29 +3440,29 @@ export type ListQuestionsQuery = {
   } | null,
 };
 
-export type QuestionsByJobIdQueryVariables = {
+export type TestsByJobIdQueryVariables = {
   jobId: string,
   sortDirection?: ModelSortDirection | null,
-  filter?: ModelQuestionFilterInput | null,
+  filter?: ModelTestFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type QuestionsByJobIdQuery = {
-  questionsByJobId?:  {
-    __typename: "ModelQuestionConnection",
+export type TestsByJobIdQuery = {
+  testsByJobId?:  {
+    __typename: "ModelTestConnection",
     items:  Array< {
-      __typename: "Question",
+      __typename: "Test",
       id: string,
       jobId: string,
-      stage: number,
-      questionText: string,
-      questionType: QuestionType,
-      options?: Array< string | null > | null,
-      correctAnswer?: string | null,
-      timeLimit?: number | null,
-      order: number,
+      title: string,
+      description: string,
+      instructions: string,
+      timeLimit: number,
+      totalPoints: number,
+      passingScore: number,
       isActive: boolean,
+      questions: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2675,78 +3470,265 @@ export type QuestionsByJobIdQuery = {
   } | null,
 };
 
-export type GetTestResponseQueryVariables = {
+export type GetTestAttemptQueryVariables = {
   id: string,
 };
 
-export type GetTestResponseQuery = {
-  getTestResponse?:  {
-    __typename: "TestResponse",
+export type GetTestAttemptQuery = {
+  getTestAttempt?:  {
+    __typename: "TestAttempt",
     id: string,
+    testId: string,
+    test:  {
+      __typename: "Test",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      timeLimit: number,
+      totalPoints: number,
+      passingScore: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
     applicationId: string,
-    questionId: string,
-    response?: string | null,
-    videoUrl?: string | null,
-    isCorrect?: boolean | null,
-    submittedAt: string,
-    application?:  {
+    application:  {
       __typename: "Application",
       id: string,
       candidateId: string,
       jobId: string,
-      status: ApplicationStatus,
-      currentStage: number,
       appliedAt: string,
-      updatedAt: string,
-      coverLetter?: string | null,
-      resumeUrl?: string | null,
-      writtenTestScore?: number | null,
-      writtenTestSubmittedAt?: string | null,
-      videoTestUrl?: string | null,
-      videoTestSubmittedAt?: string | null,
-      interviewLink?: string | null,
-      interviewScheduledAt?: string | null,
-      finalDecision?: string | null,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
       createdAt: string,
-    } | null,
-    question?:  {
-      __typename: "Question",
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    timeRemaining?: number | null,
+    status: TestAttemptStatus,
+    answers?: string | null,
+    score?: number | null,
+    percentage?: number | null,
+    passed?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListTestAttemptsQueryVariables = {
+  filter?: ModelTestAttemptFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListTestAttemptsQuery = {
+  listTestAttempts?:  {
+    __typename: "ModelTestAttemptConnection",
+    items:  Array< {
+      __typename: "TestAttempt",
       id: string,
-      jobId: string,
-      stage: number,
-      questionText: string,
-      questionType: QuestionType,
-      options?: Array< string | null > | null,
-      correctAnswer?: string | null,
-      timeLimit?: number | null,
-      order: number,
-      isActive: boolean,
+      testId: string,
+      candidateId: string,
+      applicationId: string,
+      startedAt: string,
+      completedAt?: string | null,
+      timeRemaining?: number | null,
+      status: TestAttemptStatus,
+      answers?: string | null,
+      score?: number | null,
+      percentage?: number | null,
+      passed?: boolean | null,
       createdAt: string,
       updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type TestAttemptsByTestIdQueryVariables = {
+  testId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTestAttemptFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TestAttemptsByTestIdQuery = {
+  testAttemptsByTestId?:  {
+    __typename: "ModelTestAttemptConnection",
+    items:  Array< {
+      __typename: "TestAttempt",
+      id: string,
+      testId: string,
+      candidateId: string,
+      applicationId: string,
+      startedAt: string,
+      completedAt?: string | null,
+      timeRemaining?: number | null,
+      status: TestAttemptStatus,
+      answers?: string | null,
+      score?: number | null,
+      percentage?: number | null,
+      passed?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type TestAttemptsByCandidateIdQueryVariables = {
+  candidateId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTestAttemptFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TestAttemptsByCandidateIdQuery = {
+  testAttemptsByCandidateId?:  {
+    __typename: "ModelTestAttemptConnection",
+    items:  Array< {
+      __typename: "TestAttempt",
+      id: string,
+      testId: string,
+      candidateId: string,
+      applicationId: string,
+      startedAt: string,
+      completedAt?: string | null,
+      timeRemaining?: number | null,
+      status: TestAttemptStatus,
+      answers?: string | null,
+      score?: number | null,
+      percentage?: number | null,
+      passed?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type TestAttemptsByApplicationIdQueryVariables = {
+  applicationId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTestAttemptFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TestAttemptsByApplicationIdQuery = {
+  testAttemptsByApplicationId?:  {
+    __typename: "ModelTestAttemptConnection",
+    items:  Array< {
+      __typename: "TestAttempt",
+      id: string,
+      testId: string,
+      candidateId: string,
+      applicationId: string,
+      startedAt: string,
+      completedAt?: string | null,
+      timeRemaining?: number | null,
+      status: TestAttemptStatus,
+      answers?: string | null,
+      score?: number | null,
+      percentage?: number | null,
+      passed?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetVideoTestQueryVariables = {
+  id: string,
+};
+
+export type GetVideoTestQuery = {
+  getVideoTest?:  {
+    __typename: "VideoTest",
+    id: string,
+    jobId: string,
+    job:  {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    totalPoints: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type ListTestResponsesQueryVariables = {
-  filter?: ModelTestResponseFilterInput | null,
+export type ListVideoTestsQueryVariables = {
+  filter?: ModelVideoTestFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListTestResponsesQuery = {
-  listTestResponses?:  {
-    __typename: "ModelTestResponseConnection",
+export type ListVideoTestsQuery = {
+  listVideoTests?:  {
+    __typename: "ModelVideoTestConnection",
     items:  Array< {
-      __typename: "TestResponse",
+      __typename: "VideoTest",
       id: string,
-      applicationId: string,
-      questionId: string,
-      response?: string | null,
-      videoUrl?: string | null,
-      isCorrect?: boolean | null,
-      submittedAt: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      totalPoints: number,
+      isActive: boolean,
+      questions: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2754,26 +3736,218 @@ export type ListTestResponsesQuery = {
   } | null,
 };
 
-export type TestResponsesByApplicationIdQueryVariables = {
+export type VideoTestsByJobIdQueryVariables = {
+  jobId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelVideoTestFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type VideoTestsByJobIdQuery = {
+  videoTestsByJobId?:  {
+    __typename: "ModelVideoTestConnection",
+    items:  Array< {
+      __typename: "VideoTest",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      totalPoints: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetVideoTestAttemptQueryVariables = {
+  id: string,
+};
+
+export type GetVideoTestAttemptQuery = {
+  getVideoTestAttempt?:  {
+    __typename: "VideoTestAttempt",
+    id: string,
+    videoTestId: string,
+    videoTest:  {
+      __typename: "VideoTest",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      totalPoints: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    status: VideoTestAttemptStatus,
+    currentQuestionIndex: number,
+    recordings?: string | null,
+    totalScore?: number | null,
+    feedback?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListVideoTestAttemptsQueryVariables = {
+  filter?: ModelVideoTestAttemptFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListVideoTestAttemptsQuery = {
+  listVideoTestAttempts?:  {
+    __typename: "ModelVideoTestAttemptConnection",
+    items:  Array< {
+      __typename: "VideoTestAttempt",
+      id: string,
+      videoTestId: string,
+      candidateId: string,
+      applicationId: string,
+      startedAt: string,
+      completedAt?: string | null,
+      status: VideoTestAttemptStatus,
+      currentQuestionIndex: number,
+      recordings?: string | null,
+      totalScore?: number | null,
+      feedback?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type VideoTestAttemptsByVideoTestIdQueryVariables = {
+  videoTestId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelVideoTestAttemptFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type VideoTestAttemptsByVideoTestIdQuery = {
+  videoTestAttemptsByVideoTestId?:  {
+    __typename: "ModelVideoTestAttemptConnection",
+    items:  Array< {
+      __typename: "VideoTestAttempt",
+      id: string,
+      videoTestId: string,
+      candidateId: string,
+      applicationId: string,
+      startedAt: string,
+      completedAt?: string | null,
+      status: VideoTestAttemptStatus,
+      currentQuestionIndex: number,
+      recordings?: string | null,
+      totalScore?: number | null,
+      feedback?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type VideoTestAttemptsByCandidateIdQueryVariables = {
+  candidateId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelVideoTestAttemptFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type VideoTestAttemptsByCandidateIdQuery = {
+  videoTestAttemptsByCandidateId?:  {
+    __typename: "ModelVideoTestAttemptConnection",
+    items:  Array< {
+      __typename: "VideoTestAttempt",
+      id: string,
+      videoTestId: string,
+      candidateId: string,
+      applicationId: string,
+      startedAt: string,
+      completedAt?: string | null,
+      status: VideoTestAttemptStatus,
+      currentQuestionIndex: number,
+      recordings?: string | null,
+      totalScore?: number | null,
+      feedback?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type VideoTestAttemptsByApplicationIdQueryVariables = {
   applicationId: string,
   sortDirection?: ModelSortDirection | null,
-  filter?: ModelTestResponseFilterInput | null,
+  filter?: ModelVideoTestAttemptFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type TestResponsesByApplicationIdQuery = {
-  testResponsesByApplicationId?:  {
-    __typename: "ModelTestResponseConnection",
+export type VideoTestAttemptsByApplicationIdQuery = {
+  videoTestAttemptsByApplicationId?:  {
+    __typename: "ModelVideoTestAttemptConnection",
     items:  Array< {
-      __typename: "TestResponse",
+      __typename: "VideoTestAttempt",
       id: string,
+      videoTestId: string,
+      candidateId: string,
       applicationId: string,
-      questionId: string,
-      response?: string | null,
-      videoUrl?: string | null,
-      isCorrect?: boolean | null,
-      submittedAt: string,
+      startedAt: string,
+      completedAt?: string | null,
+      status: VideoTestAttemptStatus,
+      currentQuestionIndex: number,
+      recordings?: string | null,
+      totalScore?: number | null,
+      feedback?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2781,30 +3955,320 @@ export type TestResponsesByApplicationIdQuery = {
   } | null,
 };
 
-export type TestResponsesByQuestionIdQueryVariables = {
-  questionId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelTestResponseFilterInput | null,
+export type GetInterviewQueryVariables = {
+  id: string,
+};
+
+export type GetInterviewQuery = {
+  getInterview?:  {
+    __typename: "Interview",
+    id: string,
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    scheduledAt: string,
+    duration: number,
+    type: InterviewType,
+    status: InterviewStatus,
+    meetingUrl?: string | null,
+    interviewerNotes?: string | null,
+    candidateFeedback?: string | null,
+    finalScore?: number | null,
+    recommendation?: InterviewRecommendation | null,
+    interviewers?: Array< string > | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListInterviewsQueryVariables = {
+  filter?: ModelInterviewFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type TestResponsesByQuestionIdQuery = {
-  testResponsesByQuestionId?:  {
-    __typename: "ModelTestResponseConnection",
+export type ListInterviewsQuery = {
+  listInterviews?:  {
+    __typename: "ModelInterviewConnection",
     items:  Array< {
-      __typename: "TestResponse",
+      __typename: "Interview",
       id: string,
+      candidateId: string,
       applicationId: string,
-      questionId: string,
-      response?: string | null,
-      videoUrl?: string | null,
-      isCorrect?: boolean | null,
-      submittedAt: string,
+      scheduledAt: string,
+      duration: number,
+      type: InterviewType,
+      status: InterviewStatus,
+      meetingUrl?: string | null,
+      interviewerNotes?: string | null,
+      candidateFeedback?: string | null,
+      finalScore?: number | null,
+      recommendation?: InterviewRecommendation | null,
+      interviewers?: Array< string > | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
+  } | null,
+};
+
+export type InterviewsByCandidateIdQueryVariables = {
+  candidateId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelInterviewFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type InterviewsByCandidateIdQuery = {
+  interviewsByCandidateId?:  {
+    __typename: "ModelInterviewConnection",
+    items:  Array< {
+      __typename: "Interview",
+      id: string,
+      candidateId: string,
+      applicationId: string,
+      scheduledAt: string,
+      duration: number,
+      type: InterviewType,
+      status: InterviewStatus,
+      meetingUrl?: string | null,
+      interviewerNotes?: string | null,
+      candidateFeedback?: string | null,
+      finalScore?: number | null,
+      recommendation?: InterviewRecommendation | null,
+      interviewers?: Array< string > | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type InterviewsByApplicationIdQueryVariables = {
+  applicationId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelInterviewFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type InterviewsByApplicationIdQuery = {
+  interviewsByApplicationId?:  {
+    __typename: "ModelInterviewConnection",
+    items:  Array< {
+      __typename: "Interview",
+      id: string,
+      candidateId: string,
+      applicationId: string,
+      scheduledAt: string,
+      duration: number,
+      type: InterviewType,
+      status: InterviewStatus,
+      meetingUrl?: string | null,
+      interviewerNotes?: string | null,
+      candidateFeedback?: string | null,
+      finalScore?: number | null,
+      recommendation?: InterviewRecommendation | null,
+      interviewers?: Array< string > | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type OnCreateUserSubscriptionVariables = {
+  filter?: ModelSubscriptionUserFilterInput | null,
+  sub?: string | null,
+};
+
+export type OnCreateUserSubscription = {
+  onCreateUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+  } | null,
+};
+
+export type OnUpdateUserSubscriptionVariables = {
+  filter?: ModelSubscriptionUserFilterInput | null,
+  sub?: string | null,
+};
+
+export type OnUpdateUserSubscription = {
+  onUpdateUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+  } | null,
+};
+
+export type OnDeleteUserSubscriptionVariables = {
+  filter?: ModelSubscriptionUserFilterInput | null,
+  sub?: string | null,
+};
+
+export type OnDeleteUserSubscription = {
+  onDeleteUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
   } | null,
 };
 
@@ -2824,16 +4288,16 @@ export type OnCreateCompanySubscription = {
     logo?: string | null,
     description?: string | null,
     isActive: boolean,
-    createdAt: string,
-    updatedAt: string,
     admins?:  {
-      __typename: "ModelCompanyAdminConnection",
+      __typename: "ModelUserConnection",
       nextToken?: string | null,
     } | null,
     jobs?:  {
       __typename: "ModelJobConnection",
       nextToken?: string | null,
     } | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -2853,16 +4317,16 @@ export type OnUpdateCompanySubscription = {
     logo?: string | null,
     description?: string | null,
     isActive: boolean,
-    createdAt: string,
-    updatedAt: string,
     admins?:  {
-      __typename: "ModelCompanyAdminConnection",
+      __typename: "ModelUserConnection",
       nextToken?: string | null,
     } | null,
     jobs?:  {
       __typename: "ModelJobConnection",
       nextToken?: string | null,
     } | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -2882,170 +4346,14 @@ export type OnDeleteCompanySubscription = {
     logo?: string | null,
     description?: string | null,
     isActive: boolean,
-    createdAt: string,
-    updatedAt: string,
     admins?:  {
-      __typename: "ModelCompanyAdminConnection",
+      __typename: "ModelUserConnection",
       nextToken?: string | null,
     } | null,
     jobs?:  {
       __typename: "ModelJobConnection",
       nextToken?: string | null,
     } | null,
-  } | null,
-};
-
-export type OnCreateCompanyAdminSubscriptionVariables = {
-  filter?: ModelSubscriptionCompanyAdminFilterInput | null,
-};
-
-export type OnCreateCompanyAdminSubscription = {
-  onCreateCompanyAdmin?:  {
-    __typename: "CompanyAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    isActive: boolean,
-    companyId: string,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateCompanyAdminSubscriptionVariables = {
-  filter?: ModelSubscriptionCompanyAdminFilterInput | null,
-};
-
-export type OnUpdateCompanyAdminSubscription = {
-  onUpdateCompanyAdmin?:  {
-    __typename: "CompanyAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    isActive: boolean,
-    companyId: string,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteCompanyAdminSubscriptionVariables = {
-  filter?: ModelSubscriptionCompanyAdminFilterInput | null,
-};
-
-export type OnDeleteCompanyAdminSubscription = {
-  onDeleteCompanyAdmin?:  {
-    __typename: "CompanyAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    isActive: boolean,
-    companyId: string,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateSuperAdminSubscriptionVariables = {
-  filter?: ModelSubscriptionSuperAdminFilterInput | null,
-};
-
-export type OnCreateSuperAdminSubscription = {
-  onCreateSuperAdmin?:  {
-    __typename: "SuperAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateSuperAdminSubscriptionVariables = {
-  filter?: ModelSubscriptionSuperAdminFilterInput | null,
-};
-
-export type OnUpdateSuperAdminSubscription = {
-  onUpdateSuperAdmin?:  {
-    __typename: "SuperAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteSuperAdminSubscriptionVariables = {
-  filter?: ModelSubscriptionSuperAdminFilterInput | null,
-};
-
-export type OnDeleteSuperAdminSubscription = {
-  onDeleteSuperAdmin?:  {
-    __typename: "SuperAdmin",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3060,16 +4368,17 @@ export type OnCreateJobSubscription = {
     __typename: "Job",
     id: string,
     title: string,
+    department: string,
+    location: string,
+    type: JobType,
+    salary?: string | null,
     description: string,
-    requirements?: string | null,
-    location?: string | null,
-    jobType?: string | null,
-    salaryRange?: string | null,
-    isActive: boolean,
+    requirements: Array< string >,
+    responsibilities: Array< string >,
+    benefits?: Array< string > | null,
+    status: JobStatus,
     companyId: string,
-    createdAt: string,
-    updatedAt: string,
-    company?:  {
+    company:  {
       __typename: "Company",
       id: string,
       name: string,
@@ -3082,15 +4391,22 @@ export type OnCreateJobSubscription = {
       isActive: boolean,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     applications?:  {
       __typename: "ModelApplicationConnection",
       nextToken?: string | null,
     } | null,
-    questions?:  {
-      __typename: "ModelQuestionConnection",
+    tests?:  {
+      __typename: "ModelTestConnection",
       nextToken?: string | null,
     } | null,
+    videoTests?:  {
+      __typename: "ModelVideoTestConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    closingDate?: string | null,
   } | null,
 };
 
@@ -3103,16 +4419,17 @@ export type OnUpdateJobSubscription = {
     __typename: "Job",
     id: string,
     title: string,
+    department: string,
+    location: string,
+    type: JobType,
+    salary?: string | null,
     description: string,
-    requirements?: string | null,
-    location?: string | null,
-    jobType?: string | null,
-    salaryRange?: string | null,
-    isActive: boolean,
+    requirements: Array< string >,
+    responsibilities: Array< string >,
+    benefits?: Array< string > | null,
+    status: JobStatus,
     companyId: string,
-    createdAt: string,
-    updatedAt: string,
-    company?:  {
+    company:  {
       __typename: "Company",
       id: string,
       name: string,
@@ -3125,15 +4442,22 @@ export type OnUpdateJobSubscription = {
       isActive: boolean,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     applications?:  {
       __typename: "ModelApplicationConnection",
       nextToken?: string | null,
     } | null,
-    questions?:  {
-      __typename: "ModelQuestionConnection",
+    tests?:  {
+      __typename: "ModelTestConnection",
       nextToken?: string | null,
     } | null,
+    videoTests?:  {
+      __typename: "ModelVideoTestConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    closingDate?: string | null,
   } | null,
 };
 
@@ -3146,16 +4470,17 @@ export type OnDeleteJobSubscription = {
     __typename: "Job",
     id: string,
     title: string,
+    department: string,
+    location: string,
+    type: JobType,
+    salary?: string | null,
     description: string,
-    requirements?: string | null,
-    location?: string | null,
-    jobType?: string | null,
-    salaryRange?: string | null,
-    isActive: boolean,
+    requirements: Array< string >,
+    responsibilities: Array< string >,
+    benefits?: Array< string > | null,
+    status: JobStatus,
     companyId: string,
-    createdAt: string,
-    updatedAt: string,
-    company?:  {
+    company:  {
       __typename: "Company",
       id: string,
       name: string,
@@ -3168,20 +4493,28 @@ export type OnDeleteJobSubscription = {
       isActive: boolean,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
     applications?:  {
       __typename: "ModelApplicationConnection",
       nextToken?: string | null,
     } | null,
-    questions?:  {
-      __typename: "ModelQuestionConnection",
+    tests?:  {
+      __typename: "ModelTestConnection",
       nextToken?: string | null,
     } | null,
+    videoTests?:  {
+      __typename: "ModelVideoTestConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    closingDate?: string | null,
   } | null,
 };
 
 export type OnCreateApplicationSubscriptionVariables = {
   filter?: ModelSubscriptionApplicationFilterInput | null,
+  candidateId?: string | null,
 };
 
 export type OnCreateApplicationSubscription = {
@@ -3189,62 +4522,70 @@ export type OnCreateApplicationSubscription = {
     __typename: "Application",
     id: string,
     candidateId: string,
-    jobId: string,
-    status: ApplicationStatus,
-    currentStage: number,
-    appliedAt: string,
-    updatedAt: string,
-    coverLetter?: string | null,
-    resumeUrl?: string | null,
-    writtenTestScore?: number | null,
-    writtenTestSubmittedAt?: string | null,
-    videoTestUrl?: string | null,
-    videoTestSubmittedAt?: string | null,
-    interviewLink?: string | null,
-    interviewScheduledAt?: string | null,
-    finalDecision?: string | null,
-    candidate?:  {
-      __typename: "Candidate",
+    candidate:  {
+      __typename: "User",
       id: string,
-      cognitoId: string,
+      sub: string,
       email: string,
       firstName: string,
       lastName: string,
       phone?: string | null,
-      address?: string | null,
-      linkedin?: string | null,
-      portfolio?: string | null,
-      bio?: string | null,
-      skills?: Array< string | null > | null,
-      experience?: string | null,
-      education?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-    } | null,
-    job?:  {
+      resume?: string | null,
+    },
+    jobId: string,
+    job:  {
       __typename: "Job",
       id: string,
       title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
       description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
-      isActive: boolean,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
       companyId: string,
       createdAt: string,
       updatedAt: string,
+      closingDate?: string | null,
+    },
+    appliedAt: string,
+    currentStage: number,
+    overallStatus: ApplicationStatus,
+    applicationStatus: StageStatus,
+    writtenTestStatus: StageStatus,
+    videoTestStatus: StageStatus,
+    interviewStatus: StageStatus,
+    feedback?: string | null,
+    internalNotes?: string | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
     } | null,
-    testResponses?:  {
-      __typename: "ModelTestResponseConnection",
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
       nextToken?: string | null,
     } | null,
     createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
 export type OnUpdateApplicationSubscriptionVariables = {
   filter?: ModelSubscriptionApplicationFilterInput | null,
+  candidateId?: string | null,
 };
 
 export type OnUpdateApplicationSubscription = {
@@ -3252,62 +4593,70 @@ export type OnUpdateApplicationSubscription = {
     __typename: "Application",
     id: string,
     candidateId: string,
-    jobId: string,
-    status: ApplicationStatus,
-    currentStage: number,
-    appliedAt: string,
-    updatedAt: string,
-    coverLetter?: string | null,
-    resumeUrl?: string | null,
-    writtenTestScore?: number | null,
-    writtenTestSubmittedAt?: string | null,
-    videoTestUrl?: string | null,
-    videoTestSubmittedAt?: string | null,
-    interviewLink?: string | null,
-    interviewScheduledAt?: string | null,
-    finalDecision?: string | null,
-    candidate?:  {
-      __typename: "Candidate",
+    candidate:  {
+      __typename: "User",
       id: string,
-      cognitoId: string,
+      sub: string,
       email: string,
       firstName: string,
       lastName: string,
       phone?: string | null,
-      address?: string | null,
-      linkedin?: string | null,
-      portfolio?: string | null,
-      bio?: string | null,
-      skills?: Array< string | null > | null,
-      experience?: string | null,
-      education?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-    } | null,
-    job?:  {
+      resume?: string | null,
+    },
+    jobId: string,
+    job:  {
       __typename: "Job",
       id: string,
       title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
       description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
-      isActive: boolean,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
       companyId: string,
       createdAt: string,
       updatedAt: string,
+      closingDate?: string | null,
+    },
+    appliedAt: string,
+    currentStage: number,
+    overallStatus: ApplicationStatus,
+    applicationStatus: StageStatus,
+    writtenTestStatus: StageStatus,
+    videoTestStatus: StageStatus,
+    interviewStatus: StageStatus,
+    feedback?: string | null,
+    internalNotes?: string | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
     } | null,
-    testResponses?:  {
-      __typename: "ModelTestResponseConnection",
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
       nextToken?: string | null,
     } | null,
     createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
 export type OnDeleteApplicationSubscriptionVariables = {
   filter?: ModelSubscriptionApplicationFilterInput | null,
+  candidateId?: string | null,
 };
 
 export type OnDeleteApplicationSubscription = {
@@ -3315,180 +4664,104 @@ export type OnDeleteApplicationSubscription = {
     __typename: "Application",
     id: string,
     candidateId: string,
-    jobId: string,
-    status: ApplicationStatus,
-    currentStage: number,
-    appliedAt: string,
-    updatedAt: string,
-    coverLetter?: string | null,
-    resumeUrl?: string | null,
-    writtenTestScore?: number | null,
-    writtenTestSubmittedAt?: string | null,
-    videoTestUrl?: string | null,
-    videoTestSubmittedAt?: string | null,
-    interviewLink?: string | null,
-    interviewScheduledAt?: string | null,
-    finalDecision?: string | null,
-    candidate?:  {
-      __typename: "Candidate",
+    candidate:  {
+      __typename: "User",
       id: string,
-      cognitoId: string,
+      sub: string,
       email: string,
       firstName: string,
       lastName: string,
       phone?: string | null,
-      address?: string | null,
-      linkedin?: string | null,
-      portfolio?: string | null,
-      bio?: string | null,
-      skills?: Array< string | null > | null,
-      experience?: string | null,
-      education?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-    } | null,
-    job?:  {
+      resume?: string | null,
+    },
+    jobId: string,
+    job:  {
       __typename: "Job",
       id: string,
       title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
       description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
-      isActive: boolean,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
       companyId: string,
       createdAt: string,
       updatedAt: string,
+      closingDate?: string | null,
+    },
+    appliedAt: string,
+    currentStage: number,
+    overallStatus: ApplicationStatus,
+    applicationStatus: StageStatus,
+    writtenTestStatus: StageStatus,
+    videoTestStatus: StageStatus,
+    interviewStatus: StageStatus,
+    feedback?: string | null,
+    internalNotes?: string | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
     } | null,
-    testResponses?:  {
-      __typename: "ModelTestResponseConnection",
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
       nextToken?: string | null,
     } | null,
     createdAt: string,
-  } | null,
-};
-
-export type OnCreateCandidateSubscriptionVariables = {
-  filter?: ModelSubscriptionCandidateFilterInput | null,
-};
-
-export type OnCreateCandidateSubscription = {
-  onCreateCandidate?:  {
-    __typename: "Candidate",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    address?: string | null,
-    linkedin?: string | null,
-    portfolio?: string | null,
-    bio?: string | null,
-    skills?: Array< string | null > | null,
-    experience?: string | null,
-    education?: string | null,
-    createdAt: string,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
     updatedAt: string,
   } | null,
 };
 
-export type OnUpdateCandidateSubscriptionVariables = {
-  filter?: ModelSubscriptionCandidateFilterInput | null,
+export type OnCreateTestSubscriptionVariables = {
+  filter?: ModelSubscriptionTestFilterInput | null,
 };
 
-export type OnUpdateCandidateSubscription = {
-  onUpdateCandidate?:  {
-    __typename: "Candidate",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    address?: string | null,
-    linkedin?: string | null,
-    portfolio?: string | null,
-    bio?: string | null,
-    skills?: Array< string | null > | null,
-    experience?: string | null,
-    education?: string | null,
-    createdAt: string,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteCandidateSubscriptionVariables = {
-  filter?: ModelSubscriptionCandidateFilterInput | null,
-};
-
-export type OnDeleteCandidateSubscription = {
-  onDeleteCandidate?:  {
-    __typename: "Candidate",
-    id: string,
-    cognitoId: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    address?: string | null,
-    linkedin?: string | null,
-    portfolio?: string | null,
-    bio?: string | null,
-    skills?: Array< string | null > | null,
-    experience?: string | null,
-    education?: string | null,
-    createdAt: string,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateQuestionSubscriptionVariables = {
-  filter?: ModelSubscriptionQuestionFilterInput | null,
-};
-
-export type OnCreateQuestionSubscription = {
-  onCreateQuestion?:  {
-    __typename: "Question",
+export type OnCreateTestSubscription = {
+  onCreateTest?:  {
+    __typename: "Test",
     id: string,
     jobId: string,
-    stage: number,
-    questionText: string,
-    questionType: QuestionType,
-    options?: Array< string | null > | null,
-    correctAnswer?: string | null,
-    timeLimit?: number | null,
-    order: number,
-    isActive: boolean,
-    job?:  {
+    job:  {
       __typename: "Job",
       id: string,
       title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
       description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
-      isActive: boolean,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
       companyId: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
-    responses?:  {
-      __typename: "ModelTestResponseConnection",
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    timeLimit: number,
+    totalPoints: number,
+    passingScore: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelTestAttemptConnection",
       nextToken?: string | null,
     } | null,
     createdAt: string,
@@ -3496,39 +4769,43 @@ export type OnCreateQuestionSubscription = {
   } | null,
 };
 
-export type OnUpdateQuestionSubscriptionVariables = {
-  filter?: ModelSubscriptionQuestionFilterInput | null,
+export type OnUpdateTestSubscriptionVariables = {
+  filter?: ModelSubscriptionTestFilterInput | null,
 };
 
-export type OnUpdateQuestionSubscription = {
-  onUpdateQuestion?:  {
-    __typename: "Question",
+export type OnUpdateTestSubscription = {
+  onUpdateTest?:  {
+    __typename: "Test",
     id: string,
     jobId: string,
-    stage: number,
-    questionText: string,
-    questionType: QuestionType,
-    options?: Array< string | null > | null,
-    correctAnswer?: string | null,
-    timeLimit?: number | null,
-    order: number,
-    isActive: boolean,
-    job?:  {
+    job:  {
       __typename: "Job",
       id: string,
       title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
       description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
-      isActive: boolean,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
       companyId: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
-    responses?:  {
-      __typename: "ModelTestResponseConnection",
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    timeLimit: number,
+    totalPoints: number,
+    passingScore: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelTestAttemptConnection",
       nextToken?: string | null,
     } | null,
     createdAt: string,
@@ -3536,39 +4813,43 @@ export type OnUpdateQuestionSubscription = {
   } | null,
 };
 
-export type OnDeleteQuestionSubscriptionVariables = {
-  filter?: ModelSubscriptionQuestionFilterInput | null,
+export type OnDeleteTestSubscriptionVariables = {
+  filter?: ModelSubscriptionTestFilterInput | null,
 };
 
-export type OnDeleteQuestionSubscription = {
-  onDeleteQuestion?:  {
-    __typename: "Question",
+export type OnDeleteTestSubscription = {
+  onDeleteTest?:  {
+    __typename: "Test",
     id: string,
     jobId: string,
-    stage: number,
-    questionText: string,
-    questionType: QuestionType,
-    options?: Array< string | null > | null,
-    correctAnswer?: string | null,
-    timeLimit?: number | null,
-    order: number,
-    isActive: boolean,
-    job?:  {
+    job:  {
       __typename: "Job",
       id: string,
       title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
       description: string,
-      requirements?: string | null,
-      location?: string | null,
-      jobType?: string | null,
-      salaryRange?: string | null,
-      isActive: boolean,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
       companyId: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
-    responses?:  {
-      __typename: "ModelTestResponseConnection",
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    timeLimit: number,
+    totalPoints: number,
+    passingScore: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelTestAttemptConnection",
       nextToken?: string | null,
     } | null,
     createdAt: string,
@@ -3576,163 +4857,733 @@ export type OnDeleteQuestionSubscription = {
   } | null,
 };
 
-export type OnCreateTestResponseSubscriptionVariables = {
-  filter?: ModelSubscriptionTestResponseFilterInput | null,
+export type OnCreateTestAttemptSubscriptionVariables = {
+  filter?: ModelSubscriptionTestAttemptFilterInput | null,
+  candidateId?: string | null,
 };
 
-export type OnCreateTestResponseSubscription = {
-  onCreateTestResponse?:  {
-    __typename: "TestResponse",
+export type OnCreateTestAttemptSubscription = {
+  onCreateTestAttempt?:  {
+    __typename: "TestAttempt",
     id: string,
+    testId: string,
+    test:  {
+      __typename: "Test",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      timeLimit: number,
+      totalPoints: number,
+      passingScore: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
     applicationId: string,
-    questionId: string,
-    response?: string | null,
-    videoUrl?: string | null,
-    isCorrect?: boolean | null,
-    submittedAt: string,
-    application?:  {
+    application:  {
       __typename: "Application",
       id: string,
       candidateId: string,
       jobId: string,
-      status: ApplicationStatus,
-      currentStage: number,
       appliedAt: string,
-      updatedAt: string,
-      coverLetter?: string | null,
-      resumeUrl?: string | null,
-      writtenTestScore?: number | null,
-      writtenTestSubmittedAt?: string | null,
-      videoTestUrl?: string | null,
-      videoTestSubmittedAt?: string | null,
-      interviewLink?: string | null,
-      interviewScheduledAt?: string | null,
-      finalDecision?: string | null,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
       createdAt: string,
-    } | null,
-    question?:  {
-      __typename: "Question",
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    timeRemaining?: number | null,
+    status: TestAttemptStatus,
+    answers?: string | null,
+    score?: number | null,
+    percentage?: number | null,
+    passed?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateTestAttemptSubscriptionVariables = {
+  filter?: ModelSubscriptionTestAttemptFilterInput | null,
+  candidateId?: string | null,
+};
+
+export type OnUpdateTestAttemptSubscription = {
+  onUpdateTestAttempt?:  {
+    __typename: "TestAttempt",
+    id: string,
+    testId: string,
+    test:  {
+      __typename: "Test",
       id: string,
       jobId: string,
-      stage: number,
-      questionText: string,
-      questionType: QuestionType,
-      options?: Array< string | null > | null,
-      correctAnswer?: string | null,
-      timeLimit?: number | null,
-      order: number,
+      title: string,
+      description: string,
+      instructions: string,
+      timeLimit: number,
+      totalPoints: number,
+      passingScore: number,
       isActive: boolean,
+      questions: string,
       createdAt: string,
       updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    timeRemaining?: number | null,
+    status: TestAttemptStatus,
+    answers?: string | null,
+    score?: number | null,
+    percentage?: number | null,
+    passed?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteTestAttemptSubscriptionVariables = {
+  filter?: ModelSubscriptionTestAttemptFilterInput | null,
+  candidateId?: string | null,
+};
+
+export type OnDeleteTestAttemptSubscription = {
+  onDeleteTestAttempt?:  {
+    __typename: "TestAttempt",
+    id: string,
+    testId: string,
+    test:  {
+      __typename: "Test",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      timeLimit: number,
+      totalPoints: number,
+      passingScore: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    timeRemaining?: number | null,
+    status: TestAttemptStatus,
+    answers?: string | null,
+    score?: number | null,
+    percentage?: number | null,
+    passed?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateVideoTestSubscriptionVariables = {
+  filter?: ModelSubscriptionVideoTestFilterInput | null,
+};
+
+export type OnCreateVideoTestSubscription = {
+  onCreateVideoTest?:  {
+    __typename: "VideoTest",
+    id: string,
+    jobId: string,
+    job:  {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    totalPoints: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnUpdateTestResponseSubscriptionVariables = {
-  filter?: ModelSubscriptionTestResponseFilterInput | null,
+export type OnUpdateVideoTestSubscriptionVariables = {
+  filter?: ModelSubscriptionVideoTestFilterInput | null,
 };
 
-export type OnUpdateTestResponseSubscription = {
-  onUpdateTestResponse?:  {
-    __typename: "TestResponse",
+export type OnUpdateVideoTestSubscription = {
+  onUpdateVideoTest?:  {
+    __typename: "VideoTest",
     id: string,
-    applicationId: string,
-    questionId: string,
-    response?: string | null,
-    videoUrl?: string | null,
-    isCorrect?: boolean | null,
-    submittedAt: string,
-    application?:  {
-      __typename: "Application",
+    jobId: string,
+    job:  {
+      __typename: "Job",
       id: string,
-      candidateId: string,
-      jobId: string,
-      status: ApplicationStatus,
-      currentStage: number,
-      appliedAt: string,
-      updatedAt: string,
-      coverLetter?: string | null,
-      resumeUrl?: string | null,
-      writtenTestScore?: number | null,
-      writtenTestSubmittedAt?: string | null,
-      videoTestUrl?: string | null,
-      videoTestSubmittedAt?: string | null,
-      interviewLink?: string | null,
-      interviewScheduledAt?: string | null,
-      finalDecision?: string | null,
-      createdAt: string,
-    } | null,
-    question?:  {
-      __typename: "Question",
-      id: string,
-      jobId: string,
-      stage: number,
-      questionText: string,
-      questionType: QuestionType,
-      options?: Array< string | null > | null,
-      correctAnswer?: string | null,
-      timeLimit?: number | null,
-      order: number,
-      isActive: boolean,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
       createdAt: string,
       updatedAt: string,
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    totalPoints: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnDeleteTestResponseSubscriptionVariables = {
-  filter?: ModelSubscriptionTestResponseFilterInput | null,
+export type OnDeleteVideoTestSubscriptionVariables = {
+  filter?: ModelSubscriptionVideoTestFilterInput | null,
 };
 
-export type OnDeleteTestResponseSubscription = {
-  onDeleteTestResponse?:  {
-    __typename: "TestResponse",
+export type OnDeleteVideoTestSubscription = {
+  onDeleteVideoTest?:  {
+    __typename: "VideoTest",
     id: string,
+    jobId: string,
+    job:  {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
+    },
+    title: string,
+    description: string,
+    instructions: string,
+    totalPoints: number,
+    isActive: boolean,
+    questions: string,
+    attempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateVideoTestAttemptSubscriptionVariables = {
+  filter?: ModelSubscriptionVideoTestAttemptFilterInput | null,
+  candidateId?: string | null,
+};
+
+export type OnCreateVideoTestAttemptSubscription = {
+  onCreateVideoTestAttempt?:  {
+    __typename: "VideoTestAttempt",
+    id: string,
+    videoTestId: string,
+    videoTest:  {
+      __typename: "VideoTest",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      totalPoints: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
     applicationId: string,
-    questionId: string,
-    response?: string | null,
-    videoUrl?: string | null,
-    isCorrect?: boolean | null,
-    submittedAt: string,
-    application?:  {
+    application:  {
       __typename: "Application",
       id: string,
       candidateId: string,
       jobId: string,
-      status: ApplicationStatus,
-      currentStage: number,
       appliedAt: string,
-      updatedAt: string,
-      coverLetter?: string | null,
-      resumeUrl?: string | null,
-      writtenTestScore?: number | null,
-      writtenTestSubmittedAt?: string | null,
-      videoTestUrl?: string | null,
-      videoTestSubmittedAt?: string | null,
-      interviewLink?: string | null,
-      interviewScheduledAt?: string | null,
-      finalDecision?: string | null,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
       createdAt: string,
-    } | null,
-    question?:  {
-      __typename: "Question",
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    status: VideoTestAttemptStatus,
+    currentQuestionIndex: number,
+    recordings?: string | null,
+    totalScore?: number | null,
+    feedback?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateVideoTestAttemptSubscriptionVariables = {
+  filter?: ModelSubscriptionVideoTestAttemptFilterInput | null,
+  candidateId?: string | null,
+};
+
+export type OnUpdateVideoTestAttemptSubscription = {
+  onUpdateVideoTestAttempt?:  {
+    __typename: "VideoTestAttempt",
+    id: string,
+    videoTestId: string,
+    videoTest:  {
+      __typename: "VideoTest",
       id: string,
       jobId: string,
-      stage: number,
-      questionText: string,
-      questionType: QuestionType,
-      options?: Array< string | null > | null,
-      correctAnswer?: string | null,
-      timeLimit?: number | null,
-      order: number,
+      title: string,
+      description: string,
+      instructions: string,
+      totalPoints: number,
       isActive: boolean,
+      questions: string,
       createdAt: string,
       updatedAt: string,
-    } | null,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    status: VideoTestAttemptStatus,
+    currentQuestionIndex: number,
+    recordings?: string | null,
+    totalScore?: number | null,
+    feedback?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteVideoTestAttemptSubscriptionVariables = {
+  filter?: ModelSubscriptionVideoTestAttemptFilterInput | null,
+  candidateId?: string | null,
+};
+
+export type OnDeleteVideoTestAttemptSubscription = {
+  onDeleteVideoTestAttempt?:  {
+    __typename: "VideoTestAttempt",
+    id: string,
+    videoTestId: string,
+    videoTest:  {
+      __typename: "VideoTest",
+      id: string,
+      jobId: string,
+      title: string,
+      description: string,
+      instructions: string,
+      totalPoints: number,
+      isActive: boolean,
+      questions: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    startedAt: string,
+    completedAt?: string | null,
+    status: VideoTestAttemptStatus,
+    currentQuestionIndex: number,
+    recordings?: string | null,
+    totalScore?: number | null,
+    feedback?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateInterviewSubscriptionVariables = {
+  filter?: ModelSubscriptionInterviewFilterInput | null,
+  candidateId?: string | null,
+};
+
+export type OnCreateInterviewSubscription = {
+  onCreateInterview?:  {
+    __typename: "Interview",
+    id: string,
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    scheduledAt: string,
+    duration: number,
+    type: InterviewType,
+    status: InterviewStatus,
+    meetingUrl?: string | null,
+    interviewerNotes?: string | null,
+    candidateFeedback?: string | null,
+    finalScore?: number | null,
+    recommendation?: InterviewRecommendation | null,
+    interviewers?: Array< string > | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateInterviewSubscriptionVariables = {
+  filter?: ModelSubscriptionInterviewFilterInput | null,
+  candidateId?: string | null,
+};
+
+export type OnUpdateInterviewSubscription = {
+  onUpdateInterview?:  {
+    __typename: "Interview",
+    id: string,
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    scheduledAt: string,
+    duration: number,
+    type: InterviewType,
+    status: InterviewStatus,
+    meetingUrl?: string | null,
+    interviewerNotes?: string | null,
+    candidateFeedback?: string | null,
+    finalScore?: number | null,
+    recommendation?: InterviewRecommendation | null,
+    interviewers?: Array< string > | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteInterviewSubscriptionVariables = {
+  filter?: ModelSubscriptionInterviewFilterInput | null,
+  candidateId?: string | null,
+};
+
+export type OnDeleteInterviewSubscription = {
+  onDeleteInterview?:  {
+    __typename: "Interview",
+    id: string,
+    candidateId: string,
+    candidate:  {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      resume?: string | null,
+    },
+    applicationId: string,
+    application:  {
+      __typename: "Application",
+      id: string,
+      candidateId: string,
+      jobId: string,
+      appliedAt: string,
+      currentStage: number,
+      overallStatus: ApplicationStatus,
+      applicationStatus: StageStatus,
+      writtenTestStatus: StageStatus,
+      videoTestStatus: StageStatus,
+      interviewStatus: StageStatus,
+      feedback?: string | null,
+      internalNotes?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    scheduledAt: string,
+    duration: number,
+    type: InterviewType,
+    status: InterviewStatus,
+    meetingUrl?: string | null,
+    interviewerNotes?: string | null,
+    candidateFeedback?: string | null,
+    finalScore?: number | null,
+    recommendation?: InterviewRecommendation | null,
+    interviewers?: Array< string > | null,
     createdAt: string,
     updatedAt: string,
   } | null,

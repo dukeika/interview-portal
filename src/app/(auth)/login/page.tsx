@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Brain, Users, Heart } from "lucide-react";
@@ -20,7 +21,20 @@ export default function LoginPage() {
     try {
       await signIn(email, password);
     } catch (err: any) {
-      setError(err.message || "Login failed");
+      console.error("Login error:", err);
+      let errorMessage = "Login failed";
+      
+      if (err.message?.includes("UserNotFoundException")) {
+        errorMessage = "User not found. Try using one of the demo accounts shown above.";
+      } else if (err.message?.includes("NotAuthorizedException")) {
+        errorMessage = "Invalid email or password. For demo purposes, use the accounts listed above.";
+      } else if (err.message?.includes("UserAlreadyAuthenticatedException")) {
+        errorMessage = "Another user is already signed in. Please try again.";
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -51,23 +65,29 @@ export default function LoginPage() {
               Demo Mode Active
             </p>
             <p className="mt-2">Try these accounts:</p>
-            <div className="mt-3 text-xs space-y-2 text-left">
-              <div className="flex justify-between">
-                <strong>admin@abhh.com</strong>
-                <span className="text-abhh-teal-500">Super Admin</span>
+            <div className="mt-3 text-xs space-y-3 text-left">
+              <div>
+                <div className="flex justify-between mb-1">
+                  <strong>admin@abhh.demo</strong>
+                  <span className="text-abhh-teal-500">Super Admin</span>
+                </div>
+                <div className="text-abhh-teal-600">Password: AdminPass123!</div>
               </div>
-              <div className="flex justify-between">
-                <strong>company@abhh.com</strong>
-                <span className="text-abhh-teal-500">Company Admin</span>
+              <div>
+                <div className="flex justify-between mb-1">
+                  <strong>company@techcorp.demo</strong>
+                  <span className="text-abhh-teal-500">Company Admin</span>
+                </div>
+                <div className="text-abhh-teal-600">Password: CompanyPass123!</div>
               </div>
-              <div className="flex justify-between">
-                <strong>candidate@abhh.com</strong>
-                <span className="text-abhh-teal-500">Candidate</span>
+              <div>
+                <div className="flex justify-between mb-1">
+                  <strong>candidate@demo.com</strong>
+                  <span className="text-abhh-teal-500">Candidate</span>
+                </div>
+                <div className="text-abhh-teal-600">Password: CandidatePass123!</div>
               </div>
             </div>
-            <p className="mt-3 text-xs text-center text-abhh-teal-600">
-              Any password will work in demo mode
-            </p>
           </div>
         </div>
 
@@ -133,7 +153,23 @@ export default function LoginPage() {
             )}
           </Button>
 
-          <div className="text-center">
+          <div className="text-center space-y-4">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-abhh-teal-200" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-abhh-teal-500">New to ABHH?</span>
+              </div>
+            </div>
+
+            <Link
+              href="/register"
+              className="inline-block font-medium text-abhh-teal-600 hover:text-abhh-teal-800 transition-colors"
+            >
+              Create an account
+            </Link>
+
             <p className="text-sm text-abhh-teal-600">
               Empowering holistic behavioral health through technology
             </p>

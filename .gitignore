@@ -21,3 +21,12 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
+# Next.js
+.next/
+.vercel/
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.claude/

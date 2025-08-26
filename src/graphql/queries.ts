@@ -8,6 +8,196 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
+  getUser(id: $id) {
+    id
+    sub
+    email
+    firstName
+    lastName
+    phone
+    role
+    companyId
+    company {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    isActive
+    lastLoginAt
+    createdAt
+    updatedAt
+    resume
+    applications {
+      nextToken
+      __typename
+    }
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
+      nextToken
+      __typename
+    }
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetUserQueryVariables, APITypes.GetUserQuery>;
+export const listUsers = /* GraphQL */ `query ListUsers(
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.ListUsersQueryVariables, APITypes.ListUsersQuery>;
+export const usersBySub = /* GraphQL */ `query UsersBySub(
+  $sub: String!
+  $sortDirection: ModelSortDirection
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  usersBySub(
+    sub: $sub
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.UsersBySubQueryVariables,
+  APITypes.UsersBySubQuery
+>;
+export const usersByEmail = /* GraphQL */ `query UsersByEmail(
+  $email: String!
+  $sortDirection: ModelSortDirection
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  usersByEmail(
+    email: $email
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.UsersByEmailQueryVariables,
+  APITypes.UsersByEmailQuery
+>;
+export const usersByCompanyId = /* GraphQL */ `query UsersByCompanyId(
+  $companyId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  usersByCompanyId(
+    companyId: $companyId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.UsersByCompanyIdQueryVariables,
+  APITypes.UsersByCompanyIdQuery
+>;
 export const getCompany = /* GraphQL */ `query GetCompany($id: ID!) {
   getCompany(id: $id) {
     id
@@ -19,8 +209,6 @@ export const getCompany = /* GraphQL */ `query GetCompany($id: ID!) {
     logo
     description
     isActive
-    createdAt
-    updatedAt
     admins {
       nextToken
       __typename
@@ -29,6 +217,8 @@ export const getCompany = /* GraphQL */ `query GetCompany($id: ID!) {
       nextToken
       __typename
     }
+    createdAt
+    updatedAt
     __typename
   }
 }
@@ -64,17 +254,21 @@ export const listCompanies = /* GraphQL */ `query ListCompanies(
   APITypes.ListCompaniesQueryVariables,
   APITypes.ListCompaniesQuery
 >;
-export const getCompanyAdmin = /* GraphQL */ `query GetCompanyAdmin($id: ID!) {
-  getCompanyAdmin(id: $id) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    isActive
-    companyId
-    company {
+export const companiesByEmail = /* GraphQL */ `query CompaniesByEmail(
+  $email: String!
+  $sortDirection: ModelSortDirection
+  $filter: ModelCompanyFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  companiesByEmail(
+    email: $email
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
       id
       name
       email
@@ -88,200 +282,28 @@ export const getCompanyAdmin = /* GraphQL */ `query GetCompanyAdmin($id: ID!) {
       updatedAt
       __typename
     }
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.GetCompanyAdminQueryVariables,
-  APITypes.GetCompanyAdminQuery
->;
-export const listCompanyAdmins = /* GraphQL */ `query ListCompanyAdmins(
-  $filter: ModelCompanyAdminFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listCompanyAdmins(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      cognitoId
-      email
-      firstName
-      lastName
-      phone
-      isActive
-      companyId
-      createdAt
-      updatedAt
-      __typename
-    }
     nextToken
     __typename
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListCompanyAdminsQueryVariables,
-  APITypes.ListCompanyAdminsQuery
->;
-export const companyAdminsByCognitoId = /* GraphQL */ `query CompanyAdminsByCognitoId(
-  $cognitoId: String!
-  $sortDirection: ModelSortDirection
-  $filter: ModelCompanyAdminFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  companyAdminsByCognitoId(
-    cognitoId: $cognitoId
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      cognitoId
-      email
-      firstName
-      lastName
-      phone
-      isActive
-      companyId
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.CompanyAdminsByCognitoIdQueryVariables,
-  APITypes.CompanyAdminsByCognitoIdQuery
->;
-export const companyAdminsByCompanyId = /* GraphQL */ `query CompanyAdminsByCompanyId(
-  $companyId: ID!
-  $sortDirection: ModelSortDirection
-  $filter: ModelCompanyAdminFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  companyAdminsByCompanyId(
-    companyId: $companyId
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      cognitoId
-      email
-      firstName
-      lastName
-      phone
-      isActive
-      companyId
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.CompanyAdminsByCompanyIdQueryVariables,
-  APITypes.CompanyAdminsByCompanyIdQuery
->;
-export const getSuperAdmin = /* GraphQL */ `query GetSuperAdmin($id: ID!) {
-  getSuperAdmin(id: $id) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.GetSuperAdminQueryVariables,
-  APITypes.GetSuperAdminQuery
->;
-export const listSuperAdmins = /* GraphQL */ `query ListSuperAdmins(
-  $filter: ModelSuperAdminFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listSuperAdmins(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      cognitoId
-      email
-      firstName
-      lastName
-      phone
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.ListSuperAdminsQueryVariables,
-  APITypes.ListSuperAdminsQuery
->;
-export const superAdminsByCognitoId = /* GraphQL */ `query SuperAdminsByCognitoId(
-  $cognitoId: String!
-  $sortDirection: ModelSortDirection
-  $filter: ModelSuperAdminFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  superAdminsByCognitoId(
-    cognitoId: $cognitoId
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      cognitoId
-      email
-      firstName
-      lastName
-      phone
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.SuperAdminsByCognitoIdQueryVariables,
-  APITypes.SuperAdminsByCognitoIdQuery
+  APITypes.CompaniesByEmailQueryVariables,
+  APITypes.CompaniesByEmailQuery
 >;
 export const getJob = /* GraphQL */ `query GetJob($id: ID!) {
   getJob(id: $id) {
     id
     title
+    department
+    location
+    type
+    salary
     description
     requirements
-    location
-    jobType
-    salaryRange
-    isActive
+    responsibilities
+    benefits
+    status
     companyId
-    createdAt
-    updatedAt
     company {
       id
       name
@@ -300,10 +322,17 @@ export const getJob = /* GraphQL */ `query GetJob($id: ID!) {
       nextToken
       __typename
     }
-    questions {
+    tests {
       nextToken
       __typename
     }
+    videoTests {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    closingDate
     __typename
   }
 }
@@ -313,15 +342,19 @@ export const listJobs = /* GraphQL */ `query ListJobs($filter: ModelJobFilterInp
     items {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
     nextToken
@@ -346,15 +379,19 @@ export const jobsByCompanyId = /* GraphQL */ `query JobsByCompanyId(
     items {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
     nextToken
@@ -369,57 +406,64 @@ export const getApplication = /* GraphQL */ `query GetApplication($id: ID!) {
   getApplication(id: $id) {
     id
     candidateId
-    jobId
-    status
-    currentStage
-    appliedAt
-    updatedAt
-    coverLetter
-    resumeUrl
-    writtenTestScore
-    writtenTestSubmittedAt
-    videoTestUrl
-    videoTestSubmittedAt
-    interviewLink
-    interviewScheduledAt
-    finalDecision
     candidate {
       id
-      cognitoId
+      sub
       email
       firstName
       lastName
       phone
-      address
-      linkedin
-      portfolio
-      bio
-      skills
-      experience
-      education
+      role
+      companyId
+      isActive
+      lastLoginAt
       createdAt
       updatedAt
+      resume
       __typename
     }
+    jobId
     job {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
-    testResponses {
+    appliedAt
+    currentStage
+    overallStatus
+    applicationStatus
+    writtenTestStatus
+    videoTestStatus
+    interviewStatus
+    feedback
+    internalNotes
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
       nextToken
       __typename
     }
     createdAt
+    updatedAt
     __typename
   }
 }
@@ -437,20 +481,17 @@ export const listApplications = /* GraphQL */ `query ListApplications(
       id
       candidateId
       jobId
-      status
-      currentStage
       appliedAt
-      updatedAt
-      coverLetter
-      resumeUrl
-      writtenTestScore
-      writtenTestSubmittedAt
-      videoTestUrl
-      videoTestSubmittedAt
-      interviewLink
-      interviewScheduledAt
-      finalDecision
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
       createdAt
+      updatedAt
       __typename
     }
     nextToken
@@ -479,20 +520,17 @@ export const applicationsByCandidateId = /* GraphQL */ `query ApplicationsByCand
       id
       candidateId
       jobId
-      status
-      currentStage
       appliedAt
-      updatedAt
-      coverLetter
-      resumeUrl
-      writtenTestScore
-      writtenTestSubmittedAt
-      videoTestUrl
-      videoTestSubmittedAt
-      interviewLink
-      interviewScheduledAt
-      finalDecision
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
       createdAt
+      updatedAt
       __typename
     }
     nextToken
@@ -521,20 +559,17 @@ export const applicationsByJobId = /* GraphQL */ `query ApplicationsByJobId(
       id
       candidateId
       jobId
-      status
-      currentStage
       appliedAt
-      updatedAt
-      coverLetter
-      resumeUrl
-      writtenTestScore
-      writtenTestSubmittedAt
-      videoTestUrl
-      videoTestSubmittedAt
-      interviewLink
-      interviewScheduledAt
-      finalDecision
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
       createdAt
+      updatedAt
       __typename
     }
     nextToken
@@ -545,133 +580,37 @@ export const applicationsByJobId = /* GraphQL */ `query ApplicationsByJobId(
   APITypes.ApplicationsByJobIdQueryVariables,
   APITypes.ApplicationsByJobIdQuery
 >;
-export const getCandidate = /* GraphQL */ `query GetCandidate($id: ID!) {
-  getCandidate(id: $id) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    address
-    linkedin
-    portfolio
-    bio
-    skills
-    experience
-    education
-    createdAt
-    applications {
-      nextToken
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.GetCandidateQueryVariables,
-  APITypes.GetCandidateQuery
->;
-export const listCandidates = /* GraphQL */ `query ListCandidates(
-  $filter: ModelCandidateFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listCandidates(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      cognitoId
-      email
-      firstName
-      lastName
-      phone
-      address
-      linkedin
-      portfolio
-      bio
-      skills
-      experience
-      education
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.ListCandidatesQueryVariables,
-  APITypes.ListCandidatesQuery
->;
-export const candidatesByCognitoId = /* GraphQL */ `query CandidatesByCognitoId(
-  $cognitoId: String!
-  $sortDirection: ModelSortDirection
-  $filter: ModelCandidateFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  candidatesByCognitoId(
-    cognitoId: $cognitoId
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      cognitoId
-      email
-      firstName
-      lastName
-      phone
-      address
-      linkedin
-      portfolio
-      bio
-      skills
-      experience
-      education
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.CandidatesByCognitoIdQueryVariables,
-  APITypes.CandidatesByCognitoIdQuery
->;
-export const getQuestion = /* GraphQL */ `query GetQuestion($id: ID!) {
-  getQuestion(id: $id) {
+export const getTest = /* GraphQL */ `query GetTest($id: ID!) {
+  getTest(id: $id) {
     id
     jobId
-    stage
-    questionText
-    questionType
-    options
-    correctAnswer
-    timeLimit
-    order
-    isActive
     job {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
-    responses {
+    title
+    description
+    instructions
+    timeLimit
+    totalPoints
+    passingScore
+    isActive
+    questions
+    attempts {
       nextToken
       __typename
     }
@@ -680,27 +619,24 @@ export const getQuestion = /* GraphQL */ `query GetQuestion($id: ID!) {
     __typename
   }
 }
-` as GeneratedQuery<
-  APITypes.GetQuestionQueryVariables,
-  APITypes.GetQuestionQuery
->;
-export const listQuestions = /* GraphQL */ `query ListQuestions(
-  $filter: ModelQuestionFilterInput
+` as GeneratedQuery<APITypes.GetTestQueryVariables, APITypes.GetTestQuery>;
+export const listTests = /* GraphQL */ `query ListTests(
+  $filter: ModelTestFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listQuestions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listTests(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
       jobId
-      stage
-      questionText
-      questionType
-      options
-      correctAnswer
+      title
+      description
+      instructions
       timeLimit
-      order
+      totalPoints
+      passingScore
       isActive
+      questions
       createdAt
       updatedAt
       __typename
@@ -709,18 +645,15 @@ export const listQuestions = /* GraphQL */ `query ListQuestions(
     __typename
   }
 }
-` as GeneratedQuery<
-  APITypes.ListQuestionsQueryVariables,
-  APITypes.ListQuestionsQuery
->;
-export const questionsByJobId = /* GraphQL */ `query QuestionsByJobId(
+` as GeneratedQuery<APITypes.ListTestsQueryVariables, APITypes.ListTestsQuery>;
+export const testsByJobId = /* GraphQL */ `query TestsByJobId(
   $jobId: ID!
   $sortDirection: ModelSortDirection
-  $filter: ModelQuestionFilterInput
+  $filter: ModelTestFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  questionsByJobId(
+  testsByJobId(
     jobId: $jobId
     sortDirection: $sortDirection
     filter: $filter
@@ -730,14 +663,14 @@ export const questionsByJobId = /* GraphQL */ `query QuestionsByJobId(
     items {
       id
       jobId
-      stage
-      questionText
-      questionType
-      options
-      correctAnswer
+      title
+      description
+      instructions
       timeLimit
-      order
+      totalPoints
+      passingScore
       isActive
+      questions
       createdAt
       updatedAt
       __typename
@@ -747,76 +680,99 @@ export const questionsByJobId = /* GraphQL */ `query QuestionsByJobId(
   }
 }
 ` as GeneratedQuery<
-  APITypes.QuestionsByJobIdQueryVariables,
-  APITypes.QuestionsByJobIdQuery
+  APITypes.TestsByJobIdQueryVariables,
+  APITypes.TestsByJobIdQuery
 >;
-export const getTestResponse = /* GraphQL */ `query GetTestResponse($id: ID!) {
-  getTestResponse(id: $id) {
+export const getTestAttempt = /* GraphQL */ `query GetTestAttempt($id: ID!) {
+  getTestAttempt(id: $id) {
     id
+    testId
+    test {
+      id
+      jobId
+      title
+      description
+      instructions
+      timeLimit
+      totalPoints
+      passingScore
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
     applicationId
-    questionId
-    response
-    videoUrl
-    isCorrect
-    submittedAt
     application {
       id
       candidateId
       jobId
-      status
-      currentStage
       appliedAt
-      updatedAt
-      coverLetter
-      resumeUrl
-      writtenTestScore
-      writtenTestSubmittedAt
-      videoTestUrl
-      videoTestSubmittedAt
-      interviewLink
-      interviewScheduledAt
-      finalDecision
-      createdAt
-      __typename
-    }
-    question {
-      id
-      jobId
-      stage
-      questionText
-      questionType
-      options
-      correctAnswer
-      timeLimit
-      order
-      isActive
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
       createdAt
       updatedAt
       __typename
     }
+    startedAt
+    completedAt
+    timeRemaining
+    status
+    answers
+    score
+    percentage
+    passed
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedQuery<
-  APITypes.GetTestResponseQueryVariables,
-  APITypes.GetTestResponseQuery
+  APITypes.GetTestAttemptQueryVariables,
+  APITypes.GetTestAttemptQuery
 >;
-export const listTestResponses = /* GraphQL */ `query ListTestResponses(
-  $filter: ModelTestResponseFilterInput
+export const listTestAttempts = /* GraphQL */ `query ListTestAttempts(
+  $filter: ModelTestAttemptFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listTestResponses(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listTestAttempts(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      testId
+      candidateId
       applicationId
-      questionId
-      response
-      videoUrl
-      isCorrect
-      submittedAt
+      startedAt
+      completedAt
+      timeRemaining
+      status
+      answers
+      score
+      percentage
+      passed
       createdAt
       updatedAt
       __typename
@@ -826,17 +782,95 @@ export const listTestResponses = /* GraphQL */ `query ListTestResponses(
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListTestResponsesQueryVariables,
-  APITypes.ListTestResponsesQuery
+  APITypes.ListTestAttemptsQueryVariables,
+  APITypes.ListTestAttemptsQuery
 >;
-export const testResponsesByApplicationId = /* GraphQL */ `query TestResponsesByApplicationId(
-  $applicationId: ID!
+export const testAttemptsByTestId = /* GraphQL */ `query TestAttemptsByTestId(
+  $testId: ID!
   $sortDirection: ModelSortDirection
-  $filter: ModelTestResponseFilterInput
+  $filter: ModelTestAttemptFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  testResponsesByApplicationId(
+  testAttemptsByTestId(
+    testId: $testId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      testId
+      candidateId
+      applicationId
+      startedAt
+      completedAt
+      timeRemaining
+      status
+      answers
+      score
+      percentage
+      passed
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.TestAttemptsByTestIdQueryVariables,
+  APITypes.TestAttemptsByTestIdQuery
+>;
+export const testAttemptsByCandidateId = /* GraphQL */ `query TestAttemptsByCandidateId(
+  $candidateId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelTestAttemptFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  testAttemptsByCandidateId(
+    candidateId: $candidateId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      testId
+      candidateId
+      applicationId
+      startedAt
+      completedAt
+      timeRemaining
+      status
+      answers
+      score
+      percentage
+      passed
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.TestAttemptsByCandidateIdQueryVariables,
+  APITypes.TestAttemptsByCandidateIdQuery
+>;
+export const testAttemptsByApplicationId = /* GraphQL */ `query TestAttemptsByApplicationId(
+  $applicationId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelTestAttemptFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  testAttemptsByApplicationId(
     applicationId: $applicationId
     sortDirection: $sortDirection
     filter: $filter
@@ -845,12 +879,17 @@ export const testResponsesByApplicationId = /* GraphQL */ `query TestResponsesBy
   ) {
     items {
       id
+      testId
+      candidateId
       applicationId
-      questionId
-      response
-      videoUrl
-      isCorrect
-      submittedAt
+      startedAt
+      completedAt
+      timeRemaining
+      status
+      answers
+      score
+      percentage
+      passed
       createdAt
       updatedAt
       __typename
@@ -860,18 +899,86 @@ export const testResponsesByApplicationId = /* GraphQL */ `query TestResponsesBy
   }
 }
 ` as GeneratedQuery<
-  APITypes.TestResponsesByApplicationIdQueryVariables,
-  APITypes.TestResponsesByApplicationIdQuery
+  APITypes.TestAttemptsByApplicationIdQueryVariables,
+  APITypes.TestAttemptsByApplicationIdQuery
 >;
-export const testResponsesByQuestionId = /* GraphQL */ `query TestResponsesByQuestionId(
-  $questionId: ID!
-  $sortDirection: ModelSortDirection
-  $filter: ModelTestResponseFilterInput
+export const getVideoTest = /* GraphQL */ `query GetVideoTest($id: ID!) {
+  getVideoTest(id: $id) {
+    id
+    jobId
+    job {
+      id
+      title
+      department
+      location
+      type
+      salary
+      description
+      requirements
+      responsibilities
+      benefits
+      status
+      companyId
+      createdAt
+      updatedAt
+      closingDate
+      __typename
+    }
+    title
+    description
+    instructions
+    totalPoints
+    isActive
+    questions
+    attempts {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetVideoTestQueryVariables,
+  APITypes.GetVideoTestQuery
+>;
+export const listVideoTests = /* GraphQL */ `query ListVideoTests(
+  $filter: ModelVideoTestFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  testResponsesByQuestionId(
-    questionId: $questionId
+  listVideoTests(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      jobId
+      title
+      description
+      instructions
+      totalPoints
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListVideoTestsQueryVariables,
+  APITypes.ListVideoTestsQuery
+>;
+export const videoTestsByJobId = /* GraphQL */ `query VideoTestsByJobId(
+  $jobId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelVideoTestFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  videoTestsByJobId(
+    jobId: $jobId
     sortDirection: $sortDirection
     filter: $filter
     limit: $limit
@@ -879,12 +986,13 @@ export const testResponsesByQuestionId = /* GraphQL */ `query TestResponsesByQue
   ) {
     items {
       id
-      applicationId
-      questionId
-      response
-      videoUrl
-      isCorrect
-      submittedAt
+      jobId
+      title
+      description
+      instructions
+      totalPoints
+      isActive
+      questions
       createdAt
       updatedAt
       __typename
@@ -894,6 +1002,387 @@ export const testResponsesByQuestionId = /* GraphQL */ `query TestResponsesByQue
   }
 }
 ` as GeneratedQuery<
-  APITypes.TestResponsesByQuestionIdQueryVariables,
-  APITypes.TestResponsesByQuestionIdQuery
+  APITypes.VideoTestsByJobIdQueryVariables,
+  APITypes.VideoTestsByJobIdQuery
+>;
+export const getVideoTestAttempt = /* GraphQL */ `query GetVideoTestAttempt($id: ID!) {
+  getVideoTestAttempt(id: $id) {
+    id
+    videoTestId
+    videoTest {
+      id
+      jobId
+      title
+      description
+      instructions
+      totalPoints
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    startedAt
+    completedAt
+    status
+    currentQuestionIndex
+    recordings
+    totalScore
+    feedback
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetVideoTestAttemptQueryVariables,
+  APITypes.GetVideoTestAttemptQuery
+>;
+export const listVideoTestAttempts = /* GraphQL */ `query ListVideoTestAttempts(
+  $filter: ModelVideoTestAttemptFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listVideoTestAttempts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      videoTestId
+      candidateId
+      applicationId
+      startedAt
+      completedAt
+      status
+      currentQuestionIndex
+      recordings
+      totalScore
+      feedback
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListVideoTestAttemptsQueryVariables,
+  APITypes.ListVideoTestAttemptsQuery
+>;
+export const videoTestAttemptsByVideoTestId = /* GraphQL */ `query VideoTestAttemptsByVideoTestId(
+  $videoTestId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelVideoTestAttemptFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  videoTestAttemptsByVideoTestId(
+    videoTestId: $videoTestId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      videoTestId
+      candidateId
+      applicationId
+      startedAt
+      completedAt
+      status
+      currentQuestionIndex
+      recordings
+      totalScore
+      feedback
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.VideoTestAttemptsByVideoTestIdQueryVariables,
+  APITypes.VideoTestAttemptsByVideoTestIdQuery
+>;
+export const videoTestAttemptsByCandidateId = /* GraphQL */ `query VideoTestAttemptsByCandidateId(
+  $candidateId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelVideoTestAttemptFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  videoTestAttemptsByCandidateId(
+    candidateId: $candidateId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      videoTestId
+      candidateId
+      applicationId
+      startedAt
+      completedAt
+      status
+      currentQuestionIndex
+      recordings
+      totalScore
+      feedback
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.VideoTestAttemptsByCandidateIdQueryVariables,
+  APITypes.VideoTestAttemptsByCandidateIdQuery
+>;
+export const videoTestAttemptsByApplicationId = /* GraphQL */ `query VideoTestAttemptsByApplicationId(
+  $applicationId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelVideoTestAttemptFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  videoTestAttemptsByApplicationId(
+    applicationId: $applicationId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      videoTestId
+      candidateId
+      applicationId
+      startedAt
+      completedAt
+      status
+      currentQuestionIndex
+      recordings
+      totalScore
+      feedback
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.VideoTestAttemptsByApplicationIdQueryVariables,
+  APITypes.VideoTestAttemptsByApplicationIdQuery
+>;
+export const getInterview = /* GraphQL */ `query GetInterview($id: ID!) {
+  getInterview(id: $id) {
+    id
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    scheduledAt
+    duration
+    type
+    status
+    meetingUrl
+    interviewerNotes
+    candidateFeedback
+    finalScore
+    recommendation
+    interviewers
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetInterviewQueryVariables,
+  APITypes.GetInterviewQuery
+>;
+export const listInterviews = /* GraphQL */ `query ListInterviews(
+  $filter: ModelInterviewFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listInterviews(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      candidateId
+      applicationId
+      scheduledAt
+      duration
+      type
+      status
+      meetingUrl
+      interviewerNotes
+      candidateFeedback
+      finalScore
+      recommendation
+      interviewers
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListInterviewsQueryVariables,
+  APITypes.ListInterviewsQuery
+>;
+export const interviewsByCandidateId = /* GraphQL */ `query InterviewsByCandidateId(
+  $candidateId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelInterviewFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  interviewsByCandidateId(
+    candidateId: $candidateId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      candidateId
+      applicationId
+      scheduledAt
+      duration
+      type
+      status
+      meetingUrl
+      interviewerNotes
+      candidateFeedback
+      finalScore
+      recommendation
+      interviewers
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.InterviewsByCandidateIdQueryVariables,
+  APITypes.InterviewsByCandidateIdQuery
+>;
+export const interviewsByApplicationId = /* GraphQL */ `query InterviewsByApplicationId(
+  $applicationId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelInterviewFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  interviewsByApplicationId(
+    applicationId: $applicationId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      candidateId
+      applicationId
+      scheduledAt
+      duration
+      type
+      status
+      meetingUrl
+      interviewerNotes
+      candidateFeedback
+      finalScore
+      recommendation
+      interviewers
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.InterviewsByApplicationIdQueryVariables,
+  APITypes.InterviewsByApplicationIdQuery
 >;

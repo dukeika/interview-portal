@@ -1,160 +1,350 @@
-# Interview Management Platform GraphQL Schema
+# File: amplify/backend/api/interviewsaas/schema.graphql
+# ABHH Interview Management Platform - GraphQL Schema
 
-type Company @model @auth(rules: [{ allow: private }]) {
+# User model with role-based access
+type User @model @auth(rules: [
+  { allow: owner, ownerField: "sub" }
+  { allow: groups, groups: ["superAdmins"] }
+  { allow: groups, groups: ["companyAdmins"], operations: [read] }
+]) {
+  id: ID!
+  sub: String! @index(name: "bySub") # Cognito User ID
+  email: String! @index(name: "byEmail")
+  firstName: String!
+  lastName: String!
+  phone: String
+  role: UserRole!
+  companyId: ID @index(name: "byCompany")
+  company: Company @belongsTo(fields: ["companyId"])
+  isActive: Boolean!
+  lastLoginAt: AWSDateTime
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  
+  # Candidate specific fields
+  resume: String # S3 key for resume file
+  applications: [Application] @hasMany(indexName: "byCandidate", fields: ["id"])
+  testAttempts: [TestAttempt] @hasMany(indexName: "byCandidate", fields: ["id"])
+  videoTestAttempts: [VideoTestAttempt] @hasMany(indexName: "byCandidate", fields: ["id"])
+  interviews: [Interview] @hasMany(indexName: "byCandidate", fields: ["id"])
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  COMPANY_ADMIN
+  CANDIDATE
+}
+
+# Company model
+type Company @model @auth(rules: [
+  { allow: groups, groups: ["superAdmins"] }
+  { allow: groups, groups: ["companyAdmins"], operations: [read, update] }
+]) {
   id: ID!
   name: String!
-  email: String!
+  email: String! @index(name: "byEmail")
   phone: String
   address: String
   website: String
-  logo: String
+  logo: String # S3 key for company logo
   description: String
   isActive: Boolean!
+  
+  # Relationships
+  admins: [User] @hasMany(indexName: "byCompany", fields: ["id"])
+  jobs: [Job] @hasMany(indexName: "byCompany", fields: ["id"])
+  
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
-
-  # Relationships
-  admins: [CompanyAdmin] @hasMany(indexName: "byCompany", fields: ["id"])
-  jobs: [Job] @hasMany(indexName: "byCompany", fields: ["id"])
 }
 
-type CompanyAdmin @model @auth(rules: [{ allow: private }]) {
-  id: ID!
-  cognitoId: String! @index(name: "byCognitoId")
-  email: String!
-  firstName: String!
-  lastName: String!
-  phone: String
-  isActive: Boolean!
-  companyId: ID! @index(name: "byCompany")
-
-  # Relationships
-  company: Company @belongsTo(fields: ["companyId"])
-}
-
-type SuperAdmin @model @auth(rules: [{ allow: private }]) {
-  id: ID!
-  cognitoId: String! @index(name: "byCognitoId")
-  email: String!
-  firstName: String!
-  lastName: String!
-  phone: String
-}
-
-type Job @model @auth(rules: [{ allow: private }]) {
+# Job posting model
+type Job @model @auth(rules: [
+  { allow: groups, groups: ["superAdmins"] }
+  { allow: groups, groups: ["companyAdmins"], operations: [create, read, update, delete] }
+  { allow: groups, groups: ["candidates"], operations: [read] }
+]) {
   id: ID!
   title: String!
+  department: String!
+  location: String!
+  type: JobType!
+  salary: String
   description: String!
-  requirements: String
-  location: String
-  jobType: String
-  salaryRange: String
-  isActive: Boolean!
+  requirements: [String!]!
+  responsibilities: [String!]!
+  benefits: [String!]
+  status: JobStatus!
+  
+  # Company relationship
   companyId: ID! @index(name: "byCompany")
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
-
-  # Relationships
-  company: Company @belongsTo(fields: ["companyId"])
+  company: Company! @belongsTo(fields: ["companyId"])
+  
+  # Related data
   applications: [Application] @hasMany(indexName: "byJob", fields: ["id"])
-  questions: [Question] @hasMany(indexName: "byJob", fields: ["id"])
-}
-
-type Application @model @auth(rules: [{ allow: private }]) {
-  id: ID!
-  candidateId: ID! @index(name: "byCandidate")
-  jobId: ID! @index(name: "byJob")
-  status: ApplicationStatus!
-  currentStage: Int!
-  appliedAt: AWSDateTime!
-  updatedAt: AWSDateTime!
-
-  # Application details
-  coverLetter: String
-  resumeUrl: String
-
-  # Stage results
-  writtenTestScore: Float
-  writtenTestSubmittedAt: AWSDateTime
-  videoTestUrl: String
-  videoTestSubmittedAt: AWSDateTime
-  interviewLink: String
-  interviewScheduledAt: AWSDateTime
-  finalDecision: String
-
-  # Relationships
-  candidate: Candidate @belongsTo(fields: ["candidateId"])
-  job: Job @belongsTo(fields: ["jobId"])
-  testResponses: [TestResponse]
-    @hasMany(indexName: "byApplication", fields: ["id"])
-}
-
-type Candidate @model @auth(rules: [{ allow: private }]) {
-  id: ID!
-  cognitoId: String! @index(name: "byCognitoId")
-  email: String!
-  firstName: String!
-  lastName: String!
-  phone: String
-  address: String
-  linkedin: String
-  portfolio: String
-  bio: String
-  skills: [String]
-  experience: String
-  education: String
+  tests: [Test] @hasMany(indexName: "byJob", fields: ["id"])
+  videoTests: [VideoTest] @hasMany(indexName: "byJob", fields: ["id"])
+  
   createdAt: AWSDateTime!
-
-  # Relationships
-  applications: [Application] @hasMany(indexName: "byCandidate", fields: ["id"])
+  updatedAt: AWSDateTime!
+  closingDate: AWSDateTime
 }
 
-type Question @model @auth(rules: [{ allow: private }]) {
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+}
+
+enum JobStatus {
+  ACTIVE
+  PAUSED
+  CLOSED
+}
+
+# Application model
+type Application @model @auth(rules: [
+  { allow: groups, groups: ["superAdmins"] }
+  { allow: groups, groups: ["companyAdmins"], operations: [read, update] }
+  { allow: owner, ownerField: "candidateId" }
+]) {
   id: ID!
+  
+  # Candidate info
+  candidateId: ID! @index(name: "byCandidate")
+  candidate: User! @belongsTo(fields: ["candidateId"])
+  
+  # Job info
   jobId: ID! @index(name: "byJob")
-  stage: Int! # 2 = written, 3 = video
-  questionText: String!
-  questionType: QuestionType!
-  options: [String] # For multiple choice questions
-  correctAnswer: String # For written test
-  timeLimit: Int # In seconds, for video questions
-  order: Int!
-  isActive: Boolean!
-
-  # Relationships
-  job: Job @belongsTo(fields: ["jobId"])
-  responses: [TestResponse] @hasMany(indexName: "byQuestion", fields: ["id"])
-}
-
-type TestResponse @model @auth(rules: [{ allow: private }]) {
-  id: ID!
-  applicationId: ID! @index(name: "byApplication")
-  questionId: ID! @index(name: "byQuestion")
-  response: String
-  videoUrl: String # For video responses
-  isCorrect: Boolean # For written test
-  submittedAt: AWSDateTime!
-
-  # Relationships
-  application: Application @belongsTo(fields: ["applicationId"])
-  question: Question @belongsTo(fields: ["questionId"])
+  job: Job! @belongsTo(fields: ["jobId"])
+  
+  # Application details
+  appliedAt: AWSDateTime!
+  currentStage: Int! # 1=Application, 2=Written Test, 3=Video Test, 4=Interview
+  overallStatus: ApplicationStatus!
+  
+  # Stage statuses
+  applicationStatus: StageStatus!
+  writtenTestStatus: StageStatus!
+  videoTestStatus: StageStatus!
+  interviewStatus: StageStatus!
+  
+  # Feedback and notes
+  feedback: String
+  internalNotes: String
+  
+  # Related data
+  testAttempts: [TestAttempt] @hasMany(indexName: "byApplication", fields: ["id"])
+  videoTestAttempts: [VideoTestAttempt] @hasMany(indexName: "byApplication", fields: ["id"])
+  interviews: [Interview] @hasMany(indexName: "byApplication", fields: ["id"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
 }
 
 enum ApplicationStatus {
-  APPLIED
-  WRITTEN_TEST_PENDING
-  WRITTEN_TEST_COMPLETED
-  VIDEO_TEST_PENDING
-  VIDEO_TEST_COMPLETED
-  INTERVIEW_SCHEDULED
-  INTERVIEW_COMPLETED
-  ACCEPTED
+  ACTIVE
   REJECTED
+  HIRED
   WITHDRAWN
 }
 
-enum QuestionType {
-  MULTIPLE_CHOICE
-  TEXT
+enum StageStatus {
+  NOT_STARTED
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  SCHEDULED
+}
+
+# Test model for written assessments
+type Test @model @auth(rules: [
+  { allow: groups, groups: ["superAdmins"] }
+  { allow: groups, groups: ["companyAdmins"] }
+]) {
+  id: ID!
+  
+  # Job relationship
+  jobId: ID! @index(name: "byJob")
+  job: Job! @belongsTo(fields: ["jobId"])
+  
+  # Test details
+  title: String!
+  description: String!
+  instructions: String!
+  timeLimit: Int! # Total time in minutes
+  totalPoints: Int!
+  passingScore: Int! # Percentage needed to pass
+  isActive: Boolean!
+  
+  # Questions (stored as JSON)
+  questions: AWSJSON!
+  
+  # Related data
+  attempts: [TestAttempt] @hasMany(indexName: "byTest", fields: ["id"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+# Test attempt model
+type TestAttempt @model @auth(rules: [
+  { allow: groups, groups: ["superAdmins"] }
+  { allow: groups, groups: ["companyAdmins"], operations: [read] }
+  { allow: owner, ownerField: "candidateId" }
+]) {
+  id: ID!
+  
+  # Relationships
+  testId: ID! @index(name: "byTest")
+  test: Test! @belongsTo(fields: ["testId"])
+  candidateId: ID! @index(name: "byCandidate")
+  candidate: User! @belongsTo(fields: ["candidateId"])
+  applicationId: ID! @index(name: "byApplication")
+  application: Application! @belongsTo(fields: ["applicationId"])
+  
+  # Attempt details
+  startedAt: AWSDateTime!
+  completedAt: AWSDateTime
+  timeRemaining: Int # Seconds remaining when submitted
+  status: TestAttemptStatus!
+  
+  # Answers and scoring
+  answers: AWSJSON # questionId -> answer mapping
+  score: Int
+  percentage: Float
+  passed: Boolean
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum TestAttemptStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+  EXPIRED
+}
+
+# Video test model
+type VideoTest @model @auth(rules: [
+  { allow: groups, groups: ["superAdmins"] }
+  { allow: groups, groups: ["companyAdmins"] }
+]) {
+  id: ID!
+  
+  # Job relationship
+  jobId: ID! @index(name: "byJob")
+  job: Job! @belongsTo(fields: ["jobId"])
+  
+  # Test details
+  title: String!
+  description: String!
+  instructions: String!
+  totalPoints: Int!
+  isActive: Boolean!
+  
+  # Questions (stored as JSON)
+  questions: AWSJSON!
+  
+  # Related data
+  attempts: [VideoTestAttempt] @hasMany(indexName: "byVideoTest", fields: ["id"])
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+# Video test attempt model
+type VideoTestAttempt @model @auth(rules: [
+  { allow: groups, groups: ["superAdmins"] }
+  { allow: groups, groups: ["companyAdmins"], operations: [read] }
+  { allow: owner, ownerField: "candidateId" }
+]) {
+  id: ID!
+  
+  # Relationships
+  videoTestId: ID! @index(name: "byVideoTest")
+  videoTest: VideoTest! @belongsTo(fields: ["videoTestId"])
+  candidateId: ID! @index(name: "byCandidate")
+  candidate: User! @belongsTo(fields: ["candidateId"])
+  applicationId: ID! @index(name: "byApplication")
+  application: Application! @belongsTo(fields: ["applicationId"])
+  
+  # Attempt details
+  startedAt: AWSDateTime!
+  completedAt: AWSDateTime
+  status: VideoTestAttemptStatus!
+  currentQuestionIndex: Int!
+  
+  # Recordings and scoring
+  recordings: AWSJSON # questionId -> recording metadata mapping
+  totalScore: Int
+  feedback: String
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum VideoTestAttemptStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+# Interview model for final stage
+type Interview @model @auth(rules: [
+  { allow: groups, groups: ["superAdmins"] }
+  { allow: groups, groups: ["companyAdmins"] }
+  { allow: owner, ownerField: "candidateId", operations: [read] }
+]) {
+  id: ID!
+  
+  # Relationships
+  candidateId: ID! @index(name: "byCandidate")
+  candidate: User! @belongsTo(fields: ["candidateId"])
+  applicationId: ID! @index(name: "byApplication")
+  application: Application! @belongsTo(fields: ["applicationId"])
+  
+  # Interview details
+  scheduledAt: AWSDateTime!
+  duration: Int! # Duration in minutes
+  type: InterviewType!
+  status: InterviewStatus!
+  meetingUrl: String
+  
+  # Interview feedback
+  interviewerNotes: String
+  candidateFeedback: String
+  finalScore: Int
+  recommendation: InterviewRecommendation
+  
+  # Interviewers
+  interviewers: [String!] # List of interviewer email addresses
+  
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum InterviewType {
+  PHONE
   VIDEO
+  IN_PERSON
+}
+
+enum InterviewStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum InterviewRecommendation {
+  STRONG_HIRE
+  HIRE
+  NO_HIRE
+  STRONG_NO_HIRE
 }

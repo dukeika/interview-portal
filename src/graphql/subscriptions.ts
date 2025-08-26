@@ -8,6 +8,171 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
+  $filter: ModelSubscriptionUserFilterInput
+  $sub: String
+) {
+  onCreateUser(filter: $filter, sub: $sub) {
+    id
+    sub
+    email
+    firstName
+    lastName
+    phone
+    role
+    companyId
+    company {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    isActive
+    lastLoginAt
+    createdAt
+    updatedAt
+    resume
+    applications {
+      nextToken
+      __typename
+    }
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
+      nextToken
+      __typename
+    }
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateUserSubscriptionVariables,
+  APITypes.OnCreateUserSubscription
+>;
+export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
+  $filter: ModelSubscriptionUserFilterInput
+  $sub: String
+) {
+  onUpdateUser(filter: $filter, sub: $sub) {
+    id
+    sub
+    email
+    firstName
+    lastName
+    phone
+    role
+    companyId
+    company {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    isActive
+    lastLoginAt
+    createdAt
+    updatedAt
+    resume
+    applications {
+      nextToken
+      __typename
+    }
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
+      nextToken
+      __typename
+    }
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateUserSubscriptionVariables,
+  APITypes.OnUpdateUserSubscription
+>;
+export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
+  $filter: ModelSubscriptionUserFilterInput
+  $sub: String
+) {
+  onDeleteUser(filter: $filter, sub: $sub) {
+    id
+    sub
+    email
+    firstName
+    lastName
+    phone
+    role
+    companyId
+    company {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    isActive
+    lastLoginAt
+    createdAt
+    updatedAt
+    resume
+    applications {
+      nextToken
+      __typename
+    }
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
+      nextToken
+      __typename
+    }
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteUserSubscriptionVariables,
+  APITypes.OnDeleteUserSubscription
+>;
 export const onCreateCompany = /* GraphQL */ `subscription OnCreateCompany($filter: ModelSubscriptionCompanyFilterInput) {
   onCreateCompany(filter: $filter) {
     id
@@ -19,8 +184,6 @@ export const onCreateCompany = /* GraphQL */ `subscription OnCreateCompany($filt
     logo
     description
     isActive
-    createdAt
-    updatedAt
     admins {
       nextToken
       __typename
@@ -29,6 +192,8 @@ export const onCreateCompany = /* GraphQL */ `subscription OnCreateCompany($filt
       nextToken
       __typename
     }
+    createdAt
+    updatedAt
     __typename
   }
 }
@@ -47,8 +212,6 @@ export const onUpdateCompany = /* GraphQL */ `subscription OnUpdateCompany($filt
     logo
     description
     isActive
-    createdAt
-    updatedAt
     admins {
       nextToken
       __typename
@@ -57,6 +220,8 @@ export const onUpdateCompany = /* GraphQL */ `subscription OnUpdateCompany($filt
       nextToken
       __typename
     }
+    createdAt
+    updatedAt
     __typename
   }
 }
@@ -75,8 +240,6 @@ export const onDeleteCompany = /* GraphQL */ `subscription OnDeleteCompany($filt
     logo
     description
     isActive
-    createdAt
-    updatedAt
     admins {
       nextToken
       __typename
@@ -85,6 +248,8 @@ export const onDeleteCompany = /* GraphQL */ `subscription OnDeleteCompany($filt
       nextToken
       __typename
     }
+    createdAt
+    updatedAt
     __typename
   }
 }
@@ -92,181 +257,20 @@ export const onDeleteCompany = /* GraphQL */ `subscription OnDeleteCompany($filt
   APITypes.OnDeleteCompanySubscriptionVariables,
   APITypes.OnDeleteCompanySubscription
 >;
-export const onCreateCompanyAdmin = /* GraphQL */ `subscription OnCreateCompanyAdmin(
-  $filter: ModelSubscriptionCompanyAdminFilterInput
-) {
-  onCreateCompanyAdmin(filter: $filter) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    isActive
-    companyId
-    company {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      createdAt
-      updatedAt
-      __typename
-    }
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnCreateCompanyAdminSubscriptionVariables,
-  APITypes.OnCreateCompanyAdminSubscription
->;
-export const onUpdateCompanyAdmin = /* GraphQL */ `subscription OnUpdateCompanyAdmin(
-  $filter: ModelSubscriptionCompanyAdminFilterInput
-) {
-  onUpdateCompanyAdmin(filter: $filter) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    isActive
-    companyId
-    company {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      createdAt
-      updatedAt
-      __typename
-    }
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnUpdateCompanyAdminSubscriptionVariables,
-  APITypes.OnUpdateCompanyAdminSubscription
->;
-export const onDeleteCompanyAdmin = /* GraphQL */ `subscription OnDeleteCompanyAdmin(
-  $filter: ModelSubscriptionCompanyAdminFilterInput
-) {
-  onDeleteCompanyAdmin(filter: $filter) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    isActive
-    companyId
-    company {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      createdAt
-      updatedAt
-      __typename
-    }
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnDeleteCompanyAdminSubscriptionVariables,
-  APITypes.OnDeleteCompanyAdminSubscription
->;
-export const onCreateSuperAdmin = /* GraphQL */ `subscription OnCreateSuperAdmin(
-  $filter: ModelSubscriptionSuperAdminFilterInput
-) {
-  onCreateSuperAdmin(filter: $filter) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnCreateSuperAdminSubscriptionVariables,
-  APITypes.OnCreateSuperAdminSubscription
->;
-export const onUpdateSuperAdmin = /* GraphQL */ `subscription OnUpdateSuperAdmin(
-  $filter: ModelSubscriptionSuperAdminFilterInput
-) {
-  onUpdateSuperAdmin(filter: $filter) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnUpdateSuperAdminSubscriptionVariables,
-  APITypes.OnUpdateSuperAdminSubscription
->;
-export const onDeleteSuperAdmin = /* GraphQL */ `subscription OnDeleteSuperAdmin(
-  $filter: ModelSubscriptionSuperAdminFilterInput
-) {
-  onDeleteSuperAdmin(filter: $filter) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnDeleteSuperAdminSubscriptionVariables,
-  APITypes.OnDeleteSuperAdminSubscription
->;
 export const onCreateJob = /* GraphQL */ `subscription OnCreateJob($filter: ModelSubscriptionJobFilterInput) {
   onCreateJob(filter: $filter) {
     id
     title
+    department
+    location
+    type
+    salary
     description
     requirements
-    location
-    jobType
-    salaryRange
-    isActive
+    responsibilities
+    benefits
+    status
     companyId
-    createdAt
-    updatedAt
     company {
       id
       name
@@ -285,10 +289,17 @@ export const onCreateJob = /* GraphQL */ `subscription OnCreateJob($filter: Mode
       nextToken
       __typename
     }
-    questions {
+    tests {
       nextToken
       __typename
     }
+    videoTests {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    closingDate
     __typename
   }
 }
@@ -300,15 +311,16 @@ export const onUpdateJob = /* GraphQL */ `subscription OnUpdateJob($filter: Mode
   onUpdateJob(filter: $filter) {
     id
     title
+    department
+    location
+    type
+    salary
     description
     requirements
-    location
-    jobType
-    salaryRange
-    isActive
+    responsibilities
+    benefits
+    status
     companyId
-    createdAt
-    updatedAt
     company {
       id
       name
@@ -327,10 +339,17 @@ export const onUpdateJob = /* GraphQL */ `subscription OnUpdateJob($filter: Mode
       nextToken
       __typename
     }
-    questions {
+    tests {
       nextToken
       __typename
     }
+    videoTests {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    closingDate
     __typename
   }
 }
@@ -342,15 +361,16 @@ export const onDeleteJob = /* GraphQL */ `subscription OnDeleteJob($filter: Mode
   onDeleteJob(filter: $filter) {
     id
     title
+    department
+    location
+    type
+    salary
     description
     requirements
-    location
-    jobType
-    salaryRange
-    isActive
+    responsibilities
+    benefits
+    status
     companyId
-    createdAt
-    updatedAt
     company {
       id
       name
@@ -369,10 +389,17 @@ export const onDeleteJob = /* GraphQL */ `subscription OnDeleteJob($filter: Mode
       nextToken
       __typename
     }
-    questions {
+    tests {
       nextToken
       __typename
     }
+    videoTests {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    closingDate
     __typename
   }
 }
@@ -382,61 +409,69 @@ export const onDeleteJob = /* GraphQL */ `subscription OnDeleteJob($filter: Mode
 >;
 export const onCreateApplication = /* GraphQL */ `subscription OnCreateApplication(
   $filter: ModelSubscriptionApplicationFilterInput
+  $candidateId: String
 ) {
-  onCreateApplication(filter: $filter) {
+  onCreateApplication(filter: $filter, candidateId: $candidateId) {
     id
     candidateId
-    jobId
-    status
-    currentStage
-    appliedAt
-    updatedAt
-    coverLetter
-    resumeUrl
-    writtenTestScore
-    writtenTestSubmittedAt
-    videoTestUrl
-    videoTestSubmittedAt
-    interviewLink
-    interviewScheduledAt
-    finalDecision
     candidate {
       id
-      cognitoId
+      sub
       email
       firstName
       lastName
       phone
-      address
-      linkedin
-      portfolio
-      bio
-      skills
-      experience
-      education
+      role
+      companyId
+      isActive
+      lastLoginAt
       createdAt
       updatedAt
+      resume
       __typename
     }
+    jobId
     job {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
-    testResponses {
+    appliedAt
+    currentStage
+    overallStatus
+    applicationStatus
+    writtenTestStatus
+    videoTestStatus
+    interviewStatus
+    feedback
+    internalNotes
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
       nextToken
       __typename
     }
     createdAt
+    updatedAt
     __typename
   }
 }
@@ -446,61 +481,69 @@ export const onCreateApplication = /* GraphQL */ `subscription OnCreateApplicati
 >;
 export const onUpdateApplication = /* GraphQL */ `subscription OnUpdateApplication(
   $filter: ModelSubscriptionApplicationFilterInput
+  $candidateId: String
 ) {
-  onUpdateApplication(filter: $filter) {
+  onUpdateApplication(filter: $filter, candidateId: $candidateId) {
     id
     candidateId
-    jobId
-    status
-    currentStage
-    appliedAt
-    updatedAt
-    coverLetter
-    resumeUrl
-    writtenTestScore
-    writtenTestSubmittedAt
-    videoTestUrl
-    videoTestSubmittedAt
-    interviewLink
-    interviewScheduledAt
-    finalDecision
     candidate {
       id
-      cognitoId
+      sub
       email
       firstName
       lastName
       phone
-      address
-      linkedin
-      portfolio
-      bio
-      skills
-      experience
-      education
+      role
+      companyId
+      isActive
+      lastLoginAt
       createdAt
       updatedAt
+      resume
       __typename
     }
+    jobId
     job {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
-    testResponses {
+    appliedAt
+    currentStage
+    overallStatus
+    applicationStatus
+    writtenTestStatus
+    videoTestStatus
+    interviewStatus
+    feedback
+    internalNotes
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
       nextToken
       __typename
     }
     createdAt
+    updatedAt
     __typename
   }
 }
@@ -510,61 +553,69 @@ export const onUpdateApplication = /* GraphQL */ `subscription OnUpdateApplicati
 >;
 export const onDeleteApplication = /* GraphQL */ `subscription OnDeleteApplication(
   $filter: ModelSubscriptionApplicationFilterInput
+  $candidateId: String
 ) {
-  onDeleteApplication(filter: $filter) {
+  onDeleteApplication(filter: $filter, candidateId: $candidateId) {
     id
     candidateId
-    jobId
-    status
-    currentStage
-    appliedAt
-    updatedAt
-    coverLetter
-    resumeUrl
-    writtenTestScore
-    writtenTestSubmittedAt
-    videoTestUrl
-    videoTestSubmittedAt
-    interviewLink
-    interviewScheduledAt
-    finalDecision
     candidate {
       id
-      cognitoId
+      sub
       email
       firstName
       lastName
       phone
-      address
-      linkedin
-      portfolio
-      bio
-      skills
-      experience
-      education
+      role
+      companyId
+      isActive
+      lastLoginAt
       createdAt
       updatedAt
+      resume
       __typename
     }
+    jobId
     job {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
-    testResponses {
+    appliedAt
+    currentStage
+    overallStatus
+    applicationStatus
+    writtenTestStatus
+    videoTestStatus
+    interviewStatus
+    feedback
+    internalNotes
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
       nextToken
       __typename
     }
     createdAt
+    updatedAt
     __typename
   }
 }
@@ -572,117 +623,37 @@ export const onDeleteApplication = /* GraphQL */ `subscription OnDeleteApplicati
   APITypes.OnDeleteApplicationSubscriptionVariables,
   APITypes.OnDeleteApplicationSubscription
 >;
-export const onCreateCandidate = /* GraphQL */ `subscription OnCreateCandidate($filter: ModelSubscriptionCandidateFilterInput) {
-  onCreateCandidate(filter: $filter) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    address
-    linkedin
-    portfolio
-    bio
-    skills
-    experience
-    education
-    createdAt
-    applications {
-      nextToken
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnCreateCandidateSubscriptionVariables,
-  APITypes.OnCreateCandidateSubscription
->;
-export const onUpdateCandidate = /* GraphQL */ `subscription OnUpdateCandidate($filter: ModelSubscriptionCandidateFilterInput) {
-  onUpdateCandidate(filter: $filter) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    address
-    linkedin
-    portfolio
-    bio
-    skills
-    experience
-    education
-    createdAt
-    applications {
-      nextToken
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnUpdateCandidateSubscriptionVariables,
-  APITypes.OnUpdateCandidateSubscription
->;
-export const onDeleteCandidate = /* GraphQL */ `subscription OnDeleteCandidate($filter: ModelSubscriptionCandidateFilterInput) {
-  onDeleteCandidate(filter: $filter) {
-    id
-    cognitoId
-    email
-    firstName
-    lastName
-    phone
-    address
-    linkedin
-    portfolio
-    bio
-    skills
-    experience
-    education
-    createdAt
-    applications {
-      nextToken
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnDeleteCandidateSubscriptionVariables,
-  APITypes.OnDeleteCandidateSubscription
->;
-export const onCreateQuestion = /* GraphQL */ `subscription OnCreateQuestion($filter: ModelSubscriptionQuestionFilterInput) {
-  onCreateQuestion(filter: $filter) {
+export const onCreateTest = /* GraphQL */ `subscription OnCreateTest($filter: ModelSubscriptionTestFilterInput) {
+  onCreateTest(filter: $filter) {
     id
     jobId
-    stage
-    questionText
-    questionType
-    options
-    correctAnswer
-    timeLimit
-    order
-    isActive
     job {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
-    responses {
+    title
+    description
+    instructions
+    timeLimit
+    totalPoints
+    passingScore
+    isActive
+    questions
+    attempts {
       nextToken
       __typename
     }
@@ -692,36 +663,40 @@ export const onCreateQuestion = /* GraphQL */ `subscription OnCreateQuestion($fi
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnCreateQuestionSubscriptionVariables,
-  APITypes.OnCreateQuestionSubscription
+  APITypes.OnCreateTestSubscriptionVariables,
+  APITypes.OnCreateTestSubscription
 >;
-export const onUpdateQuestion = /* GraphQL */ `subscription OnUpdateQuestion($filter: ModelSubscriptionQuestionFilterInput) {
-  onUpdateQuestion(filter: $filter) {
+export const onUpdateTest = /* GraphQL */ `subscription OnUpdateTest($filter: ModelSubscriptionTestFilterInput) {
+  onUpdateTest(filter: $filter) {
     id
     jobId
-    stage
-    questionText
-    questionType
-    options
-    correctAnswer
-    timeLimit
-    order
-    isActive
     job {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
-    responses {
+    title
+    description
+    instructions
+    timeLimit
+    totalPoints
+    passingScore
+    isActive
+    questions
+    attempts {
       nextToken
       __typename
     }
@@ -731,36 +706,40 @@ export const onUpdateQuestion = /* GraphQL */ `subscription OnUpdateQuestion($fi
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnUpdateQuestionSubscriptionVariables,
-  APITypes.OnUpdateQuestionSubscription
+  APITypes.OnUpdateTestSubscriptionVariables,
+  APITypes.OnUpdateTestSubscription
 >;
-export const onDeleteQuestion = /* GraphQL */ `subscription OnDeleteQuestion($filter: ModelSubscriptionQuestionFilterInput) {
-  onDeleteQuestion(filter: $filter) {
+export const onDeleteTest = /* GraphQL */ `subscription OnDeleteTest($filter: ModelSubscriptionTestFilterInput) {
+  onDeleteTest(filter: $filter) {
     id
     jobId
-    stage
-    questionText
-    questionType
-    options
-    correctAnswer
-    timeLimit
-    order
-    isActive
     job {
       id
       title
+      department
+      location
+      type
+      salary
       description
       requirements
-      location
-      jobType
-      salaryRange
-      isActive
+      responsibilities
+      benefits
+      status
       companyId
       createdAt
       updatedAt
+      closingDate
       __typename
     }
-    responses {
+    title
+    description
+    instructions
+    timeLimit
+    totalPoints
+    passingScore
+    isActive
+    questions
+    attempts {
       nextToken
       __typename
     }
@@ -770,163 +749,261 @@ export const onDeleteQuestion = /* GraphQL */ `subscription OnDeleteQuestion($fi
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnDeleteQuestionSubscriptionVariables,
-  APITypes.OnDeleteQuestionSubscription
+  APITypes.OnDeleteTestSubscriptionVariables,
+  APITypes.OnDeleteTestSubscription
 >;
-export const onCreateTestResponse = /* GraphQL */ `subscription OnCreateTestResponse(
-  $filter: ModelSubscriptionTestResponseFilterInput
+export const onCreateTestAttempt = /* GraphQL */ `subscription OnCreateTestAttempt(
+  $filter: ModelSubscriptionTestAttemptFilterInput
+  $candidateId: String
 ) {
-  onCreateTestResponse(filter: $filter) {
+  onCreateTestAttempt(filter: $filter, candidateId: $candidateId) {
     id
+    testId
+    test {
+      id
+      jobId
+      title
+      description
+      instructions
+      timeLimit
+      totalPoints
+      passingScore
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
     applicationId
-    questionId
-    response
-    videoUrl
-    isCorrect
-    submittedAt
     application {
       id
       candidateId
       jobId
-      status
-      currentStage
       appliedAt
-      updatedAt
-      coverLetter
-      resumeUrl
-      writtenTestScore
-      writtenTestSubmittedAt
-      videoTestUrl
-      videoTestSubmittedAt
-      interviewLink
-      interviewScheduledAt
-      finalDecision
-      createdAt
-      __typename
-    }
-    question {
-      id
-      jobId
-      stage
-      questionText
-      questionType
-      options
-      correctAnswer
-      timeLimit
-      order
-      isActive
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
       createdAt
       updatedAt
       __typename
     }
+    startedAt
+    completedAt
+    timeRemaining
+    status
+    answers
+    score
+    percentage
+    passed
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnCreateTestResponseSubscriptionVariables,
-  APITypes.OnCreateTestResponseSubscription
+  APITypes.OnCreateTestAttemptSubscriptionVariables,
+  APITypes.OnCreateTestAttemptSubscription
 >;
-export const onUpdateTestResponse = /* GraphQL */ `subscription OnUpdateTestResponse(
-  $filter: ModelSubscriptionTestResponseFilterInput
+export const onUpdateTestAttempt = /* GraphQL */ `subscription OnUpdateTestAttempt(
+  $filter: ModelSubscriptionTestAttemptFilterInput
+  $candidateId: String
 ) {
-  onUpdateTestResponse(filter: $filter) {
+  onUpdateTestAttempt(filter: $filter, candidateId: $candidateId) {
     id
+    testId
+    test {
+      id
+      jobId
+      title
+      description
+      instructions
+      timeLimit
+      totalPoints
+      passingScore
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
     applicationId
-    questionId
-    response
-    videoUrl
-    isCorrect
-    submittedAt
     application {
       id
       candidateId
       jobId
-      status
-      currentStage
       appliedAt
-      updatedAt
-      coverLetter
-      resumeUrl
-      writtenTestScore
-      writtenTestSubmittedAt
-      videoTestUrl
-      videoTestSubmittedAt
-      interviewLink
-      interviewScheduledAt
-      finalDecision
-      createdAt
-      __typename
-    }
-    question {
-      id
-      jobId
-      stage
-      questionText
-      questionType
-      options
-      correctAnswer
-      timeLimit
-      order
-      isActive
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
       createdAt
       updatedAt
       __typename
     }
+    startedAt
+    completedAt
+    timeRemaining
+    status
+    answers
+    score
+    percentage
+    passed
     createdAt
     updatedAt
     __typename
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnUpdateTestResponseSubscriptionVariables,
-  APITypes.OnUpdateTestResponseSubscription
+  APITypes.OnUpdateTestAttemptSubscriptionVariables,
+  APITypes.OnUpdateTestAttemptSubscription
 >;
-export const onDeleteTestResponse = /* GraphQL */ `subscription OnDeleteTestResponse(
-  $filter: ModelSubscriptionTestResponseFilterInput
+export const onDeleteTestAttempt = /* GraphQL */ `subscription OnDeleteTestAttempt(
+  $filter: ModelSubscriptionTestAttemptFilterInput
+  $candidateId: String
 ) {
-  onDeleteTestResponse(filter: $filter) {
+  onDeleteTestAttempt(filter: $filter, candidateId: $candidateId) {
     id
+    testId
+    test {
+      id
+      jobId
+      title
+      description
+      instructions
+      timeLimit
+      totalPoints
+      passingScore
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
     applicationId
-    questionId
-    response
-    videoUrl
-    isCorrect
-    submittedAt
     application {
       id
       candidateId
       jobId
-      status
-      currentStage
       appliedAt
-      updatedAt
-      coverLetter
-      resumeUrl
-      writtenTestScore
-      writtenTestSubmittedAt
-      videoTestUrl
-      videoTestSubmittedAt
-      interviewLink
-      interviewScheduledAt
-      finalDecision
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
       createdAt
+      updatedAt
       __typename
     }
-    question {
+    startedAt
+    completedAt
+    timeRemaining
+    status
+    answers
+    score
+    percentage
+    passed
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteTestAttemptSubscriptionVariables,
+  APITypes.OnDeleteTestAttemptSubscription
+>;
+export const onCreateVideoTest = /* GraphQL */ `subscription OnCreateVideoTest($filter: ModelSubscriptionVideoTestFilterInput) {
+  onCreateVideoTest(filter: $filter) {
+    id
+    jobId
+    job {
       id
-      jobId
-      stage
-      questionText
-      questionType
-      options
-      correctAnswer
-      timeLimit
-      order
-      isActive
+      title
+      department
+      location
+      type
+      salary
+      description
+      requirements
+      responsibilities
+      benefits
+      status
+      companyId
       createdAt
       updatedAt
+      closingDate
+      __typename
+    }
+    title
+    description
+    instructions
+    totalPoints
+    isActive
+    questions
+    attempts {
+      nextToken
       __typename
     }
     createdAt
@@ -935,6 +1012,481 @@ export const onDeleteTestResponse = /* GraphQL */ `subscription OnDeleteTestResp
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnDeleteTestResponseSubscriptionVariables,
-  APITypes.OnDeleteTestResponseSubscription
+  APITypes.OnCreateVideoTestSubscriptionVariables,
+  APITypes.OnCreateVideoTestSubscription
+>;
+export const onUpdateVideoTest = /* GraphQL */ `subscription OnUpdateVideoTest($filter: ModelSubscriptionVideoTestFilterInput) {
+  onUpdateVideoTest(filter: $filter) {
+    id
+    jobId
+    job {
+      id
+      title
+      department
+      location
+      type
+      salary
+      description
+      requirements
+      responsibilities
+      benefits
+      status
+      companyId
+      createdAt
+      updatedAt
+      closingDate
+      __typename
+    }
+    title
+    description
+    instructions
+    totalPoints
+    isActive
+    questions
+    attempts {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateVideoTestSubscriptionVariables,
+  APITypes.OnUpdateVideoTestSubscription
+>;
+export const onDeleteVideoTest = /* GraphQL */ `subscription OnDeleteVideoTest($filter: ModelSubscriptionVideoTestFilterInput) {
+  onDeleteVideoTest(filter: $filter) {
+    id
+    jobId
+    job {
+      id
+      title
+      department
+      location
+      type
+      salary
+      description
+      requirements
+      responsibilities
+      benefits
+      status
+      companyId
+      createdAt
+      updatedAt
+      closingDate
+      __typename
+    }
+    title
+    description
+    instructions
+    totalPoints
+    isActive
+    questions
+    attempts {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteVideoTestSubscriptionVariables,
+  APITypes.OnDeleteVideoTestSubscription
+>;
+export const onCreateVideoTestAttempt = /* GraphQL */ `subscription OnCreateVideoTestAttempt(
+  $filter: ModelSubscriptionVideoTestAttemptFilterInput
+  $candidateId: String
+) {
+  onCreateVideoTestAttempt(filter: $filter, candidateId: $candidateId) {
+    id
+    videoTestId
+    videoTest {
+      id
+      jobId
+      title
+      description
+      instructions
+      totalPoints
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    startedAt
+    completedAt
+    status
+    currentQuestionIndex
+    recordings
+    totalScore
+    feedback
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateVideoTestAttemptSubscriptionVariables,
+  APITypes.OnCreateVideoTestAttemptSubscription
+>;
+export const onUpdateVideoTestAttempt = /* GraphQL */ `subscription OnUpdateVideoTestAttempt(
+  $filter: ModelSubscriptionVideoTestAttemptFilterInput
+  $candidateId: String
+) {
+  onUpdateVideoTestAttempt(filter: $filter, candidateId: $candidateId) {
+    id
+    videoTestId
+    videoTest {
+      id
+      jobId
+      title
+      description
+      instructions
+      totalPoints
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    startedAt
+    completedAt
+    status
+    currentQuestionIndex
+    recordings
+    totalScore
+    feedback
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateVideoTestAttemptSubscriptionVariables,
+  APITypes.OnUpdateVideoTestAttemptSubscription
+>;
+export const onDeleteVideoTestAttempt = /* GraphQL */ `subscription OnDeleteVideoTestAttempt(
+  $filter: ModelSubscriptionVideoTestAttemptFilterInput
+  $candidateId: String
+) {
+  onDeleteVideoTestAttempt(filter: $filter, candidateId: $candidateId) {
+    id
+    videoTestId
+    videoTest {
+      id
+      jobId
+      title
+      description
+      instructions
+      totalPoints
+      isActive
+      questions
+      createdAt
+      updatedAt
+      __typename
+    }
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    startedAt
+    completedAt
+    status
+    currentQuestionIndex
+    recordings
+    totalScore
+    feedback
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteVideoTestAttemptSubscriptionVariables,
+  APITypes.OnDeleteVideoTestAttemptSubscription
+>;
+export const onCreateInterview = /* GraphQL */ `subscription OnCreateInterview(
+  $filter: ModelSubscriptionInterviewFilterInput
+  $candidateId: String
+) {
+  onCreateInterview(filter: $filter, candidateId: $candidateId) {
+    id
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    scheduledAt
+    duration
+    type
+    status
+    meetingUrl
+    interviewerNotes
+    candidateFeedback
+    finalScore
+    recommendation
+    interviewers
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateInterviewSubscriptionVariables,
+  APITypes.OnCreateInterviewSubscription
+>;
+export const onUpdateInterview = /* GraphQL */ `subscription OnUpdateInterview(
+  $filter: ModelSubscriptionInterviewFilterInput
+  $candidateId: String
+) {
+  onUpdateInterview(filter: $filter, candidateId: $candidateId) {
+    id
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    scheduledAt
+    duration
+    type
+    status
+    meetingUrl
+    interviewerNotes
+    candidateFeedback
+    finalScore
+    recommendation
+    interviewers
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateInterviewSubscriptionVariables,
+  APITypes.OnUpdateInterviewSubscription
+>;
+export const onDeleteInterview = /* GraphQL */ `subscription OnDeleteInterview(
+  $filter: ModelSubscriptionInterviewFilterInput
+  $candidateId: String
+) {
+  onDeleteInterview(filter: $filter, candidateId: $candidateId) {
+    id
+    candidateId
+    candidate {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      resume
+      __typename
+    }
+    applicationId
+    application {
+      id
+      candidateId
+      jobId
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      createdAt
+      updatedAt
+      __typename
+    }
+    scheduledAt
+    duration
+    type
+    status
+    meetingUrl
+    interviewerNotes
+    candidateFeedback
+    finalScore
+    recommendation
+    interviewers
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteInterviewSubscriptionVariables,
+  APITypes.OnDeleteInterviewSubscription
 >;
