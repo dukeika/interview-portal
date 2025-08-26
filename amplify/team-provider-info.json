@@ -38,8 +38,7 @@
     },
     "categories": {
       "auth": {
-        "interviewsaasa01f72f6": {},
-        "userPoolGroups": {}
+        "interviewsaasa01f72f6": {}
       },
       "api": {
         "interviewsaas": {}

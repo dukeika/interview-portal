@@ -146,7 +146,7 @@ export const applicationService = {
             companyName: 'Company', // TODO: Get from job/company data
             oldStatus: currentApplication.overallStatus,
             newStatus: input.overallStatus,
-            nextSteps: this.getNextStepsMessage(input.overallStatus, input.currentStage)
+            nextSteps: this.getNextStepsMessage(input.overallStatus, input.currentStage ?? undefined)
           });
         } catch (notificationError) {
           console.warn('Failed to send application update notification:', notificationError);

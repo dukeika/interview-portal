@@ -33,11 +33,14 @@ export class StorageService {
         options: {
           contentType: file.type,
           onProgress: onProgress ? (event) => {
-            if (event.total) {
+            // Handle the transfer progress event structure
+            const loaded = (event as any).loaded ?? 0;
+            const total = (event as any).total ?? 0;
+            if (total > 0) {
               onProgress({
-                loaded: event.loaded ?? 0,
-                total: event.total,
-                percentage: Math.round(((event.loaded ?? 0) / event.total) * 100)
+                loaded,
+                total,
+                percentage: Math.round((loaded / total) * 100)
               });
             }
           } : undefined
@@ -63,7 +66,8 @@ export class StorageService {
   static async getFileUrl(key: string): Promise<string> {
     try {
       const result = await downloadData({ key });
-      return URL.createObjectURL(result.body as Blob);
+      const blob = await (result as any).body;
+      return URL.createObjectURL(blob as Blob);
     } catch (error) {
       console.error('Error getting file URL:', error);
       throw error;
