@@ -1,0 +1,14 @@
+## Custom resolver for rejecting users
+## Updates user status and sends rejection notifications
+
+#set($userId = $context.args.userId)
+#set($rejectionReason = $context.args.rejectionReason)
+
+## First, get the current user data
+{
+  "version": "2018-05-29",
+  "operation": "GetItem",
+  "key": {
+    "id": { "S": "$userId" }
+  }
+}

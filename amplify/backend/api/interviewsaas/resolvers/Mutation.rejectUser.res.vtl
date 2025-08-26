@@ -1,0 +1,47 @@
+## Response mapping for rejectUser mutation
+## Updates user status and handles rejection workflow
+
+#if($context.error)
+  $util.error($context.error.message, $context.error.type)
+#end
+
+#if($context.result.isEmpty())
+  $util.error("User not found", "NotFound")
+#end
+
+## Update the user with rejection status
+#set($updateExpression = "SET approvalStatus = :rejected, isActive = :active, rejectedAt = :timestamp, rejectionReason = :reason")
+#set($expressionAttributeValues = {
+  ":rejected": { "S": "REJECTED" },
+  ":active": { "BOOL": false },
+  ":timestamp": { "S": "$util.time.nowISO8601()" },
+  ":reason": { "S": "$context.args.rejectionReason" }
+})
+
+## Prepare the update operation
+#set($updateInput = {
+  "version": "2018-05-29",
+  "operation": "UpdateItem",
+  "key": {
+    "id": { "S": "$context.args.userId" }
+  },
+  "update": {
+    "expression": "$updateExpression",
+    "expressionAttributeValues": $expressionAttributeValues
+  },
+  "condition": {
+    "expression": "attribute_exists(id)"
+  }
+})
+
+## Execute the update
+$util.dynamo.toDynamoDB($updateInput)
+
+## Return the updated user
+{
+  "id": "$context.args.userId",
+  "approvalStatus": "REJECTED",
+  "isActive": false,
+  "rejectedAt": "$util.time.nowISO8601()",
+  "rejectionReason": "$context.args.rejectionReason"
+}

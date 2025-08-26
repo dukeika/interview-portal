@@ -1,0 +1,40 @@
+## Response mapping for getApprovalStats query
+## Calculates statistics from the scan results
+
+#set($totalPending = 0)
+#set($totalApproved = 0)
+#set($totalRejected = 0)
+#set($pendingCompanyAdmins = 0)
+#set($pendingCandidates = 0)
+#set($emailVerified = 0)
+#set($emailPending = 0)
+
+#foreach($user in $context.result.items)
+  #if($user.approvalStatus.S == "PENDING")
+    #set($totalPending = $totalPending + 1)
+    #if($user.role && $user.role.S == "COMPANY_ADMIN")
+      #set($pendingCompanyAdmins = $pendingCompanyAdmins + 1)
+    #elseif($user.role && $user.role.S == "CANDIDATE")
+      #set($pendingCandidates = $pendingCandidates + 1)
+    #end
+    #if($user.isActive && $user.isActive.BOOL)
+      #set($emailVerified = $emailVerified + 1)
+    #else
+      #set($emailPending = $emailPending + 1)
+    #end
+  #elseif($user.approvalStatus.S == "APPROVED")
+    #set($totalApproved = $totalApproved + 1)
+  #elseif($user.approvalStatus.S == "REJECTED")
+    #set($totalRejected = $totalRejected + 1)
+  #end
+#end
+
+{
+  "totalPending": $totalPending,
+  "totalApproved": $totalApproved,
+  "totalRejected": $totalRejected,
+  "pendingCompanyAdmins": $pendingCompanyAdmins,
+  "pendingCandidates": $pendingCandidates,
+  "emailVerified": $emailVerified,
+  "emailPending": $emailPending
+}

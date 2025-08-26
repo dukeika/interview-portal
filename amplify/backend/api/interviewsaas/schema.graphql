@@ -21,6 +21,15 @@ type User @model @auth(rules: [
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
   
+  # User approval fields
+  approvalStatus: ApprovalStatus! @default(value: "PENDING") @index(name: "byApprovalStatus")
+  approvedAt: AWSDateTime
+  approvedBy: ID
+  approvalNotes: String
+  rejectedAt: AWSDateTime
+  rejectedBy: ID
+  rejectionReason: String
+  
   # Candidate specific fields
   resume: String # S3 key for resume file
   applications: [Application] @hasMany(indexName: "byCandidate", fields: ["id"])
@@ -33,6 +42,12 @@ enum UserRole {
   SUPER_ADMIN
   COMPANY_ADMIN
   CANDIDATE
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 # Company model
@@ -347,4 +362,31 @@ enum InterviewRecommendation {
   HIRE
   NO_HIRE
   STRONG_NO_HIRE
+}
+
+# Custom operations for user approval workflow
+input ApproveUserInput {
+  userId: ID!
+  approvalNotes: String
+}
+
+input RejectUserInput {
+  userId: ID!
+  rejectionReason: String!
+}
+
+input BulkApproveUsersInput {
+  userIds: [ID!]!
+  approvalNotes: String
+}
+
+# Statistics type for approval dashboard
+type ApprovalStats {
+  totalPending: Int!
+  totalApproved: Int!
+  totalRejected: Int!
+  pendingCompanyAdmins: Int!
+  pendingCandidates: Int!
+  emailVerified: Int!
+  emailPending: Int!
 }

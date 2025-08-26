@@ -1,0 +1,50 @@
+## Response mapping for approveUser mutation
+## Updates user status and handles approval workflow
+
+#if($context.error)
+  $util.error($context.error.message, $context.error.type)
+#end
+
+#if($context.result.isEmpty())
+  $util.error("User not found", "NotFound")
+#end
+
+## Update the user with approval status
+#set($updateExpression = "SET approvalStatus = :approved, isActive = :active, approvedAt = :timestamp")
+#set($expressionAttributeValues = {
+  ":approved": { "S": "APPROVED" },
+  ":active": { "BOOL": true },
+  ":timestamp": { "S": "$util.time.nowISO8601()" }
+})
+
+#if($context.args.approvalNotes)
+  #set($updateExpression = "$updateExpression, approvalNotes = :notes")
+  #set($expressionAttributeValues[":notes"] = { "S": "$context.args.approvalNotes" })
+#end
+
+## Prepare the update operation
+#set($updateInput = {
+  "version": "2018-05-29",
+  "operation": "UpdateItem",
+  "key": {
+    "id": { "S": "$context.args.userId" }
+  },
+  "update": {
+    "expression": "$updateExpression",
+    "expressionAttributeValues": $expressionAttributeValues
+  },
+  "condition": {
+    "expression": "attribute_exists(id)"
+  }
+})
+
+## Execute the update
+$util.dynamo.toDynamoDB($updateInput)
+
+## Return the updated user
+{
+  "id": "$context.args.userId",
+  "approvalStatus": "APPROVED",
+  "isActive": true,
+  "approvedAt": "$util.time.nowISO8601()"
+}

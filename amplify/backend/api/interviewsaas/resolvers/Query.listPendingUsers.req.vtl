@@ -1,0 +1,24 @@
+## Query to list users with pending approval status
+## This resolver filters users who need admin approval
+
+{
+  "version": "2018-05-29",
+  "operation": "Query",
+  "query": {
+    "expression": "#approvalStatus = :pendingStatus",
+    "expressionNames": {
+      "#approvalStatus": "approvalStatus"
+    },
+    "expressionValues": {
+      ":pendingStatus": { "S": "PENDING" }
+    }
+  },
+  "index": "byApprovalStatus",
+  "scanIndexForward": false,
+  "limit": $util.defaultIfNull($context.args.limit, 100)
+}
+
+#if($context.args.nextToken)
+  #set($context.args.nextToken = $util.parseJson($util.base64Decode($context.args.nextToken)))
+  #set($result.nextToken = $context.args.nextToken)
+#end

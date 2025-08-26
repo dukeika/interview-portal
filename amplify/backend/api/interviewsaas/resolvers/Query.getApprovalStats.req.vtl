@@ -1,0 +1,14 @@
+## Query to get approval statistics
+## Scans the User table to calculate approval metrics
+
+{
+  "version": "2018-05-29",
+  "operation": "Scan",
+  "filter": {
+    "expression": "attribute_exists(approvalStatus)"
+  },
+  "projectionExpression": "approvalStatus, #role, isActive",
+  "expressionNames": {
+    "#role": "role"
+  }
+}

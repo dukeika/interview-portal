@@ -1,0 +1,16 @@
+## Custom resolver for approving users
+## Updates user status and sends approval notifications
+
+#set($userId = $context.args.userId)
+#set($approvalNotes = $context.args.approvalNotes)
+
+## First, get the current user data
+{
+  "version": "2018-05-29",
+  "operation": "GetItem",
+  "key": {
+    "id": { "S": "$userId" }
+  }
+}
+
+## The actual update will be handled in the response template
