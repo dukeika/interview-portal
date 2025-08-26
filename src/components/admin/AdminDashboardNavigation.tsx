@@ -1,7 +1,7 @@
 // src/components/admin/AdminDashboardNavigation.tsx
 "use client";
 
-import { BarChart3, Building, Users, Settings, TrendingUp } from "lucide-react";
+import { BarChart3, Building, Users, Settings, TrendingUp, Clock } from "lucide-react";
 import { AdminTabType } from "./types";
 
 interface AdminDashboardNavigationProps {
@@ -17,6 +17,7 @@ export default function AdminDashboardNavigation({
     { id: "overview", label: "Overview", icon: BarChart3 },
     { id: "companies", label: "Companies", icon: Building },
     { id: "users", label: "Users", icon: Users },
+    { id: "pending", label: "Pending Approvals", icon: Clock },
     { id: "analytics", label: "Analytics", icon: TrendingUp },
     { id: "settings", label: "Settings", icon: Settings },
   ] as const;

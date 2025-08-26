@@ -3,17 +3,30 @@
 
 import { useState } from "react";
 import { useAdminData } from "@/hooks/useAdminData";
+import { usePendingUsers } from "@/hooks/usePendingUsers";
 import AdminDashboardHeader from "@/components/admin/AdminDashboardHeader";
 import AdminDashboardNavigation from "@/components/admin/AdminDashboardNavigation";
 import AdminOverviewTab from "@/components/admin/AdminOverviewTab";
 import AdminCompaniesTab from "@/components/admin/AdminCompaniesTab";
 import AdminUsersTab from "@/components/admin/AdminUsersTab";
+import PendingUsersTab from "@/components/admin/PendingUsersTab";
 import { AdminTabType } from "@/components/admin/types";
 
 export default function SuperAdminDashboard() {
   const [activeTab, setActiveTab] = useState<AdminTabType>("overview");
   const { companies, companyAdmins, platformStats, recentActivity, loading } =
     useAdminData();
+  
+  const { 
+    pendingUsers, 
+    loading: pendingUsersLoading, 
+    error: pendingUsersError,
+    approvalStats,
+    refreshPendingUsers,
+    approveUser,
+    rejectUser,
+    bulkApproveUsers
+  } = usePendingUsers();
 
   if (loading) {
     return (
@@ -44,6 +57,29 @@ export default function SuperAdminDashboard() {
       case "users":
         return (
           <AdminUsersTab companyAdmins={companyAdmins} companies={companies} />
+        );
+      case "pending":
+        return (
+          <PendingUsersTab 
+            pendingUsers={pendingUsers.map(user => ({
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              phone: user.phone,
+              role: user.role,
+              companyName: user.companyName,
+              companyEmail: user.companyEmail,
+              companyWebsite: user.companyWebsite,
+              registeredAt: user.registeredAt,
+              verificationStatus: user.verificationStatus,
+              documents: user.documents
+            }))}
+            onRefresh={refreshPendingUsers}
+            loading={pendingUsersLoading}
+            onApproveUser={approveUser}
+            onRejectUser={rejectUser}
+          />
         );
       case "analytics":
         return (
