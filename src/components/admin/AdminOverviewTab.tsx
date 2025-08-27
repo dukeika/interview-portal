@@ -12,16 +12,18 @@ import {
   AlertCircle,
   CheckCircle,
 } from "lucide-react";
-import { PlatformStats, ActivityLog } from "./types";
+import { PlatformStats, ActivityLog, AdminTabType } from "./types";
 
 interface AdminOverviewTabProps {
   stats: PlatformStats;
   recentActivity: ActivityLog[];
+  onNavigateToTab?: (tab: AdminTabType) => void;
 }
 
 export default function AdminOverviewTab({
   stats,
   recentActivity,
+  onNavigateToTab,
 }: AdminOverviewTabProps) {
   const statsCards = [
     {
@@ -139,7 +141,10 @@ export default function AdminOverviewTab({
           Quick Actions
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Button className="justify-start h-auto p-4 flex-col items-start">
+          <Button 
+            className="justify-start h-auto p-4 flex-col items-start"
+            onClick={() => onNavigateToTab?.('companies')}
+          >
             <Plus className="h-5 w-5 mb-2" />
             <span className="font-medium">Add Company</span>
             <span className="text-xs opacity-70">Register new company</span>
@@ -147,6 +152,7 @@ export default function AdminOverviewTab({
           <Button
             variant="outline"
             className="justify-start h-auto p-4 flex-col items-start"
+            onClick={() => onNavigateToTab?.('users')}
           >
             <Users className="h-5 w-5 mb-2" />
             <span className="font-medium">Create Admin</span>
@@ -155,6 +161,7 @@ export default function AdminOverviewTab({
           <Button
             variant="outline"
             className="justify-start h-auto p-4 flex-col items-start"
+            onClick={() => onNavigateToTab?.('reports')}
           >
             <FileText className="h-5 w-5 mb-2" />
             <span className="font-medium">Platform Report</span>
@@ -163,6 +170,7 @@ export default function AdminOverviewTab({
           <Button
             variant="outline"
             className="justify-start h-auto p-4 flex-col items-start"
+            onClick={() => onNavigateToTab?.('analytics')}
           >
             <TrendingUp className="h-5 w-5 mb-2" />
             <span className="font-medium">View Analytics</span>

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { signUp, confirmSignUp } from 'aws-amplify/auth';
 import { userService } from '@/services/userService';
 import { companyService } from '@/services/companyService';
-import { UserRole } from '@/API';
+import { UserRole, ApprovalStatus } from '@/API';
 
 export interface RegistrationData {
   email: string;
@@ -174,7 +174,8 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
         lastName: formData.lastName,
         phone: formData.phone || undefined,
         role: formData.userType === 'company' ? UserRole.COMPANY_ADMIN : UserRole.CANDIDATE,
-        isActive: true
+        isActive: true,
+        approvalStatus: ApprovalStatus.PENDING
       });
 
       // Step 3: If company registration, create company record

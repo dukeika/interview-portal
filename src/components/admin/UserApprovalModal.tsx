@@ -15,25 +15,7 @@ import {
   FileText,
   X,
 } from "lucide-react";
-
-interface PendingUser {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string;
-  role: "COMPANY_ADMIN" | "CANDIDATE";
-  companyName?: string;
-  companyEmail?: string;
-  companyWebsite?: string;
-  registeredAt: string;
-  verificationStatus: "PENDING" | "EMAIL_VERIFIED";
-  documents?: {
-    businessLicense?: string;
-    taxId?: string;
-    incorporation?: string;
-  };
-}
+import { PendingUser } from "./types";
 
 interface UserApprovalModalProps {
   user: PendingUser;

@@ -13,10 +13,17 @@ import PendingUsersTab from "@/components/admin/PendingUsersTab";
 import PlatformReportsTab from "@/components/admin/PlatformReportsTab";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
 import NotificationsSettingsTab from "@/components/admin/NotificationsSettingsTab";
+import SettingsTab from "@/components/admin/SettingsTab";
 import { AdminTabType } from "@/components/admin/types";
 
 export default function SuperAdminDashboard() {
   const [activeTab, setActiveTab] = useState<AdminTabType>("overview");
+  
+  const handleTabChange = (tab: AdminTabType) => {
+    console.log(`🔄 handleTabChange called - Switching from ${activeTab} to ${tab}`);
+    setActiveTab(tab);
+    console.log(`✅ Tab state updated to: ${tab}`);
+  };
   const { companies, companyAdmins, platformStats, recentActivity, loading } =
     useAdminData();
   
@@ -53,6 +60,7 @@ export default function SuperAdminDashboard() {
           <AdminOverviewTab
             stats={platformStats}
             recentActivity={recentActivity}
+            onNavigateToTab={setActiveTab}
           />
         );
       case "companies":
@@ -95,19 +103,7 @@ export default function SuperAdminDashboard() {
       case "notifications":
         return <NotificationsSettingsTab />;
       case "settings":
-        return (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-abhh-yellow-100 rounded-xl flex items-center justify-center mb-4 mx-auto">
-              <span className="text-2xl">⚙️</span>
-            </div>
-            <h3 className="text-lg font-medium text-abhh-teal-700">
-              Platform Settings
-            </h3>
-            <p className="text-abhh-teal-500 mt-2">
-              System configuration and settings panel coming soon...
-            </p>
-          </div>
-        );
+        return <SettingsTab />;
       default:
         return (
           <AdminOverviewTab
@@ -120,10 +116,10 @@ export default function SuperAdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-abhh-teal-50 to-white">
-      <AdminDashboardHeader />
+      <AdminDashboardHeader onNavigateToTab={handleTabChange} />
       <AdminDashboardNavigation
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

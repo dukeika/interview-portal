@@ -62,32 +62,19 @@ export default function LoginPage() {
           <div className="mt-6 p-4 bg-abhh-yellow-50 border border-abhh-yellow-200 rounded-lg text-sm text-abhh-teal-700">
             <p className="font-semibold flex items-center justify-center">
               <Users className="w-4 h-4 mr-2" />
-              Demo Mode Active
+              Demo Account Available
             </p>
-            <p className="mt-2">Try these accounts:</p>
-            <div className="mt-3 text-xs space-y-3 text-left">
-              <div>
+            <p className="mt-2">Try the admin demo account to see the new features:</p>
+            <div className="mt-3 text-xs space-y-2 text-left">
+              <div className="p-2 bg-white rounded border">
                 <div className="flex justify-between mb-1">
                   <strong>admin@abhh.demo</strong>
                   <span className="text-abhh-teal-500">Super Admin</span>
                 </div>
                 <div className="text-abhh-teal-600">Password: AdminPass123!</div>
               </div>
-              <div>
-                <div className="flex justify-between mb-1">
-                  <strong>company@techcorp.demo</strong>
-                  <span className="text-abhh-teal-500">Company Admin</span>
-                </div>
-                <div className="text-abhh-teal-600">Password: CompanyPass123!</div>
-              </div>
-              <div>
-                <div className="flex justify-between mb-1">
-                  <strong>candidate@demo.com</strong>
-                  <span className="text-abhh-teal-500">Candidate</span>
-                </div>
-                <div className="text-abhh-teal-600">Password: CandidatePass123!</div>
-              </div>
             </div>
+            <p className="mt-2 text-xs text-center text-abhh-teal-600">Or register a new account with &quot;admin&quot; in the email for admin access</p>
           </div>
         </div>
 

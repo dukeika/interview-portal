@@ -1,5 +1,7 @@
 // src/components/admin/types.ts
 
+import { UserRole } from "@/API";
+
 export interface Company {
   id: string;
   name: string;
@@ -61,7 +63,7 @@ export interface PendingUser {
   lastName: string;
   email: string;
   phone?: string;
-  role: "COMPANY_ADMIN" | "CANDIDATE";
+  role: UserRole;
   companyName?: string;
   companyEmail?: string;
   companyWebsite?: string;

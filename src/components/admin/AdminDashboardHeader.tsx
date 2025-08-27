@@ -5,7 +5,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Plus, Settings, Bell, Brain, Heart, LogOut } from "lucide-react";
 
-export default function AdminDashboardHeader() {
+import { AdminTabType } from "./types";
+
+interface AdminDashboardHeaderProps {
+  onNavigateToTab?: (tab: AdminTabType) => void;
+}
+
+export default function AdminDashboardHeader({ onNavigateToTab }: AdminDashboardHeaderProps) {
   const { user, signOut } = useAuth();
 
   return (
@@ -37,6 +43,11 @@ export default function AdminDashboardHeader() {
               variant="outline"
               size="sm"
               className="border-abhh-yellow-400 text-abhh-teal-600 hover:bg-abhh-yellow-50"
+              onClick={() => {
+                console.log("Notifications button clicked");
+                console.log("onNavigateToTab function:", onNavigateToTab);
+                onNavigateToTab?.('notifications');
+              }}
             >
               <Bell className="mr-2 h-4 w-4" />
               Notifications
@@ -44,6 +55,11 @@ export default function AdminDashboardHeader() {
             <Button
               variant="secondary"
               className="bg-abhh-yellow-500 text-abhh-teal-600 hover:bg-abhh-yellow-400"
+              onClick={() => {
+                console.log("Add Company button clicked");
+                console.log("onNavigateToTab function:", onNavigateToTab);
+                onNavigateToTab?.('companies');
+              }}
             >
               <Plus className="mr-2 h-4 w-4" />
               Add Company
@@ -51,6 +67,11 @@ export default function AdminDashboardHeader() {
             <Button
               variant="outline"
               className="border-abhh-teal-600 text-abhh-teal-600 hover:bg-abhh-teal-50"
+              onClick={() => {
+                console.log("Settings button clicked");
+                console.log("onNavigateToTab function:", onNavigateToTab);
+                onNavigateToTab?.('settings');
+              }}
             >
               <Settings className="mr-2 h-4 w-4" />
               Settings

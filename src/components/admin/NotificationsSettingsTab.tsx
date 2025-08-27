@@ -71,7 +71,7 @@ export default function NotificationsSettingsTab() {
       ...prev,
       [category]: {
         ...prev[category],
-        [setting]: !prev[category][setting as keyof typeof prev[category]],
+        [setting]: !(prev[category] as any)[setting],
       },
     }));
   };
@@ -199,37 +199,37 @@ export default function NotificationsSettingsTab() {
             </div>
 
             <div className="space-y-4">
-              {category.settings.map((setting) => (
-                <div key={setting.key} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3">
-                      <h4 className="text-sm font-medium text-gray-900">{setting.label}</h4>
-                      <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
-                        settings[category.id as keyof NotificationSettings][setting.key as keyof typeof settings[category.id as keyof NotificationSettings]]
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {settings[category.id as keyof NotificationSettings][setting.key as keyof typeof settings[category.id as keyof NotificationSettings]]
-                          ? 'Enabled'
-                          : 'Disabled'
-                        }
-                      </span>
+              {category.settings.map((setting) => {
+                const categorySettings = settings[category.id as keyof NotificationSettings] as any;
+                const isEnabled = categorySettings[setting.key];
+                
+                return (
+                  <div key={setting.key} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3">
+                        <h4 className="text-sm font-medium text-gray-900">{setting.label}</h4>
+                        <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
+                          isEnabled ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {isEnabled ? 'Enabled' : 'Disabled'}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-500 mt-1">{setting.description}</p>
                     </div>
-                    <p className="text-sm text-gray-500 mt-1">{setting.description}</p>
+                    <div className="ml-4">
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          className="sr-only peer"
+                          checked={isEnabled}
+                          onChange={() => handleToggleSetting(category.id as keyof NotificationSettings, setting.key)}
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                      </label>
+                    </div>
                   </div>
-                  <div className="ml-4">
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="sr-only peer"
-                        checked={settings[category.id as keyof NotificationSettings][setting.key as keyof typeof settings[category.id as keyof NotificationSettings]]}
-                        onChange={() => handleToggleSetting(category.id as keyof NotificationSettings, setting.key)}
-                      />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         ))}

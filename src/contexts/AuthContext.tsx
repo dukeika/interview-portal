@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { userService } from "@/services/userService";
-import { UserRole } from "@/API";
+import { UserRole, ApprovalStatus } from "@/API";
 import { setMockMode, clearMockMode } from "@/lib/mockServices";
 
 interface AuthContextType {
@@ -192,7 +192,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           role: role === 'super_admin' ? UserRole.SUPER_ADMIN :
                 role === 'company_admin' ? UserRole.COMPANY_ADMIN :
                 UserRole.CANDIDATE,
-          isActive: true
+          isActive: true,
+          approvalStatus: role === 'super_admin' ? ApprovalStatus.APPROVED : ApprovalStatus.PENDING
         });
 
         console.log("✅ User record created:", newUser);
