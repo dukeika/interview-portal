@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAdminData } from "@/hooks/useAdminData";
+import { useAdminDataReal } from "@/hooks/useAdminDataReal";
 import { usePendingUsers } from "@/hooks/usePendingUsers";
 import AdminDashboardHeader from "@/components/admin/AdminDashboardHeader";
 import AdminDashboardNavigation from "@/components/admin/AdminDashboardNavigation";
@@ -24,8 +24,8 @@ export default function SuperAdminDashboard() {
     setActiveTab(tab);
     console.log(`✅ Tab state updated to: ${tab}`);
   };
-  const { companies, companyAdmins, platformStats, recentActivity, loading } =
-    useAdminData();
+  const { companies, companyAdmins, platformStats, recentActivity, loading, refreshData } =
+    useAdminDataReal();
   
   const { 
     pendingUsers, 
@@ -64,13 +64,13 @@ export default function SuperAdminDashboard() {
           />
         );
       case "companies":
-        return <AdminCompaniesTab companies={companies} onRefresh={() => window.location.reload()} />;
+        return <AdminCompaniesTab companies={companies} onRefresh={refreshData} />;
       case "users":
         return (
           <AdminUsersTab 
             companyAdmins={companyAdmins} 
             companies={companies}
-            onRefresh={() => window.location.reload()}
+            onRefresh={refreshData}
           />
         );
       case "pending":
