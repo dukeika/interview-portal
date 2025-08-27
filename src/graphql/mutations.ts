@@ -8,192 +8,6 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
-export const createUser = /* GraphQL */ `mutation CreateUser(
-  $input: CreateUserInput!
-  $condition: ModelUserConditionInput
-) {
-  createUser(input: $input, condition: $condition) {
-    id
-    sub
-    email
-    firstName
-    lastName
-    phone
-    role
-    companyId
-    company {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      createdAt
-      updatedAt
-      __typename
-    }
-    isActive
-    lastLoginAt
-    createdAt
-    updatedAt
-    approvalStatus
-    approvedAt
-    approvedBy
-    approvalNotes
-    rejectedAt
-    rejectedBy
-    rejectionReason
-    resume
-    applications {
-      nextToken
-      __typename
-    }
-    testAttempts {
-      nextToken
-      __typename
-    }
-    videoTestAttempts {
-      nextToken
-      __typename
-    }
-    interviews {
-      nextToken
-      __typename
-    }
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateUserMutationVariables,
-  APITypes.CreateUserMutation
->;
-export const updateUser = /* GraphQL */ `mutation UpdateUser(
-  $input: UpdateUserInput!
-  $condition: ModelUserConditionInput
-) {
-  updateUser(input: $input, condition: $condition) {
-    id
-    sub
-    email
-    firstName
-    lastName
-    phone
-    role
-    companyId
-    company {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      createdAt
-      updatedAt
-      __typename
-    }
-    isActive
-    lastLoginAt
-    createdAt
-    updatedAt
-    approvalStatus
-    approvedAt
-    approvedBy
-    approvalNotes
-    rejectedAt
-    rejectedBy
-    rejectionReason
-    resume
-    applications {
-      nextToken
-      __typename
-    }
-    testAttempts {
-      nextToken
-      __typename
-    }
-    videoTestAttempts {
-      nextToken
-      __typename
-    }
-    interviews {
-      nextToken
-      __typename
-    }
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateUserMutationVariables,
-  APITypes.UpdateUserMutation
->;
-export const deleteUser = /* GraphQL */ `mutation DeleteUser(
-  $input: DeleteUserInput!
-  $condition: ModelUserConditionInput
-) {
-  deleteUser(input: $input, condition: $condition) {
-    id
-    sub
-    email
-    firstName
-    lastName
-    phone
-    role
-    companyId
-    company {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      createdAt
-      updatedAt
-      __typename
-    }
-    isActive
-    lastLoginAt
-    createdAt
-    updatedAt
-    approvalStatus
-    approvedAt
-    approvedBy
-    approvalNotes
-    rejectedAt
-    rejectedBy
-    rejectionReason
-    resume
-    applications {
-      nextToken
-      __typename
-    }
-    testAttempts {
-      nextToken
-      __typename
-    }
-    videoTestAttempts {
-      nextToken
-      __typename
-    }
-    interviews {
-      nextToken
-      __typename
-    }
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteUserMutationVariables,
-  APITypes.DeleteUserMutation
->;
 export const createCompany = /* GraphQL */ `mutation CreateCompany(
   $input: CreateCompanyInput!
   $condition: ModelCompanyConditionInput
@@ -445,6 +259,192 @@ export const deleteJob = /* GraphQL */ `mutation DeleteJob(
 ` as GeneratedMutation<
   APITypes.DeleteJobMutationVariables,
   APITypes.DeleteJobMutation
+>;
+export const createUser = /* GraphQL */ `mutation CreateUser(
+  $input: CreateUserInput!
+  $condition: ModelUserConditionInput
+) {
+  createUser(input: $input, condition: $condition) {
+    id
+    sub
+    email
+    firstName
+    lastName
+    phone
+    role
+    companyId
+    company {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    isActive
+    lastLoginAt
+    createdAt
+    updatedAt
+    approvalStatus
+    approvedAt
+    approvedBy
+    approvalNotes
+    rejectedAt
+    rejectedBy
+    rejectionReason
+    resume
+    applications {
+      nextToken
+      __typename
+    }
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
+      nextToken
+      __typename
+    }
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateUserMutationVariables,
+  APITypes.CreateUserMutation
+>;
+export const updateUser = /* GraphQL */ `mutation UpdateUser(
+  $input: UpdateUserInput!
+  $condition: ModelUserConditionInput
+) {
+  updateUser(input: $input, condition: $condition) {
+    id
+    sub
+    email
+    firstName
+    lastName
+    phone
+    role
+    companyId
+    company {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    isActive
+    lastLoginAt
+    createdAt
+    updatedAt
+    approvalStatus
+    approvedAt
+    approvedBy
+    approvalNotes
+    rejectedAt
+    rejectedBy
+    rejectionReason
+    resume
+    applications {
+      nextToken
+      __typename
+    }
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
+      nextToken
+      __typename
+    }
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateUserMutationVariables,
+  APITypes.UpdateUserMutation
+>;
+export const deleteUser = /* GraphQL */ `mutation DeleteUser(
+  $input: DeleteUserInput!
+  $condition: ModelUserConditionInput
+) {
+  deleteUser(input: $input, condition: $condition) {
+    id
+    sub
+    email
+    firstName
+    lastName
+    phone
+    role
+    companyId
+    company {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    isActive
+    lastLoginAt
+    createdAt
+    updatedAt
+    approvalStatus
+    approvedAt
+    approvedBy
+    approvalNotes
+    rejectedAt
+    rejectedBy
+    rejectionReason
+    resume
+    applications {
+      nextToken
+      __typename
+    }
+    testAttempts {
+      nextToken
+      __typename
+    }
+    videoTestAttempts {
+      nextToken
+      __typename
+    }
+    interviews {
+      nextToken
+      __typename
+    }
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteUserMutationVariables,
+  APITypes.DeleteUserMutation
 >;
 export const createApplication = /* GraphQL */ `mutation CreateApplication(
   $input: CreateApplicationInput!

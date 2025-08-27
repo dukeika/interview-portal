@@ -1,6 +1,208 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getCompany = /* GraphQL */ `
+  query GetCompany($id: ID!) {
+    getCompany(id: $id) {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      admins {
+        nextToken
+        __typename
+      }
+      jobs {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listCompanies = /* GraphQL */ `
+  query ListCompanies(
+    $filter: ModelCompanyFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCompanies(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getJob = /* GraphQL */ `
+  query GetJob($id: ID!) {
+    getJob(id: $id) {
+      id
+      title
+      department
+      location
+      type
+      salary
+      description
+      requirements
+      responsibilities
+      benefits
+      status
+      companyId
+      company {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      applications {
+        nextToken
+        __typename
+      }
+      tests {
+        nextToken
+        __typename
+      }
+      videoTests {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      closingDate
+      __typename
+    }
+  }
+`;
+export const listJobs = /* GraphQL */ `
+  query ListJobs(
+    $filter: ModelJobFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listJobs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        department
+        location
+        type
+        salary
+        description
+        requirements
+        responsibilities
+        benefits
+        status
+        companyId
+        createdAt
+        updatedAt
+        closingDate
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const companiesByEmail = /* GraphQL */ `
+  query CompaniesByEmail(
+    $email: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCompanyFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    companiesByEmail(
+      email: $email
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const jobsByCompanyId = /* GraphQL */ `
+  query JobsByCompanyId(
+    $companyId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelJobFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    jobsByCompanyId(
+      companyId: $companyId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        title
+        department
+        location
+        type
+        salary
+        description
+        requirements
+        responsibilities
+        benefits
+        status
+        companyId
+        createdAt
+        updatedAt
+        closingDate
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
 export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
@@ -258,208 +460,6 @@ export const usersByApprovalStatus = /* GraphQL */ `
         rejectedBy
         rejectionReason
         resume
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const getCompany = /* GraphQL */ `
-  query GetCompany($id: ID!) {
-    getCompany(id: $id) {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      admins {
-        nextToken
-        __typename
-      }
-      jobs {
-        nextToken
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const listCompanies = /* GraphQL */ `
-  query ListCompanies(
-    $filter: ModelCompanyFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listCompanies(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const companiesByEmail = /* GraphQL */ `
-  query CompaniesByEmail(
-    $email: String!
-    $sortDirection: ModelSortDirection
-    $filter: ModelCompanyFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    companiesByEmail(
-      email: $email
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const getJob = /* GraphQL */ `
-  query GetJob($id: ID!) {
-    getJob(id: $id) {
-      id
-      title
-      department
-      location
-      type
-      salary
-      description
-      requirements
-      responsibilities
-      benefits
-      status
-      companyId
-      company {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      applications {
-        nextToken
-        __typename
-      }
-      tests {
-        nextToken
-        __typename
-      }
-      videoTests {
-        nextToken
-        __typename
-      }
-      createdAt
-      updatedAt
-      closingDate
-      __typename
-    }
-  }
-`;
-export const listJobs = /* GraphQL */ `
-  query ListJobs(
-    $filter: ModelJobFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listJobs(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        title
-        department
-        location
-        type
-        salary
-        description
-        requirements
-        responsibilities
-        benefits
-        status
-        companyId
-        createdAt
-        updatedAt
-        closingDate
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const jobsByCompanyId = /* GraphQL */ `
-  query JobsByCompanyId(
-    $companyId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelJobFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    jobsByCompanyId(
-      companyId: $companyId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        title
-        department
-        location
-        type
-        salary
-        description
-        requirements
-        responsibilities
-        benefits
-        status
-        companyId
-        createdAt
-        updatedAt
-        closingDate
         __typename
       }
       nextToken

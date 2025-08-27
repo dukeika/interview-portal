@@ -8,6 +8,210 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const getCompany = /* GraphQL */ `query GetCompany($id: ID!) {
+  getCompany(id: $id) {
+    id
+    name
+    email
+    phone
+    address
+    website
+    logo
+    description
+    isActive
+    admins {
+      nextToken
+      __typename
+    }
+    jobs {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetCompanyQueryVariables,
+  APITypes.GetCompanyQuery
+>;
+export const listCompanies = /* GraphQL */ `query ListCompanies(
+  $filter: ModelCompanyFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listCompanies(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListCompaniesQueryVariables,
+  APITypes.ListCompaniesQuery
+>;
+export const getJob = /* GraphQL */ `query GetJob($id: ID!) {
+  getJob(id: $id) {
+    id
+    title
+    department
+    location
+    type
+    salary
+    description
+    requirements
+    responsibilities
+    benefits
+    status
+    companyId
+    company {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    applications {
+      nextToken
+      __typename
+    }
+    tests {
+      nextToken
+      __typename
+    }
+    videoTests {
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    closingDate
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.GetJobQueryVariables, APITypes.GetJobQuery>;
+export const listJobs = /* GraphQL */ `query ListJobs($filter: ModelJobFilterInput, $limit: Int, $nextToken: String) {
+  listJobs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      title
+      department
+      location
+      type
+      salary
+      description
+      requirements
+      responsibilities
+      benefits
+      status
+      companyId
+      createdAt
+      updatedAt
+      closingDate
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<APITypes.ListJobsQueryVariables, APITypes.ListJobsQuery>;
+export const companiesByEmail = /* GraphQL */ `query CompaniesByEmail(
+  $email: String!
+  $sortDirection: ModelSortDirection
+  $filter: ModelCompanyFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  companiesByEmail(
+    email: $email
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      name
+      email
+      phone
+      address
+      website
+      logo
+      description
+      isActive
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.CompaniesByEmailQueryVariables,
+  APITypes.CompaniesByEmailQuery
+>;
+export const jobsByCompanyId = /* GraphQL */ `query JobsByCompanyId(
+  $companyId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelJobFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  jobsByCompanyId(
+    companyId: $companyId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      title
+      department
+      location
+      type
+      salary
+      description
+      requirements
+      responsibilities
+      benefits
+      status
+      companyId
+      createdAt
+      updatedAt
+      closingDate
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.JobsByCompanyIdQueryVariables,
+  APITypes.JobsByCompanyIdQuery
+>;
 export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
   getUser(id: $id) {
     id
@@ -277,210 +481,6 @@ export const usersByApprovalStatus = /* GraphQL */ `query UsersByApprovalStatus(
 ` as GeneratedQuery<
   APITypes.UsersByApprovalStatusQueryVariables,
   APITypes.UsersByApprovalStatusQuery
->;
-export const getCompany = /* GraphQL */ `query GetCompany($id: ID!) {
-  getCompany(id: $id) {
-    id
-    name
-    email
-    phone
-    address
-    website
-    logo
-    description
-    isActive
-    admins {
-      nextToken
-      __typename
-    }
-    jobs {
-      nextToken
-      __typename
-    }
-    createdAt
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.GetCompanyQueryVariables,
-  APITypes.GetCompanyQuery
->;
-export const listCompanies = /* GraphQL */ `query ListCompanies(
-  $filter: ModelCompanyFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listCompanies(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.ListCompaniesQueryVariables,
-  APITypes.ListCompaniesQuery
->;
-export const companiesByEmail = /* GraphQL */ `query CompaniesByEmail(
-  $email: String!
-  $sortDirection: ModelSortDirection
-  $filter: ModelCompanyFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  companiesByEmail(
-    email: $email
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      createdAt
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.CompaniesByEmailQueryVariables,
-  APITypes.CompaniesByEmailQuery
->;
-export const getJob = /* GraphQL */ `query GetJob($id: ID!) {
-  getJob(id: $id) {
-    id
-    title
-    department
-    location
-    type
-    salary
-    description
-    requirements
-    responsibilities
-    benefits
-    status
-    companyId
-    company {
-      id
-      name
-      email
-      phone
-      address
-      website
-      logo
-      description
-      isActive
-      createdAt
-      updatedAt
-      __typename
-    }
-    applications {
-      nextToken
-      __typename
-    }
-    tests {
-      nextToken
-      __typename
-    }
-    videoTests {
-      nextToken
-      __typename
-    }
-    createdAt
-    updatedAt
-    closingDate
-    __typename
-  }
-}
-` as GeneratedQuery<APITypes.GetJobQueryVariables, APITypes.GetJobQuery>;
-export const listJobs = /* GraphQL */ `query ListJobs($filter: ModelJobFilterInput, $limit: Int, $nextToken: String) {
-  listJobs(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      title
-      department
-      location
-      type
-      salary
-      description
-      requirements
-      responsibilities
-      benefits
-      status
-      companyId
-      createdAt
-      updatedAt
-      closingDate
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<APITypes.ListJobsQueryVariables, APITypes.ListJobsQuery>;
-export const jobsByCompanyId = /* GraphQL */ `query JobsByCompanyId(
-  $companyId: ID!
-  $sortDirection: ModelSortDirection
-  $filter: ModelJobFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  jobsByCompanyId(
-    companyId: $companyId
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      title
-      department
-      location
-      type
-      salary
-      description
-      requirements
-      responsibilities
-      benefits
-      status
-      companyId
-      createdAt
-      updatedAt
-      closingDate
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.JobsByCompanyIdQueryVariables,
-  APITypes.JobsByCompanyIdQuery
 >;
 export const getApplication = /* GraphQL */ `query GetApplication($id: ID!) {
   getApplication(id: $id) {

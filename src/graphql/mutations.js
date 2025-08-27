@@ -1,186 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createUser = /* GraphQL */ `
-  mutation CreateUser(
-    $input: CreateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    createUser(input: $input, condition: $condition) {
-      id
-      sub
-      email
-      firstName
-      lastName
-      phone
-      role
-      companyId
-      company {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      isActive
-      lastLoginAt
-      createdAt
-      updatedAt
-      approvalStatus
-      approvedAt
-      approvedBy
-      approvalNotes
-      rejectedAt
-      rejectedBy
-      rejectionReason
-      resume
-      applications {
-        nextToken
-        __typename
-      }
-      testAttempts {
-        nextToken
-        __typename
-      }
-      videoTestAttempts {
-        nextToken
-        __typename
-      }
-      interviews {
-        nextToken
-        __typename
-      }
-      __typename
-    }
-  }
-`;
-export const updateUser = /* GraphQL */ `
-  mutation UpdateUser(
-    $input: UpdateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    updateUser(input: $input, condition: $condition) {
-      id
-      sub
-      email
-      firstName
-      lastName
-      phone
-      role
-      companyId
-      company {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      isActive
-      lastLoginAt
-      createdAt
-      updatedAt
-      approvalStatus
-      approvedAt
-      approvedBy
-      approvalNotes
-      rejectedAt
-      rejectedBy
-      rejectionReason
-      resume
-      applications {
-        nextToken
-        __typename
-      }
-      testAttempts {
-        nextToken
-        __typename
-      }
-      videoTestAttempts {
-        nextToken
-        __typename
-      }
-      interviews {
-        nextToken
-        __typename
-      }
-      __typename
-    }
-  }
-`;
-export const deleteUser = /* GraphQL */ `
-  mutation DeleteUser(
-    $input: DeleteUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    deleteUser(input: $input, condition: $condition) {
-      id
-      sub
-      email
-      firstName
-      lastName
-      phone
-      role
-      companyId
-      company {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      isActive
-      lastLoginAt
-      createdAt
-      updatedAt
-      approvalStatus
-      approvedAt
-      approvedBy
-      approvalNotes
-      rejectedAt
-      rejectedBy
-      rejectionReason
-      resume
-      applications {
-        nextToken
-        __typename
-      }
-      testAttempts {
-        nextToken
-        __typename
-      }
-      videoTestAttempts {
-        nextToken
-        __typename
-      }
-      interviews {
-        nextToken
-        __typename
-      }
-      __typename
-    }
-  }
-`;
 export const createCompany = /* GraphQL */ `
   mutation CreateCompany(
     $input: CreateCompanyInput!
@@ -417,6 +237,186 @@ export const deleteJob = /* GraphQL */ `
       createdAt
       updatedAt
       closingDate
+      __typename
+    }
+  }
+`;
+export const createUser = /* GraphQL */ `
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    createUser(input: $input, condition: $condition) {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      company {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
+      resume
+      applications {
+        nextToken
+        __typename
+      }
+      testAttempts {
+        nextToken
+        __typename
+      }
+      videoTestAttempts {
+        nextToken
+        __typename
+      }
+      interviews {
+        nextToken
+        __typename
+      }
+      __typename
+    }
+  }
+`;
+export const updateUser = /* GraphQL */ `
+  mutation UpdateUser(
+    $input: UpdateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    updateUser(input: $input, condition: $condition) {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      company {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
+      resume
+      applications {
+        nextToken
+        __typename
+      }
+      testAttempts {
+        nextToken
+        __typename
+      }
+      videoTestAttempts {
+        nextToken
+        __typename
+      }
+      interviews {
+        nextToken
+        __typename
+      }
+      __typename
+    }
+  }
+`;
+export const deleteUser = /* GraphQL */ `
+  mutation DeleteUser(
+    $input: DeleteUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    deleteUser(input: $input, condition: $condition) {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      company {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
+      resume
+      applications {
+        nextToken
+        __typename
+      }
+      testAttempts {
+        nextToken
+        __typename
+      }
+      videoTestAttempts {
+        nextToken
+        __typename
+      }
+      interviews {
+        nextToken
+        __typename
+      }
       __typename
     }
   }

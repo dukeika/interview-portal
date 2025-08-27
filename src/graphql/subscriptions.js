@@ -1,186 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateUser = /* GraphQL */ `
-  subscription OnCreateUser(
-    $filter: ModelSubscriptionUserFilterInput
-    $sub: String
-  ) {
-    onCreateUser(filter: $filter, sub: $sub) {
-      id
-      sub
-      email
-      firstName
-      lastName
-      phone
-      role
-      companyId
-      company {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      isActive
-      lastLoginAt
-      createdAt
-      updatedAt
-      approvalStatus
-      approvedAt
-      approvedBy
-      approvalNotes
-      rejectedAt
-      rejectedBy
-      rejectionReason
-      resume
-      applications {
-        nextToken
-        __typename
-      }
-      testAttempts {
-        nextToken
-        __typename
-      }
-      videoTestAttempts {
-        nextToken
-        __typename
-      }
-      interviews {
-        nextToken
-        __typename
-      }
-      __typename
-    }
-  }
-`;
-export const onUpdateUser = /* GraphQL */ `
-  subscription OnUpdateUser(
-    $filter: ModelSubscriptionUserFilterInput
-    $sub: String
-  ) {
-    onUpdateUser(filter: $filter, sub: $sub) {
-      id
-      sub
-      email
-      firstName
-      lastName
-      phone
-      role
-      companyId
-      company {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      isActive
-      lastLoginAt
-      createdAt
-      updatedAt
-      approvalStatus
-      approvedAt
-      approvedBy
-      approvalNotes
-      rejectedAt
-      rejectedBy
-      rejectionReason
-      resume
-      applications {
-        nextToken
-        __typename
-      }
-      testAttempts {
-        nextToken
-        __typename
-      }
-      videoTestAttempts {
-        nextToken
-        __typename
-      }
-      interviews {
-        nextToken
-        __typename
-      }
-      __typename
-    }
-  }
-`;
-export const onDeleteUser = /* GraphQL */ `
-  subscription OnDeleteUser(
-    $filter: ModelSubscriptionUserFilterInput
-    $sub: String
-  ) {
-    onDeleteUser(filter: $filter, sub: $sub) {
-      id
-      sub
-      email
-      firstName
-      lastName
-      phone
-      role
-      companyId
-      company {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      isActive
-      lastLoginAt
-      createdAt
-      updatedAt
-      approvalStatus
-      approvedAt
-      approvedBy
-      approvalNotes
-      rejectedAt
-      rejectedBy
-      rejectionReason
-      resume
-      applications {
-        nextToken
-        __typename
-      }
-      testAttempts {
-        nextToken
-        __typename
-      }
-      videoTestAttempts {
-        nextToken
-        __typename
-      }
-      interviews {
-        nextToken
-        __typename
-      }
-      __typename
-    }
-  }
-`;
 export const onCreateCompany = /* GraphQL */ `
   subscription OnCreateCompany($filter: ModelSubscriptionCompanyFilterInput) {
     onCreateCompany(filter: $filter) {
@@ -399,6 +219,186 @@ export const onDeleteJob = /* GraphQL */ `
       createdAt
       updatedAt
       closingDate
+      __typename
+    }
+  }
+`;
+export const onCreateUser = /* GraphQL */ `
+  subscription OnCreateUser(
+    $filter: ModelSubscriptionUserFilterInput
+    $sub: String
+  ) {
+    onCreateUser(filter: $filter, sub: $sub) {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      company {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
+      resume
+      applications {
+        nextToken
+        __typename
+      }
+      testAttempts {
+        nextToken
+        __typename
+      }
+      videoTestAttempts {
+        nextToken
+        __typename
+      }
+      interviews {
+        nextToken
+        __typename
+      }
+      __typename
+    }
+  }
+`;
+export const onUpdateUser = /* GraphQL */ `
+  subscription OnUpdateUser(
+    $filter: ModelSubscriptionUserFilterInput
+    $sub: String
+  ) {
+    onUpdateUser(filter: $filter, sub: $sub) {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      company {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
+      resume
+      applications {
+        nextToken
+        __typename
+      }
+      testAttempts {
+        nextToken
+        __typename
+      }
+      videoTestAttempts {
+        nextToken
+        __typename
+      }
+      interviews {
+        nextToken
+        __typename
+      }
+      __typename
+    }
+  }
+`;
+export const onDeleteUser = /* GraphQL */ `
+  subscription OnDeleteUser(
+    $filter: ModelSubscriptionUserFilterInput
+    $sub: String
+  ) {
+    onDeleteUser(filter: $filter, sub: $sub) {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      company {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
+      resume
+      applications {
+        nextToken
+        __typename
+      }
+      testAttempts {
+        nextToken
+        __typename
+      }
+      videoTestAttempts {
+        nextToken
+        __typename
+      }
+      interviews {
+        nextToken
+        __typename
+      }
       __typename
     }
   }
