@@ -4,8 +4,7 @@
 # User model with role-based access
 type User @model @auth(rules: [
   { allow: owner, ownerField: "sub" }
-  { allow: groups, groups: ["superAdmins"] }
-  { allow: groups, groups: ["companyAdmins"], operations: [read] }
+  { allow: public, operations: [read] }
 ]) {
   id: ID!
   sub: String! @index(name: "bySub") # Cognito User ID
@@ -52,8 +51,7 @@ enum ApprovalStatus {
 
 # Company model
 type Company @model @auth(rules: [
-  { allow: groups, groups: ["superAdmins"] }
-  { allow: groups, groups: ["companyAdmins"], operations: [read, update] }
+  { allow: public, operations: [read] }
 ]) {
   id: ID!
   name: String!
@@ -75,9 +73,7 @@ type Company @model @auth(rules: [
 
 # Job posting model
 type Job @model @auth(rules: [
-  { allow: groups, groups: ["superAdmins"] }
-  { allow: groups, groups: ["companyAdmins"], operations: [create, read, update, delete] }
-  { allow: groups, groups: ["candidates"], operations: [read] }
+  { allow: public, operations: [read] }
 ]) {
   id: ID!
   title: String!
@@ -120,8 +116,7 @@ enum JobStatus {
 
 # Application model
 type Application @model @auth(rules: [
-  { allow: groups, groups: ["superAdmins"] }
-  { allow: groups, groups: ["companyAdmins"], operations: [read, update] }
+  { allow: public, operations: [read] }
   { allow: owner, ownerField: "candidateId" }
 ]) {
   id: ID!
