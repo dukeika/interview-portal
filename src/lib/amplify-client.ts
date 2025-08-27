@@ -35,10 +35,7 @@ export function configureAmplifyClient() {
   if (typeof window === 'undefined' || isConfigured) return;
   
   try {
-    Amplify.configure({
-      ...awsconfig,
-      ssr: true
-    });
+    Amplify.configure(awsconfig);
     isConfigured = true;
     console.log("✅ Amplify configured successfully");
   } catch (error) {
