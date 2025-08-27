@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { useCompanyData } from "@/hooks/useCompanyData";
+import { useCompanyData } from "@/hooks/useCompanyDataReal";
 import DashboardHeader from "@/components/company/DashboardHeader";
 import DashboardNavigation from "@/components/company/DashboardNavigation";
 import OverviewTab from "@/components/company/OverviewTab";

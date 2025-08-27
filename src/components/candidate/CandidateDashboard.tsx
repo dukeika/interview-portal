@@ -1,6 +1,6 @@
 // File: src/components/candidate/CandidateDashboard.tsx
 import React, { useState } from "react";
-import { useCandidateData } from "@/hooks/useCandidateData";
+import { useCandidateData } from "@/hooks/useCandidateDataReal";
 import CandidateDashboardHeader from "./CandidateDashboardHeader";
 import CandidateDashboardNavigation from "./CandidateDashboardNavigation";
 import TestTab from "./TestTab";

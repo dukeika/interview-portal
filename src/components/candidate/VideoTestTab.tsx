@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useVideoData } from "@/hooks/useVideoData";
-import { useCandidateData } from "@/hooks/useCandidateData";
+import { useCandidateData } from "@/hooks/useCandidateDataReal";
 import {
   CandidateApplication,
   VideoTestAttempt,

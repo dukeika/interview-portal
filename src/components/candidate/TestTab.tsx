@@ -1,7 +1,7 @@
 // File: src/components/candidate/TestTab.tsx
 import { useState, useEffect } from "react";
 import { useTestData } from "@/hooks/useTestData";
-import { useCandidateData } from "@/hooks/useCandidateData";
+import { useCandidateData } from "@/hooks/useCandidateDataReal";
 import { CandidateApplication, TestAttempt } from "./types";
 import TestStartScreen from "./TestStartScreen";
 import WrittenTestInterface from "./WrittenTestInterface";

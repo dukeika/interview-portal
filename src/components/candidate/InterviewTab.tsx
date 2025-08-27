@@ -1,6 +1,6 @@
 // File: src/components/candidate/InterviewTab.tsx
 import { useState, useEffect } from "react";
-import { useCandidateData } from "@/hooks/useCandidateData";
+import { useCandidateData } from "@/hooks/useCandidateDataReal";
 import { useInterviewData } from "@/hooks/useInterviewData";
 import { Button } from "@/components/ui/button";
 import {
