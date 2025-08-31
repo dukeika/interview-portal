@@ -38,27 +38,29 @@ const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 const APPSYNC_API_KEY = process.env.NEXT_PUBLIC_AWS_APPSYNC_API_KEY;
 
-// Debug credentials loading (remove in production)
-console.log('🔍 Server environment check:');
-console.log('  COGNITO_USER_POOL_ID:', COGNITO_USER_POOL_ID ? '✅ Set' : '❌ Missing');
-console.log('  AWS_REGION:', AWS_REGION);
-console.log('  AWS_ACCESS_KEY_ID:', AWS_ACCESS_KEY_ID ? '✅ Set' : '❌ Missing');
-console.log('  AWS_SECRET_ACCESS_KEY:', AWS_SECRET_ACCESS_KEY ? '✅ Set' : '❌ Missing');
-console.log('  APPSYNC_API_KEY:', APPSYNC_API_KEY ? '✅ Set' : '❌ Missing');
+// Lazy initialization function for Cognito client (only when needed)
+function createCognitoClient() {
+  // Debug credentials loading (only at runtime)
+  console.log('🔍 Server environment check:');
+  console.log('  COGNITO_USER_POOL_ID:', COGNITO_USER_POOL_ID ? '✅ Set' : '❌ Missing');
+  console.log('  AWS_REGION:', AWS_REGION);
+  console.log('  AWS_ACCESS_KEY_ID:', AWS_ACCESS_KEY_ID ? '✅ Set' : '❌ Missing');
+  console.log('  AWS_SECRET_ACCESS_KEY:', AWS_SECRET_ACCESS_KEY ? '✅ Set' : '❌ Missing');
+  console.log('  APPSYNC_API_KEY:', APPSYNC_API_KEY ? '✅ Set' : '❌ Missing');
 
-// Validate credentials before creating client
-if (!AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
-  console.error('❌ Missing AWS credentials. Please check your .env.local file.');
+  // Validate credentials before creating client
+  if (!AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
+    throw new Error('❌ Missing AWS credentials. Please check your environment variables.');
+  }
+
+  return new CognitoIdentityProviderClient({ 
+    region: AWS_REGION,
+    credentials: {
+      accessKeyId: AWS_ACCESS_KEY_ID,
+      secretAccessKey: AWS_SECRET_ACCESS_KEY,
+    }
+  });
 }
-
-// Server-side Cognito client with proper credentials
-const cognitoClient = new CognitoIdentityProviderClient({ 
-  region: AWS_REGION,
-  credentials: AWS_ACCESS_KEY_ID && AWS_SECRET_ACCESS_KEY ? {
-    accessKeyId: AWS_ACCESS_KEY_ID,
-    secretAccessKey: AWS_SECRET_ACCESS_KEY,
-  } : undefined
-});
 
 interface CreateCompanyWithAdminRequest {
   company: {
@@ -108,11 +110,8 @@ async function createCompanyAdmin(adminData: {
     throw new Error('Cognito User Pool ID not configured');
   }
 
-  if (!AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
-    throw new Error('AWS credentials not configured. Please check your .env.local file.');
-  }
-
   try {
+    const cognitoClient = createCognitoClient();
     // Generate temporary password
     const tempPassword = generateTempPassword();
     

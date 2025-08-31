@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { confirmSignUp, resendSignUpCode } from "aws-amplify/auth";
 import { Button } from "@/components/ui/button";
 import { Mail, CheckCircle, AlertCircle } from "lucide-react";
 
-export default function VerifyPage() {
+function VerifyPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -215,5 +215,22 @@ export default function VerifyPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-abhh-teal-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-abhh-yellow-500 rounded-xl flex items-center justify-center mb-4 mx-auto shadow-abhh animate-pulse">
+            <div className="w-8 h-8 border-2 border-abhh-teal-600 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <p className="text-abhh-teal-600 font-medium">Loading verification page...</p>
+        </div>
+      </div>
+    }>
+      <VerifyPageContent />
+    </Suspense>
   );
 }
