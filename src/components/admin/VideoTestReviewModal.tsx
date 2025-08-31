@@ -89,8 +89,9 @@ export default function VideoTestReviewModal({
       setLoading(true);
       
       // Get the video test attempt for this application
-      const attempts = application.videoTestAttempts || [];
-      const latestAttempt = attempts[attempts.length - 1];
+      const attempts = Array.isArray(application.videoTestAttempts) ? application.videoTestAttempts : 
+                      (application.videoTestAttempts?.items || []);
+      const latestAttempt = attempts.length > 0 ? attempts[attempts.length - 1] : null;
       
       if (!latestAttempt) {
         console.error('No video test attempt found');

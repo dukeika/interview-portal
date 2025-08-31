@@ -78,7 +78,7 @@ export const testService = {
         query: testsByJobId,
         variables: { jobId }
       });
-      return result.data.testsByJobId.items as Test[];
+      return (result as any).data.testsByJobId.items as Test[];
     } catch (error) {
       console.error('Error fetching tests by job:', error);
       throw error;
@@ -91,7 +91,7 @@ export const testService = {
         query: getTest,
         variables: { id }
       });
-      return result.data.getTest as Test;
+      return (result as any).data.getTest as Test;
     } catch (error) {
       console.error('Error fetching test:', error);
       throw error;
@@ -130,7 +130,7 @@ export const testService = {
       });
       
       console.log('✅ Test creation result:', result);
-      return result.data.createTest as Test;
+      return (result as any).data.createTest as Test;
     } catch (error: any) {
       console.error('❌ Error creating test:', error);
       console.error('❌ Error details:', {
@@ -187,7 +187,7 @@ export const testService = {
         variables: { input: updateInput }
       });
       
-      return result.data.updateTest as Test;
+      return (result as any).data.updateTest as Test;
     } catch (error) {
       console.error('Error updating test:', error);
       throw error;
@@ -213,7 +213,7 @@ export const testService = {
         query: videoTestsByJobId,
         variables: { jobId }
       });
-      return result.data.videoTestsByJobId.items as VideoTest[];
+      return (result as any).data.videoTestsByJobId.items as VideoTest[];
     } catch (error) {
       console.error('Error fetching video tests by job:', error);
       throw error;
@@ -226,7 +226,7 @@ export const testService = {
         query: getVideoTest,
         variables: { id }
       });
-      return result.data.getVideoTest as VideoTest;
+      return (result as any).data.getVideoTest as VideoTest;
     } catch (error) {
       console.error('Error fetching video test:', error);
       throw error;
@@ -261,7 +261,7 @@ export const testService = {
       });
       
       console.log('✅ Video test creation result:', result);
-      return result.data.createVideoTest as VideoTest;
+      return (result as any).data.createVideoTest as VideoTest;
     } catch (error: any) {
       console.error('❌ Error creating video test:', error);
       throw error;
@@ -293,7 +293,7 @@ export const testService = {
         variables: { input: updateInput }
       });
       
-      return result.data.updateVideoTest as VideoTest;
+      return (result as any).data.updateVideoTest as VideoTest;
     } catch (error) {
       console.error('Error updating video test:', error);
       throw error;

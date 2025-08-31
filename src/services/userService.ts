@@ -103,7 +103,7 @@ export const userService = {
         query: getUser,
         variables: { id }
       });
-      return result.data.getUser as User;
+      return (result as any).data.getUser as User;
     } catch (error) {
       console.error('Error fetching user:', error);
       throw error;
@@ -121,9 +121,9 @@ export const userService = {
           }
         }
       });
-      const users = result.data.listUsers.items;
+      const users = (result as any).data.listUsers.items;
       // Filter out null users from the response (in case of GraphQL partial failures)
-      const validUsers = users.filter(user => user !== null && user !== undefined);
+      const validUsers = users.filter((user: any) => user !== null && user !== undefined);
       return validUsers.length > 0 ? validUsers[0] as User : null;
     } catch (error) {
       console.error('Error fetching user by email:', error);
@@ -142,7 +142,7 @@ export const userService = {
           }
         }
       });
-      const users = result.data.listUsers.items;
+      const users = (result as any).data.listUsers.items;
       return users.length > 0 ? users[0] as User : null;
     } catch (error) {
       console.error('Error fetching user by sub:', error);
@@ -157,7 +157,7 @@ export const userService = {
         query: createUserSimple,
         variables: { input }
       }) as any;
-      return result.data.createUser as User;
+      return (result as any).data.createUser as User;
     } catch (error) {
       console.error('Error creating user:', error);
       throw error;
@@ -171,7 +171,7 @@ export const userService = {
         query: updateUserSimple,
         variables: { input }
       }) as any;
-      return result.data.updateUser as User;
+      return (result as any).data.updateUser as User;
     } catch (error: any) {
       console.error('Error updating user:', error);
       
@@ -196,7 +196,7 @@ export const userService = {
       const result = await client.graphql({ 
         query: listUsers 
       });
-      return result.data.listUsers.items as User[];
+      return (result as any).data.listUsers.items as User[];
     } catch (error) {
       console.error('Error fetching users:', error);
       throw error;
@@ -273,7 +273,7 @@ export const userService = {
       
     } catch (error) {
       console.error('❌ Failed to fix user:', error);
-      alert('❌ Failed to fix user: ' + error.message);
+      alert('❌ Failed to fix user: ' + (error as any).message);
     }
   },
 

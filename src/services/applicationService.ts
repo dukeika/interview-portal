@@ -150,7 +150,7 @@ export const applicationService = {
       
       // Get all applications and filter for company jobs
       const result = await client.graphql({ 
-        query: listApplicationsWithDetails
+        query: listApplications
       });
       
       const allApplications = (result.data as any).listApplications.items as Application[];
@@ -189,7 +189,7 @@ export const applicationService = {
         variables: { input }
       });
       
-      const application = result.data.createApplication as Application;
+      const application = (result as any).data.createApplication as Application;
       
       // Send notification about new application (temporarily disabled for debugging)
       try {

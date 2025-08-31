@@ -262,7 +262,9 @@ export default function CandidateDashboard() {
         return (
           <JobBrowser
             jobs={jobs}
-            onApply={applyToJob}
+            onApply={async (jobId: string) => {
+              await applyToJob(jobId);
+            }}
             hasApplied={hasApplied}
             loading={loading}
           />

@@ -56,8 +56,9 @@ export default function TestReviewModal({
       setLoading(true);
       
       // Get the test attempt for this application
-      const attempts = application.testAttempts || [];
-      const latestAttempt = attempts[attempts.length - 1];
+      const attempts = Array.isArray(application.testAttempts) ? application.testAttempts : 
+                      (application.testAttempts?.items || []);
+      const latestAttempt = attempts.length > 0 ? attempts[attempts.length - 1] : null;
       
       if (!latestAttempt) {
         console.error('No test attempt found');

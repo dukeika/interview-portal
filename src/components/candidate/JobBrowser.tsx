@@ -50,15 +50,15 @@ export default function JobBrowser({ jobs, onApply, hasApplied, loading = false 
 
   // Get unique filter options
   const locations = useMemo(() => 
-    [...new Set(jobs.map(job => job.location))].sort(), 
+    Array.from(new Set(jobs.map(job => job.location))).sort(), 
     [jobs]
   );
   const types = useMemo(() => 
-    [...new Set(jobs.map(job => job.type))].sort(), 
+    Array.from(new Set(jobs.map(job => job.type))).sort(), 
     [jobs]
   );
   const departments = useMemo(() => 
-    [...new Set(jobs.map(job => job.department))].sort(), 
+    Array.from(new Set(jobs.map(job => job.department))).sort(), 
     [jobs]
   );
 

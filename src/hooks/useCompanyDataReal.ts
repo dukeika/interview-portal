@@ -27,6 +27,10 @@ interface CompanyJob {
   applicationsCount: number;
   createdAt: string;
   closingDate?: string;
+  description: string;
+  requirements: string[];
+  responsibilities: string[];
+  salary?: string;
 }
 
 interface CompanyApplication {
@@ -168,7 +172,6 @@ export function useCompanyData() {
           description: job.description,
           requirements: job.requirements,
           responsibilities: job.responsibilities,
-          benefits: job.benefits || undefined,
           status: mapJobStatusToLowercase(job.status),
           applicationsCount: 0, // Will be updated below
           createdAt: job.createdAt,
@@ -313,7 +316,6 @@ export function useCompanyData() {
         description: newJob.description,
         requirements: newJob.requirements,
         responsibilities: newJob.responsibilities,
-        benefits: newJob.benefits || undefined,
         status: mapJobStatusToLowercase(newJob.status),
         applicationsCount: 0,
         createdAt: newJob.createdAt,
@@ -351,6 +353,10 @@ export function useCompanyData() {
                 department: updatedJob.department,
                 location: updatedJob.location,
                 type: updatedJob.type,
+                salary: updatedJob.salary || undefined,
+                description: updatedJob.description,
+                requirements: updatedJob.requirements,
+                responsibilities: updatedJob.responsibilities,
                 status: mapJobStatusToLowercase(updatedJob.status),
               }
             : job

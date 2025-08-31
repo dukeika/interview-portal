@@ -1992,10 +1992,11 @@ function QuestionBuilderModal({ isOpen, onClose, onSubmit }: QuestionBuilderModa
   const removeOption = (index: number) => {
     if (options.length > 2) {
       setOptions(options.filter((_, i) => i !== index));
-      if (correctAnswer === index) {
+      const correctAnswerNum = typeof correctAnswer === 'number' ? correctAnswer : parseInt(correctAnswer.toString(), 10);
+      if (correctAnswerNum === index) {
         setCorrectAnswer(0);
-      } else if (correctAnswer > index) {
-        setCorrectAnswer((correctAnswer as number) - 1);
+      } else if (correctAnswerNum > index) {
+        setCorrectAnswer(correctAnswerNum - 1);
       }
     }
   };
