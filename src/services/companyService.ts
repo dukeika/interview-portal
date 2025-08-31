@@ -3,11 +3,8 @@ import { generateClient } from 'aws-amplify/api';
 import { listCompanies, getCompany } from '@/graphql/queries';
 import { createCompany, updateCompany, deleteCompany } from '@/graphql/mutations';
 import { Company, CreateCompanyInput, UpdateCompanyInput } from '@/API';
-import { isMockMode, mockCompanyService } from '@/lib/mockServices';
 
-const client = generateClient({
-  authMode: 'userPool'
-});
+const client = generateClient();
 
 export const companyService = {
   // Get all companies (super admin only)
@@ -57,10 +54,6 @@ export const companyService = {
 
   // Create a new company (super admin only)
   async createCompany(input: CreateCompanyInput): Promise<Company> {
-    if (isMockMode()) {
-      return mockCompanyService.createCompany(input) as any;
-    }
-    
     try {
       const result = await client.graphql({ 
         query: createCompany,

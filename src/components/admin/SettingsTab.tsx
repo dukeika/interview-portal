@@ -183,7 +183,7 @@ export default function SettingsTab() {
             type="text"
             value={settings.general.platformName}
             onChange={(e) => updateSetting("general", "platformName", e.target.value)}
-            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500"
+            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500 text-gray-900 placeholder-gray-400"
           />
         </div>
         <div>
@@ -194,7 +194,7 @@ export default function SettingsTab() {
             type="email"
             value={settings.general.supportEmail}
             onChange={(e) => updateSetting("general", "supportEmail", e.target.value)}
-            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500"
+            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500 text-gray-900 placeholder-gray-400"
           />
         </div>
       </div>
@@ -248,7 +248,7 @@ export default function SettingsTab() {
             max="20"
             value={settings.security.passwordMinLength}
             onChange={(e) => updateSetting("security", "passwordMinLength", parseInt(e.target.value))}
-            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500"
+            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500 text-gray-900 placeholder-gray-400"
           />
         </div>
         <div>
@@ -261,7 +261,7 @@ export default function SettingsTab() {
             max="480"
             value={settings.security.sessionTimeout}
             onChange={(e) => updateSetting("security", "sessionTimeout", parseInt(e.target.value))}
-            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500"
+            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500 text-gray-900 placeholder-gray-400"
           />
         </div>
       </div>
@@ -325,7 +325,7 @@ export default function SettingsTab() {
             type="text"
             value={settings.email.smtpHost}
             onChange={(e) => updateSetting("email", "smtpHost", e.target.value)}
-            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500"
+            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500 text-gray-900 placeholder-gray-400"
             placeholder="smtp.gmail.com"
           />
         </div>
@@ -337,7 +337,7 @@ export default function SettingsTab() {
             type="text"
             value={settings.email.smtpPort}
             onChange={(e) => updateSetting("email", "smtpPort", e.target.value)}
-            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500"
+            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500 text-gray-900 placeholder-gray-400"
             placeholder="587"
           />
         </div>
@@ -352,7 +352,7 @@ export default function SettingsTab() {
             type="email"
             value={settings.email.smtpUsername}
             onChange={(e) => updateSetting("email", "smtpUsername", e.target.value)}
-            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500"
+            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500 text-gray-900 placeholder-gray-400"
             placeholder="noreply@abhh.com"
           />
         </div>
@@ -365,7 +365,7 @@ export default function SettingsTab() {
               type={showPassword ? "text" : "password"}
               value={settings.email.smtpPassword}
               onChange={(e) => updateSetting("email", "smtpPassword", e.target.value)}
-              className="w-full px-3 py-2 pr-10 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500"
+              className="w-full px-3 py-2 pr-10 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500 text-gray-900 placeholder-gray-400"
               placeholder="••••••••••••"
             />
             <button
@@ -392,7 +392,7 @@ export default function SettingsTab() {
             type="email"
             value={settings.email.fromEmail}
             onChange={(e) => updateSetting("email", "fromEmail", e.target.value)}
-            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500"
+            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500 text-gray-900 placeholder-gray-400"
             placeholder="noreply@abhh.com"
           />
         </div>
@@ -404,7 +404,7 @@ export default function SettingsTab() {
             type="text"
             value={settings.email.fromName}
             onChange={(e) => updateSetting("email", "fromName", e.target.value)}
-            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500"
+            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500 text-gray-900 placeholder-gray-400"
             placeholder="ABHH Interview Platform"
           />
         </div>
@@ -444,7 +444,7 @@ export default function SettingsTab() {
             max="100"
             value={settings.storage.maxFileSize}
             onChange={(e) => updateSetting("storage", "maxFileSize", parseInt(e.target.value))}
-            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500"
+            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500 text-gray-900 placeholder-gray-400"
           />
         </div>
         <div>
@@ -454,7 +454,7 @@ export default function SettingsTab() {
           <select
             value={settings.storage.storageProvider}
             onChange={(e) => updateSetting("storage", "storageProvider", e.target.value as "aws" | "local")}
-            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500"
+            className="w-full px-3 py-2 border border-abhh-teal-200 rounded-md focus:outline-none focus:ring-2 focus:ring-abhh-teal-500 focus:border-abhh-teal-500 text-gray-900"
           >
             <option value="aws">AWS S3</option>
             <option value="local">Local Storage</option>

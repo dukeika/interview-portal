@@ -2,34 +2,66 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateCompanyInput = {
+export type CreateUserInput = {
   id?: string | null,
-  name: string,
+  sub: string,
   email: string,
+  firstName: string,
+  lastName: string,
   phone?: string | null,
-  address?: string | null,
-  website?: string | null,
-  logo?: string | null,
-  description?: string | null,
+  role: UserRole,
+  companyId?: string | null,
   isActive: boolean,
+  lastLoginAt?: string | null,
   createdAt?: string | null,
   updatedAt?: string | null,
+  approvalStatus?: ApprovalStatus | null,
+  approvedAt?: string | null,
+  approvedBy?: string | null,
+  approvalNotes?: string | null,
+  rejectedAt?: string | null,
+  rejectedBy?: string | null,
+  rejectionReason?: string | null,
+  resume?: string | null,
 };
 
-export type ModelCompanyConditionInput = {
-  name?: ModelStringInput | null,
+export enum UserRole {
+  SUPER_ADMIN = "SUPER_ADMIN",
+  COMPANY_ADMIN = "COMPANY_ADMIN",
+  CANDIDATE = "CANDIDATE",
+}
+
+
+export enum ApprovalStatus {
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+}
+
+
+export type ModelUserConditionInput = {
+  sub?: ModelStringInput | null,
   email?: ModelStringInput | null,
+  firstName?: ModelStringInput | null,
+  lastName?: ModelStringInput | null,
   phone?: ModelStringInput | null,
-  address?: ModelStringInput | null,
-  website?: ModelStringInput | null,
-  logo?: ModelStringInput | null,
-  description?: ModelStringInput | null,
+  role?: ModelUserRoleInput | null,
+  companyId?: ModelIDInput | null,
   isActive?: ModelBooleanInput | null,
+  lastLoginAt?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-  and?: Array< ModelCompanyConditionInput | null > | null,
-  or?: Array< ModelCompanyConditionInput | null > | null,
-  not?: ModelCompanyConditionInput | null,
+  approvalStatus?: ModelApprovalStatusInput | null,
+  approvedAt?: ModelStringInput | null,
+  approvedBy?: ModelIDInput | null,
+  approvalNotes?: ModelStringInput | null,
+  rejectedAt?: ModelStringInput | null,
+  rejectedBy?: ModelIDInput | null,
+  rejectionReason?: ModelStringInput | null,
+  resume?: ModelStringInput | null,
+  and?: Array< ModelUserConditionInput | null > | null,
+  or?: Array< ModelUserConditionInput | null > | null,
+  not?: ModelUserConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -72,11 +104,66 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type ModelUserRoleInput = {
+  eq?: UserRole | null,
+  ne?: UserRole | null,
+};
+
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
 export type ModelBooleanInput = {
   ne?: boolean | null,
   eq?: boolean | null,
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
+};
+
+export type ModelApprovalStatusInput = {
+  eq?: ApprovalStatus | null,
+  ne?: ApprovalStatus | null,
+};
+
+export type User = {
+  __typename: "User",
+  id: string,
+  sub: string,
+  email: string,
+  firstName: string,
+  lastName: string,
+  phone?: string | null,
+  role: UserRole,
+  companyId?: string | null,
+  company?: Company | null,
+  isActive: boolean,
+  lastLoginAt?: string | null,
+  createdAt: string,
+  updatedAt: string,
+  approvalStatus?: ApprovalStatus | null,
+  approvedAt?: string | null,
+  approvedBy?: string | null,
+  approvalNotes?: string | null,
+  rejectedAt?: string | null,
+  rejectedBy?: string | null,
+  rejectionReason?: string | null,
+  resume?: string | null,
+  applications?: ModelApplicationConnection | null,
+  testAttempts?: ModelTestAttemptConnection | null,
+  videoTestAttempts?: ModelVideoTestAttemptConnection | null,
+  interviews?: ModelInterviewConnection | null,
 };
 
 export type Company = {
@@ -102,76 +189,10 @@ export type ModelUserConnection = {
   nextToken?: string | null,
 };
 
-export type User = {
-  __typename: "User",
-  id: string,
-  sub: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  phone?: string | null,
-  role: UserRole,
-  companyId?: string | null,
-  company?: Company | null,
-  isActive: boolean,
-  lastLoginAt?: string | null,
-  createdAt: string,
-  updatedAt: string,
-  approvalStatus: ApprovalStatus,
-  approvedAt?: string | null,
-  approvedBy?: string | null,
-  approvalNotes?: string | null,
-  rejectedAt?: string | null,
-  rejectedBy?: string | null,
-  rejectionReason?: string | null,
-  resume?: string | null,
-  applications?: ModelApplicationConnection | null,
-  testAttempts?: ModelTestAttemptConnection | null,
-  videoTestAttempts?: ModelVideoTestAttemptConnection | null,
-  interviews?: ModelInterviewConnection | null,
-};
-
-export enum UserRole {
-  SUPER_ADMIN = "SUPER_ADMIN",
-  COMPANY_ADMIN = "COMPANY_ADMIN",
-  CANDIDATE = "CANDIDATE",
-}
-
-
-export enum ApprovalStatus {
-  PENDING = "PENDING",
-  APPROVED = "APPROVED",
-  REJECTED = "REJECTED",
-}
-
-
-export type ModelApplicationConnection = {
-  __typename: "ModelApplicationConnection",
-  items:  Array<Application | null >,
+export type ModelJobConnection = {
+  __typename: "ModelJobConnection",
+  items:  Array<Job | null >,
   nextToken?: string | null,
-};
-
-export type Application = {
-  __typename: "Application",
-  id: string,
-  candidateId: string,
-  candidate: User,
-  jobId: string,
-  job: Job,
-  appliedAt: string,
-  currentStage: number,
-  overallStatus: ApplicationStatus,
-  applicationStatus: StageStatus,
-  writtenTestStatus: StageStatus,
-  videoTestStatus: StageStatus,
-  interviewStatus: StageStatus,
-  feedback?: string | null,
-  internalNotes?: string | null,
-  testAttempts?: ModelTestAttemptConnection | null,
-  videoTestAttempts?: ModelVideoTestAttemptConnection | null,
-  interviews?: ModelInterviewConnection | null,
-  createdAt: string,
-  updatedAt: string,
 };
 
 export type Job = {
@@ -212,29 +233,52 @@ export enum JobStatus {
 }
 
 
-export type ModelTestConnection = {
-  __typename: "ModelTestConnection",
-  items:  Array<Test | null >,
+export type ModelApplicationConnection = {
+  __typename: "ModelApplicationConnection",
+  items:  Array<Application | null >,
   nextToken?: string | null,
 };
 
-export type Test = {
-  __typename: "Test",
+export type Application = {
+  __typename: "Application",
   id: string,
+  candidateId: string,
+  candidate: User,
   jobId: string,
   job: Job,
-  title: string,
-  description: string,
-  instructions: string,
-  timeLimit: number,
-  totalPoints: number,
-  passingScore: number,
-  isActive: boolean,
-  questions: string,
-  attempts?: ModelTestAttemptConnection | null,
+  appliedAt: string,
+  currentStage: number,
+  overallStatus: ApplicationStatus,
+  applicationStatus: StageStatus,
+  writtenTestStatus: StageStatus,
+  videoTestStatus: StageStatus,
+  interviewStatus: StageStatus,
+  feedback?: string | null,
+  internalNotes?: string | null,
+  testAttempts?: ModelTestAttemptConnection | null,
+  videoTestAttempts?: ModelVideoTestAttemptConnection | null,
+  interviews?: ModelInterviewConnection | null,
   createdAt: string,
   updatedAt: string,
 };
+
+export enum ApplicationStatus {
+  ACTIVE = "ACTIVE",
+  REJECTED = "REJECTED",
+  HIRED = "HIRED",
+  WITHDRAWN = "WITHDRAWN",
+}
+
+
+export enum StageStatus {
+  NOT_STARTED = "NOT_STARTED",
+  PENDING = "PENDING",
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+  SCHEDULED = "SCHEDULED",
+}
+
 
 export type ModelTestAttemptConnection = {
   __typename: "ModelTestAttemptConnection",
@@ -263,6 +307,24 @@ export type TestAttempt = {
   updatedAt: string,
 };
 
+export type Test = {
+  __typename: "Test",
+  id: string,
+  jobId: string,
+  job: Job,
+  title: string,
+  description: string,
+  instructions: string,
+  timeLimit: number,
+  totalPoints: number,
+  passingScore: number,
+  isActive: boolean,
+  questions: string,
+  attempts?: ModelTestAttemptConnection | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
 export enum TestAttemptStatus {
   IN_PROGRESS = "IN_PROGRESS",
   COMPLETED = "COMPLETED",
@@ -270,28 +332,6 @@ export enum TestAttemptStatus {
   EXPIRED = "EXPIRED",
 }
 
-
-export type ModelVideoTestConnection = {
-  __typename: "ModelVideoTestConnection",
-  items:  Array<VideoTest | null >,
-  nextToken?: string | null,
-};
-
-export type VideoTest = {
-  __typename: "VideoTest",
-  id: string,
-  jobId: string,
-  job: Job,
-  title: string,
-  description: string,
-  instructions: string,
-  totalPoints: number,
-  isActive: boolean,
-  questions: string,
-  attempts?: ModelVideoTestAttemptConnection | null,
-  createdAt: string,
-  updatedAt: string,
-};
 
 export type ModelVideoTestAttemptConnection = {
   __typename: "ModelVideoTestAttemptConnection",
@@ -319,29 +359,27 @@ export type VideoTestAttempt = {
   updatedAt: string,
 };
 
+export type VideoTest = {
+  __typename: "VideoTest",
+  id: string,
+  jobId: string,
+  job: Job,
+  title: string,
+  description: string,
+  instructions: string,
+  totalPoints: number,
+  isActive: boolean,
+  questions: string,
+  attempts?: ModelVideoTestAttemptConnection | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
 export enum VideoTestAttemptStatus {
   NOT_STARTED = "NOT_STARTED",
   IN_PROGRESS = "IN_PROGRESS",
   COMPLETED = "COMPLETED",
   ABANDONED = "ABANDONED",
-}
-
-
-export enum ApplicationStatus {
-  ACTIVE = "ACTIVE",
-  REJECTED = "REJECTED",
-  HIRED = "HIRED",
-  WITHDRAWN = "WITHDRAWN",
-}
-
-
-export enum StageStatus {
-  NOT_STARTED = "NOT_STARTED",
-  PENDING = "PENDING",
-  IN_PROGRESS = "IN_PROGRESS",
-  COMPLETED = "COMPLETED",
-  FAILED = "FAILED",
-  SCHEDULED = "SCHEDULED",
 }
 
 
@@ -396,10 +434,73 @@ export enum InterviewRecommendation {
 }
 
 
-export type ModelJobConnection = {
-  __typename: "ModelJobConnection",
-  items:  Array<Job | null >,
+export type ModelTestConnection = {
+  __typename: "ModelTestConnection",
+  items:  Array<Test | null >,
   nextToken?: string | null,
+};
+
+export type ModelVideoTestConnection = {
+  __typename: "ModelVideoTestConnection",
+  items:  Array<VideoTest | null >,
+  nextToken?: string | null,
+};
+
+export type UpdateUserInput = {
+  id: string,
+  sub?: string | null,
+  email?: string | null,
+  firstName?: string | null,
+  lastName?: string | null,
+  phone?: string | null,
+  role?: UserRole | null,
+  companyId?: string | null,
+  isActive?: boolean | null,
+  lastLoginAt?: string | null,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+  approvalStatus?: ApprovalStatus | null,
+  approvedAt?: string | null,
+  approvedBy?: string | null,
+  approvalNotes?: string | null,
+  rejectedAt?: string | null,
+  rejectedBy?: string | null,
+  rejectionReason?: string | null,
+  resume?: string | null,
+};
+
+export type DeleteUserInput = {
+  id: string,
+};
+
+export type CreateCompanyInput = {
+  id?: string | null,
+  name: string,
+  email: string,
+  phone?: string | null,
+  address?: string | null,
+  website?: string | null,
+  logo?: string | null,
+  description?: string | null,
+  isActive: boolean,
+  createdAt?: string | null,
+  updatedAt?: string | null,
+};
+
+export type ModelCompanyConditionInput = {
+  name?: ModelStringInput | null,
+  email?: ModelStringInput | null,
+  phone?: ModelStringInput | null,
+  address?: ModelStringInput | null,
+  website?: ModelStringInput | null,
+  logo?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  isActive?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelCompanyConditionInput | null > | null,
+  or?: Array< ModelCompanyConditionInput | null > | null,
+  not?: ModelCompanyConditionInput | null,
 };
 
 export type UpdateCompanyInput = {
@@ -468,22 +569,6 @@ export type ModelJobStatusInput = {
   ne?: JobStatus | null,
 };
 
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
-};
-
 export type UpdateJobInput = {
   id: string,
   title?: string | null,
@@ -503,91 +588,6 @@ export type UpdateJobInput = {
 };
 
 export type DeleteJobInput = {
-  id: string,
-};
-
-export type CreateUserInput = {
-  id?: string | null,
-  sub: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  phone?: string | null,
-  role: UserRole,
-  companyId?: string | null,
-  isActive: boolean,
-  lastLoginAt?: string | null,
-  createdAt?: string | null,
-  updatedAt?: string | null,
-  approvalStatus: ApprovalStatus,
-  approvedAt?: string | null,
-  approvedBy?: string | null,
-  approvalNotes?: string | null,
-  rejectedAt?: string | null,
-  rejectedBy?: string | null,
-  rejectionReason?: string | null,
-  resume?: string | null,
-};
-
-export type ModelUserConditionInput = {
-  sub?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  firstName?: ModelStringInput | null,
-  lastName?: ModelStringInput | null,
-  phone?: ModelStringInput | null,
-  role?: ModelUserRoleInput | null,
-  companyId?: ModelIDInput | null,
-  isActive?: ModelBooleanInput | null,
-  lastLoginAt?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  approvalStatus?: ModelApprovalStatusInput | null,
-  approvedAt?: ModelStringInput | null,
-  approvedBy?: ModelIDInput | null,
-  approvalNotes?: ModelStringInput | null,
-  rejectedAt?: ModelStringInput | null,
-  rejectedBy?: ModelIDInput | null,
-  rejectionReason?: ModelStringInput | null,
-  resume?: ModelStringInput | null,
-  and?: Array< ModelUserConditionInput | null > | null,
-  or?: Array< ModelUserConditionInput | null > | null,
-  not?: ModelUserConditionInput | null,
-};
-
-export type ModelUserRoleInput = {
-  eq?: UserRole | null,
-  ne?: UserRole | null,
-};
-
-export type ModelApprovalStatusInput = {
-  eq?: ApprovalStatus | null,
-  ne?: ApprovalStatus | null,
-};
-
-export type UpdateUserInput = {
-  id: string,
-  sub?: string | null,
-  email?: string | null,
-  firstName?: string | null,
-  lastName?: string | null,
-  phone?: string | null,
-  role?: UserRole | null,
-  companyId?: string | null,
-  isActive?: boolean | null,
-  lastLoginAt?: string | null,
-  createdAt?: string | null,
-  updatedAt?: string | null,
-  approvalStatus?: ApprovalStatus | null,
-  approvedAt?: string | null,
-  approvedBy?: string | null,
-  approvalNotes?: string | null,
-  rejectedAt?: string | null,
-  rejectedBy?: string | null,
-  rejectionReason?: string | null,
-  resume?: string | null,
-};
-
-export type DeleteUserInput = {
   id: string,
 };
 
@@ -974,6 +974,32 @@ export type DeleteInterviewInput = {
   id: string,
 };
 
+export type ModelUserFilterInput = {
+  id?: ModelIDInput | null,
+  sub?: ModelStringInput | null,
+  email?: ModelStringInput | null,
+  firstName?: ModelStringInput | null,
+  lastName?: ModelStringInput | null,
+  phone?: ModelStringInput | null,
+  role?: ModelUserRoleInput | null,
+  companyId?: ModelIDInput | null,
+  isActive?: ModelBooleanInput | null,
+  lastLoginAt?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  approvalStatus?: ModelApprovalStatusInput | null,
+  approvedAt?: ModelStringInput | null,
+  approvedBy?: ModelIDInput | null,
+  approvalNotes?: ModelStringInput | null,
+  rejectedAt?: ModelStringInput | null,
+  rejectedBy?: ModelIDInput | null,
+  rejectionReason?: ModelStringInput | null,
+  resume?: ModelStringInput | null,
+  and?: Array< ModelUserFilterInput | null > | null,
+  or?: Array< ModelUserFilterInput | null > | null,
+  not?: ModelUserFilterInput | null,
+};
+
 export type ModelCompanyFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
@@ -1018,38 +1044,6 @@ export type ModelJobFilterInput = {
   not?: ModelJobFilterInput | null,
 };
 
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
-
-export type ModelUserFilterInput = {
-  id?: ModelIDInput | null,
-  sub?: ModelStringInput | null,
-  email?: ModelStringInput | null,
-  firstName?: ModelStringInput | null,
-  lastName?: ModelStringInput | null,
-  phone?: ModelStringInput | null,
-  role?: ModelUserRoleInput | null,
-  companyId?: ModelIDInput | null,
-  isActive?: ModelBooleanInput | null,
-  lastLoginAt?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  approvalStatus?: ModelApprovalStatusInput | null,
-  approvedAt?: ModelStringInput | null,
-  approvedBy?: ModelIDInput | null,
-  approvalNotes?: ModelStringInput | null,
-  rejectedAt?: ModelStringInput | null,
-  rejectedBy?: ModelIDInput | null,
-  rejectionReason?: ModelStringInput | null,
-  resume?: ModelStringInput | null,
-  and?: Array< ModelUserFilterInput | null > | null,
-  or?: Array< ModelUserFilterInput | null > | null,
-  not?: ModelUserFilterInput | null,
-};
-
 export type ModelApplicationFilterInput = {
   id?: ModelIDInput | null,
   candidateId?: ModelIDInput | null,
@@ -1069,6 +1063,12 @@ export type ModelApplicationFilterInput = {
   or?: Array< ModelApplicationFilterInput | null > | null,
   not?: ModelApplicationFilterInput | null,
 };
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
 
 export type ModelTestFilterInput = {
   id?: ModelIDInput | null,
@@ -1164,20 +1164,29 @@ export type ModelInterviewFilterInput = {
   not?: ModelInterviewFilterInput | null,
 };
 
-export type ModelSubscriptionCompanyFilterInput = {
+export type ModelSubscriptionUserFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
+  sub?: ModelSubscriptionStringInput | null,
   email?: ModelSubscriptionStringInput | null,
+  firstName?: ModelSubscriptionStringInput | null,
+  lastName?: ModelSubscriptionStringInput | null,
   phone?: ModelSubscriptionStringInput | null,
-  address?: ModelSubscriptionStringInput | null,
-  website?: ModelSubscriptionStringInput | null,
-  logo?: ModelSubscriptionStringInput | null,
-  description?: ModelSubscriptionStringInput | null,
+  role?: ModelSubscriptionStringInput | null,
+  companyId?: ModelSubscriptionIDInput | null,
   isActive?: ModelSubscriptionBooleanInput | null,
+  lastLoginAt?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionCompanyFilterInput | null > | null,
-  or?: Array< ModelSubscriptionCompanyFilterInput | null > | null,
+  approvalStatus?: ModelSubscriptionStringInput | null,
+  approvedAt?: ModelSubscriptionStringInput | null,
+  approvedBy?: ModelSubscriptionIDInput | null,
+  approvalNotes?: ModelSubscriptionStringInput | null,
+  rejectedAt?: ModelSubscriptionStringInput | null,
+  rejectedBy?: ModelSubscriptionIDInput | null,
+  rejectionReason?: ModelSubscriptionStringInput | null,
+  resume?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionUserFilterInput | null > | null,
+  or?: Array< ModelSubscriptionUserFilterInput | null > | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -1215,6 +1224,22 @@ export type ModelSubscriptionBooleanInput = {
   eq?: boolean | null,
 };
 
+export type ModelSubscriptionCompanyFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  email?: ModelSubscriptionStringInput | null,
+  phone?: ModelSubscriptionStringInput | null,
+  address?: ModelSubscriptionStringInput | null,
+  website?: ModelSubscriptionStringInput | null,
+  logo?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
+  isActive?: ModelSubscriptionBooleanInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionCompanyFilterInput | null > | null,
+  or?: Array< ModelSubscriptionCompanyFilterInput | null > | null,
+};
+
 export type ModelSubscriptionJobFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   title?: ModelSubscriptionStringInput | null,
@@ -1235,33 +1260,9 @@ export type ModelSubscriptionJobFilterInput = {
   or?: Array< ModelSubscriptionJobFilterInput | null > | null,
 };
 
-export type ModelSubscriptionUserFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  email?: ModelSubscriptionStringInput | null,
-  firstName?: ModelSubscriptionStringInput | null,
-  lastName?: ModelSubscriptionStringInput | null,
-  phone?: ModelSubscriptionStringInput | null,
-  role?: ModelSubscriptionStringInput | null,
-  companyId?: ModelSubscriptionIDInput | null,
-  isActive?: ModelSubscriptionBooleanInput | null,
-  lastLoginAt?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-  approvalStatus?: ModelSubscriptionStringInput | null,
-  approvedAt?: ModelSubscriptionStringInput | null,
-  approvedBy?: ModelSubscriptionIDInput | null,
-  approvalNotes?: ModelSubscriptionStringInput | null,
-  rejectedAt?: ModelSubscriptionStringInput | null,
-  rejectedBy?: ModelSubscriptionIDInput | null,
-  rejectionReason?: ModelSubscriptionStringInput | null,
-  resume?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionUserFilterInput | null > | null,
-  or?: Array< ModelSubscriptionUserFilterInput | null > | null,
-  sub?: ModelStringInput | null,
-};
-
 export type ModelSubscriptionApplicationFilterInput = {
   id?: ModelSubscriptionIDInput | null,
+  candidateId?: ModelSubscriptionIDInput | null,
   jobId?: ModelSubscriptionIDInput | null,
   appliedAt?: ModelSubscriptionStringInput | null,
   currentStage?: ModelSubscriptionIntInput | null,
@@ -1276,7 +1277,6 @@ export type ModelSubscriptionApplicationFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionApplicationFilterInput | null > | null,
   or?: Array< ModelSubscriptionApplicationFilterInput | null > | null,
-  candidateId?: ModelStringInput | null,
 };
 
 export type ModelSubscriptionIntInput = {
@@ -1390,6 +1390,189 @@ export type ModelSubscriptionInterviewFilterInput = {
   and?: Array< ModelSubscriptionInterviewFilterInput | null > | null,
   or?: Array< ModelSubscriptionInterviewFilterInput | null > | null,
   candidateId?: ModelStringInput | null,
+};
+
+export type CreateUserMutationVariables = {
+  input: CreateUserInput,
+  condition?: ModelUserConditionInput | null,
+};
+
+export type CreateUserMutation = {
+  createUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    approvalStatus?: ApprovalStatus | null,
+    approvedAt?: string | null,
+    approvedBy?: string | null,
+    approvalNotes?: string | null,
+    rejectedAt?: string | null,
+    rejectedBy?: string | null,
+    rejectionReason?: string | null,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+  } | null,
+};
+
+export type UpdateUserMutationVariables = {
+  input: UpdateUserInput,
+  condition?: ModelUserConditionInput | null,
+};
+
+export type UpdateUserMutation = {
+  updateUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    approvalStatus?: ApprovalStatus | null,
+    approvedAt?: string | null,
+    approvedBy?: string | null,
+    approvalNotes?: string | null,
+    rejectedAt?: string | null,
+    rejectedBy?: string | null,
+    rejectionReason?: string | null,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+  } | null,
+};
+
+export type DeleteUserMutationVariables = {
+  input: DeleteUserInput,
+  condition?: ModelUserConditionInput | null,
+};
+
+export type DeleteUserMutation = {
+  deleteUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    approvalStatus?: ApprovalStatus | null,
+    approvedAt?: string | null,
+    approvedBy?: string | null,
+    approvalNotes?: string | null,
+    rejectedAt?: string | null,
+    rejectedBy?: string | null,
+    rejectionReason?: string | null,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+  } | null,
 };
 
 export type CreateCompanyMutationVariables = {
@@ -1638,189 +1821,6 @@ export type DeleteJobMutation = {
   } | null,
 };
 
-export type CreateUserMutationVariables = {
-  input: CreateUserInput,
-  condition?: ModelUserConditionInput | null,
-};
-
-export type CreateUserMutation = {
-  createUser?:  {
-    __typename: "User",
-    id: string,
-    sub: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    role: UserRole,
-    companyId?: string | null,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    isActive: boolean,
-    lastLoginAt?: string | null,
-    createdAt: string,
-    updatedAt: string,
-    approvalStatus: ApprovalStatus,
-    approvedAt?: string | null,
-    approvedBy?: string | null,
-    approvalNotes?: string | null,
-    rejectedAt?: string | null,
-    rejectedBy?: string | null,
-    rejectionReason?: string | null,
-    resume?: string | null,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    testAttempts?:  {
-      __typename: "ModelTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    videoTestAttempts?:  {
-      __typename: "ModelVideoTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    interviews?:  {
-      __typename: "ModelInterviewConnection",
-      nextToken?: string | null,
-    } | null,
-  } | null,
-};
-
-export type UpdateUserMutationVariables = {
-  input: UpdateUserInput,
-  condition?: ModelUserConditionInput | null,
-};
-
-export type UpdateUserMutation = {
-  updateUser?:  {
-    __typename: "User",
-    id: string,
-    sub: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    role: UserRole,
-    companyId?: string | null,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    isActive: boolean,
-    lastLoginAt?: string | null,
-    createdAt: string,
-    updatedAt: string,
-    approvalStatus: ApprovalStatus,
-    approvedAt?: string | null,
-    approvedBy?: string | null,
-    approvalNotes?: string | null,
-    rejectedAt?: string | null,
-    rejectedBy?: string | null,
-    rejectionReason?: string | null,
-    resume?: string | null,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    testAttempts?:  {
-      __typename: "ModelTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    videoTestAttempts?:  {
-      __typename: "ModelVideoTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    interviews?:  {
-      __typename: "ModelInterviewConnection",
-      nextToken?: string | null,
-    } | null,
-  } | null,
-};
-
-export type DeleteUserMutationVariables = {
-  input: DeleteUserInput,
-  condition?: ModelUserConditionInput | null,
-};
-
-export type DeleteUserMutation = {
-  deleteUser?:  {
-    __typename: "User",
-    id: string,
-    sub: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    role: UserRole,
-    companyId?: string | null,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    isActive: boolean,
-    lastLoginAt?: string | null,
-    createdAt: string,
-    updatedAt: string,
-    approvalStatus: ApprovalStatus,
-    approvedAt?: string | null,
-    approvedBy?: string | null,
-    approvalNotes?: string | null,
-    rejectedAt?: string | null,
-    rejectedBy?: string | null,
-    rejectionReason?: string | null,
-    resume?: string | null,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    testAttempts?:  {
-      __typename: "ModelTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    videoTestAttempts?:  {
-      __typename: "ModelVideoTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    interviews?:  {
-      __typename: "ModelInterviewConnection",
-      nextToken?: string | null,
-    } | null,
-  } | null,
-};
-
 export type CreateApplicationMutationVariables = {
   input: CreateApplicationInput,
   condition?: ModelApplicationConditionInput | null,
@@ -1845,7 +1845,7 @@ export type CreateApplicationMutation = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -1923,7 +1923,7 @@ export type UpdateApplicationMutation = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -2001,7 +2001,7 @@ export type DeleteApplicationMutation = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -2230,7 +2230,7 @@ export type CreateTestAttemptMutation = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -2310,7 +2310,7 @@ export type UpdateTestAttemptMutation = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -2390,7 +2390,7 @@ export type DeleteTestAttemptMutation = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -2597,7 +2597,7 @@ export type CreateVideoTestAttemptMutation = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -2674,7 +2674,7 @@ export type UpdateVideoTestAttemptMutation = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -2751,7 +2751,7 @@ export type DeleteVideoTestAttemptMutation = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -2814,7 +2814,7 @@ export type CreateInterviewMutation = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -2880,7 +2880,7 @@ export type UpdateInterviewMutation = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -2946,7 +2946,7 @@ export type DeleteInterviewMutation = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -2985,6 +2985,102 @@ export type DeleteInterviewMutation = {
     interviewers?: Array< string > | null,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type GetUserQueryVariables = {
+  id: string,
+};
+
+export type GetUserQuery = {
+  getUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    approvalStatus?: ApprovalStatus | null,
+    approvedAt?: string | null,
+    approvedBy?: string | null,
+    approvalNotes?: string | null,
+    rejectedAt?: string | null,
+    rejectedBy?: string | null,
+    rejectionReason?: string | null,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+  } | null,
+};
+
+export type ListUsersQueryVariables = {
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListUsersQuery = {
+  listUsers?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      approvalStatus?: ApprovalStatus | null,
+      approvedAt?: string | null,
+      approvedBy?: string | null,
+      approvalNotes?: string | null,
+      rejectedAt?: string | null,
+      rejectedBy?: string | null,
+      rejectionReason?: string | null,
+      resume?: string | null,
+    } | null >,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -3126,316 +3222,6 @@ export type ListJobsQuery = {
   } | null,
 };
 
-export type CompaniesByEmailQueryVariables = {
-  email: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelCompanyFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type CompaniesByEmailQuery = {
-  companiesByEmail?:  {
-    __typename: "ModelCompanyConnection",
-    items:  Array< {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type JobsByCompanyIdQueryVariables = {
-  companyId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelJobFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type JobsByCompanyIdQuery = {
-  jobsByCompanyId?:  {
-    __typename: "ModelJobConnection",
-    items:  Array< {
-      __typename: "Job",
-      id: string,
-      title: string,
-      department: string,
-      location: string,
-      type: JobType,
-      salary?: string | null,
-      description: string,
-      requirements: Array< string >,
-      responsibilities: Array< string >,
-      benefits?: Array< string > | null,
-      status: JobStatus,
-      companyId: string,
-      createdAt: string,
-      updatedAt: string,
-      closingDate?: string | null,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type GetUserQueryVariables = {
-  id: string,
-};
-
-export type GetUserQuery = {
-  getUser?:  {
-    __typename: "User",
-    id: string,
-    sub: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    role: UserRole,
-    companyId?: string | null,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    isActive: boolean,
-    lastLoginAt?: string | null,
-    createdAt: string,
-    updatedAt: string,
-    approvalStatus: ApprovalStatus,
-    approvedAt?: string | null,
-    approvedBy?: string | null,
-    approvalNotes?: string | null,
-    rejectedAt?: string | null,
-    rejectedBy?: string | null,
-    rejectionReason?: string | null,
-    resume?: string | null,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    testAttempts?:  {
-      __typename: "ModelTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    videoTestAttempts?:  {
-      __typename: "ModelVideoTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    interviews?:  {
-      __typename: "ModelInterviewConnection",
-      nextToken?: string | null,
-    } | null,
-  } | null,
-};
-
-export type ListUsersQueryVariables = {
-  filter?: ModelUserFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListUsersQuery = {
-  listUsers?:  {
-    __typename: "ModelUserConnection",
-    items:  Array< {
-      __typename: "User",
-      id: string,
-      sub: string,
-      email: string,
-      firstName: string,
-      lastName: string,
-      phone?: string | null,
-      role: UserRole,
-      companyId?: string | null,
-      isActive: boolean,
-      lastLoginAt?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      approvalStatus: ApprovalStatus,
-      approvedAt?: string | null,
-      approvedBy?: string | null,
-      approvalNotes?: string | null,
-      rejectedAt?: string | null,
-      rejectedBy?: string | null,
-      rejectionReason?: string | null,
-      resume?: string | null,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type UsersBySubQueryVariables = {
-  sub: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelUserFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type UsersBySubQuery = {
-  usersBySub?:  {
-    __typename: "ModelUserConnection",
-    items:  Array< {
-      __typename: "User",
-      id: string,
-      sub: string,
-      email: string,
-      firstName: string,
-      lastName: string,
-      phone?: string | null,
-      role: UserRole,
-      companyId?: string | null,
-      isActive: boolean,
-      lastLoginAt?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      approvalStatus: ApprovalStatus,
-      approvedAt?: string | null,
-      approvedBy?: string | null,
-      approvalNotes?: string | null,
-      rejectedAt?: string | null,
-      rejectedBy?: string | null,
-      rejectionReason?: string | null,
-      resume?: string | null,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type UsersByEmailQueryVariables = {
-  email: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelUserFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type UsersByEmailQuery = {
-  usersByEmail?:  {
-    __typename: "ModelUserConnection",
-    items:  Array< {
-      __typename: "User",
-      id: string,
-      sub: string,
-      email: string,
-      firstName: string,
-      lastName: string,
-      phone?: string | null,
-      role: UserRole,
-      companyId?: string | null,
-      isActive: boolean,
-      lastLoginAt?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      approvalStatus: ApprovalStatus,
-      approvedAt?: string | null,
-      approvedBy?: string | null,
-      approvalNotes?: string | null,
-      rejectedAt?: string | null,
-      rejectedBy?: string | null,
-      rejectionReason?: string | null,
-      resume?: string | null,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type UsersByCompanyIdQueryVariables = {
-  companyId: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelUserFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type UsersByCompanyIdQuery = {
-  usersByCompanyId?:  {
-    __typename: "ModelUserConnection",
-    items:  Array< {
-      __typename: "User",
-      id: string,
-      sub: string,
-      email: string,
-      firstName: string,
-      lastName: string,
-      phone?: string | null,
-      role: UserRole,
-      companyId?: string | null,
-      isActive: boolean,
-      lastLoginAt?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      approvalStatus: ApprovalStatus,
-      approvedAt?: string | null,
-      approvedBy?: string | null,
-      approvalNotes?: string | null,
-      rejectedAt?: string | null,
-      rejectedBy?: string | null,
-      rejectionReason?: string | null,
-      resume?: string | null,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type UsersByApprovalStatusQueryVariables = {
-  approvalStatus: ApprovalStatus,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelUserFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type UsersByApprovalStatusQuery = {
-  usersByApprovalStatus?:  {
-    __typename: "ModelUserConnection",
-    items:  Array< {
-      __typename: "User",
-      id: string,
-      sub: string,
-      email: string,
-      firstName: string,
-      lastName: string,
-      phone?: string | null,
-      role: UserRole,
-      companyId?: string | null,
-      isActive: boolean,
-      lastLoginAt?: string | null,
-      createdAt: string,
-      updatedAt: string,
-      approvalStatus: ApprovalStatus,
-      approvedAt?: string | null,
-      approvedBy?: string | null,
-      approvalNotes?: string | null,
-      rejectedAt?: string | null,
-      rejectedBy?: string | null,
-      rejectionReason?: string | null,
-      resume?: string | null,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
 export type GetApplicationQueryVariables = {
   id: string,
 };
@@ -3459,7 +3245,7 @@ export type GetApplicationQuery = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -3538,6 +3324,220 @@ export type ListApplicationsQuery = {
       internalNotes?: string | null,
       createdAt: string,
       updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type UsersBySubQueryVariables = {
+  sub: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UsersBySubQuery = {
+  usersBySub?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      approvalStatus?: ApprovalStatus | null,
+      approvedAt?: string | null,
+      approvedBy?: string | null,
+      approvalNotes?: string | null,
+      rejectedAt?: string | null,
+      rejectedBy?: string | null,
+      rejectionReason?: string | null,
+      resume?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type UsersByEmailQueryVariables = {
+  email: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UsersByEmailQuery = {
+  usersByEmail?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      approvalStatus?: ApprovalStatus | null,
+      approvedAt?: string | null,
+      approvedBy?: string | null,
+      approvalNotes?: string | null,
+      rejectedAt?: string | null,
+      rejectedBy?: string | null,
+      rejectionReason?: string | null,
+      resume?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type UsersByCompanyIdQueryVariables = {
+  companyId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UsersByCompanyIdQuery = {
+  usersByCompanyId?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      approvalStatus?: ApprovalStatus | null,
+      approvedAt?: string | null,
+      approvedBy?: string | null,
+      approvalNotes?: string | null,
+      rejectedAt?: string | null,
+      rejectedBy?: string | null,
+      rejectionReason?: string | null,
+      resume?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type UsersByApprovalStatusQueryVariables = {
+  approvalStatus: ApprovalStatus,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UsersByApprovalStatusQuery = {
+  usersByApprovalStatus?:  {
+    __typename: "ModelUserConnection",
+    items:  Array< {
+      __typename: "User",
+      id: string,
+      sub: string,
+      email: string,
+      firstName: string,
+      lastName: string,
+      phone?: string | null,
+      role: UserRole,
+      companyId?: string | null,
+      isActive: boolean,
+      lastLoginAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      approvalStatus?: ApprovalStatus | null,
+      approvedAt?: string | null,
+      approvedBy?: string | null,
+      approvalNotes?: string | null,
+      rejectedAt?: string | null,
+      rejectedBy?: string | null,
+      rejectionReason?: string | null,
+      resume?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type CompaniesByEmailQueryVariables = {
+  email: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelCompanyFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type CompaniesByEmailQuery = {
+  companiesByEmail?:  {
+    __typename: "ModelCompanyConnection",
+    items:  Array< {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type JobsByCompanyIdQueryVariables = {
+  companyId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelJobFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type JobsByCompanyIdQuery = {
+  jobsByCompanyId?:  {
+    __typename: "ModelJobConnection",
+    items:  Array< {
+      __typename: "Job",
+      id: string,
+      title: string,
+      department: string,
+      location: string,
+      type: JobType,
+      salary?: string | null,
+      description: string,
+      requirements: Array< string >,
+      responsibilities: Array< string >,
+      benefits?: Array< string > | null,
+      status: JobStatus,
+      companyId: string,
+      createdAt: string,
+      updatedAt: string,
+      closingDate?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -3748,7 +3748,7 @@ export type GetTestAttemptQuery = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -4047,7 +4047,7 @@ export type GetVideoTestAttemptQuery = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -4231,7 +4231,7 @@ export type GetInterviewQuery = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -4367,6 +4367,186 @@ export type InterviewsByApplicationIdQuery = {
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
+  } | null,
+};
+
+export type OnCreateUserSubscriptionVariables = {
+  filter?: ModelSubscriptionUserFilterInput | null,
+};
+
+export type OnCreateUserSubscription = {
+  onCreateUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    approvalStatus?: ApprovalStatus | null,
+    approvedAt?: string | null,
+    approvedBy?: string | null,
+    approvalNotes?: string | null,
+    rejectedAt?: string | null,
+    rejectedBy?: string | null,
+    rejectionReason?: string | null,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+  } | null,
+};
+
+export type OnUpdateUserSubscriptionVariables = {
+  filter?: ModelSubscriptionUserFilterInput | null,
+};
+
+export type OnUpdateUserSubscription = {
+  onUpdateUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    approvalStatus?: ApprovalStatus | null,
+    approvedAt?: string | null,
+    approvedBy?: string | null,
+    approvalNotes?: string | null,
+    rejectedAt?: string | null,
+    rejectedBy?: string | null,
+    rejectionReason?: string | null,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
+  } | null,
+};
+
+export type OnDeleteUserSubscriptionVariables = {
+  filter?: ModelSubscriptionUserFilterInput | null,
+};
+
+export type OnDeleteUserSubscription = {
+  onDeleteUser?:  {
+    __typename: "User",
+    id: string,
+    sub: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    phone?: string | null,
+    role: UserRole,
+    companyId?: string | null,
+    company?:  {
+      __typename: "Company",
+      id: string,
+      name: string,
+      email: string,
+      phone?: string | null,
+      address?: string | null,
+      website?: string | null,
+      logo?: string | null,
+      description?: string | null,
+      isActive: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    isActive: boolean,
+    lastLoginAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    approvalStatus?: ApprovalStatus | null,
+    approvedAt?: string | null,
+    approvedBy?: string | null,
+    approvalNotes?: string | null,
+    rejectedAt?: string | null,
+    rejectedBy?: string | null,
+    rejectionReason?: string | null,
+    resume?: string | null,
+    applications?:  {
+      __typename: "ModelApplicationConnection",
+      nextToken?: string | null,
+    } | null,
+    testAttempts?:  {
+      __typename: "ModelTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    videoTestAttempts?:  {
+      __typename: "ModelVideoTestAttemptConnection",
+      nextToken?: string | null,
+    } | null,
+    interviews?:  {
+      __typename: "ModelInterviewConnection",
+      nextToken?: string | null,
+    } | null,
   } | null,
 };
 
@@ -4610,192 +4790,8 @@ export type OnDeleteJobSubscription = {
   } | null,
 };
 
-export type OnCreateUserSubscriptionVariables = {
-  filter?: ModelSubscriptionUserFilterInput | null,
-  sub?: string | null,
-};
-
-export type OnCreateUserSubscription = {
-  onCreateUser?:  {
-    __typename: "User",
-    id: string,
-    sub: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    role: UserRole,
-    companyId?: string | null,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    isActive: boolean,
-    lastLoginAt?: string | null,
-    createdAt: string,
-    updatedAt: string,
-    approvalStatus: ApprovalStatus,
-    approvedAt?: string | null,
-    approvedBy?: string | null,
-    approvalNotes?: string | null,
-    rejectedAt?: string | null,
-    rejectedBy?: string | null,
-    rejectionReason?: string | null,
-    resume?: string | null,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    testAttempts?:  {
-      __typename: "ModelTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    videoTestAttempts?:  {
-      __typename: "ModelVideoTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    interviews?:  {
-      __typename: "ModelInterviewConnection",
-      nextToken?: string | null,
-    } | null,
-  } | null,
-};
-
-export type OnUpdateUserSubscriptionVariables = {
-  filter?: ModelSubscriptionUserFilterInput | null,
-  sub?: string | null,
-};
-
-export type OnUpdateUserSubscription = {
-  onUpdateUser?:  {
-    __typename: "User",
-    id: string,
-    sub: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    role: UserRole,
-    companyId?: string | null,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    isActive: boolean,
-    lastLoginAt?: string | null,
-    createdAt: string,
-    updatedAt: string,
-    approvalStatus: ApprovalStatus,
-    approvedAt?: string | null,
-    approvedBy?: string | null,
-    approvalNotes?: string | null,
-    rejectedAt?: string | null,
-    rejectedBy?: string | null,
-    rejectionReason?: string | null,
-    resume?: string | null,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    testAttempts?:  {
-      __typename: "ModelTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    videoTestAttempts?:  {
-      __typename: "ModelVideoTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    interviews?:  {
-      __typename: "ModelInterviewConnection",
-      nextToken?: string | null,
-    } | null,
-  } | null,
-};
-
-export type OnDeleteUserSubscriptionVariables = {
-  filter?: ModelSubscriptionUserFilterInput | null,
-  sub?: string | null,
-};
-
-export type OnDeleteUserSubscription = {
-  onDeleteUser?:  {
-    __typename: "User",
-    id: string,
-    sub: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    phone?: string | null,
-    role: UserRole,
-    companyId?: string | null,
-    company?:  {
-      __typename: "Company",
-      id: string,
-      name: string,
-      email: string,
-      phone?: string | null,
-      address?: string | null,
-      website?: string | null,
-      logo?: string | null,
-      description?: string | null,
-      isActive: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    isActive: boolean,
-    lastLoginAt?: string | null,
-    createdAt: string,
-    updatedAt: string,
-    approvalStatus: ApprovalStatus,
-    approvedAt?: string | null,
-    approvedBy?: string | null,
-    approvalNotes?: string | null,
-    rejectedAt?: string | null,
-    rejectedBy?: string | null,
-    rejectionReason?: string | null,
-    resume?: string | null,
-    applications?:  {
-      __typename: "ModelApplicationConnection",
-      nextToken?: string | null,
-    } | null,
-    testAttempts?:  {
-      __typename: "ModelTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    videoTestAttempts?:  {
-      __typename: "ModelVideoTestAttemptConnection",
-      nextToken?: string | null,
-    } | null,
-    interviews?:  {
-      __typename: "ModelInterviewConnection",
-      nextToken?: string | null,
-    } | null,
-  } | null,
-};
-
 export type OnCreateApplicationSubscriptionVariables = {
   filter?: ModelSubscriptionApplicationFilterInput | null,
-  candidateId?: string | null,
 };
 
 export type OnCreateApplicationSubscription = {
@@ -4817,7 +4813,7 @@ export type OnCreateApplicationSubscription = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -4873,7 +4869,6 @@ export type OnCreateApplicationSubscription = {
 
 export type OnUpdateApplicationSubscriptionVariables = {
   filter?: ModelSubscriptionApplicationFilterInput | null,
-  candidateId?: string | null,
 };
 
 export type OnUpdateApplicationSubscription = {
@@ -4895,7 +4890,7 @@ export type OnUpdateApplicationSubscription = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -4951,7 +4946,6 @@ export type OnUpdateApplicationSubscription = {
 
 export type OnDeleteApplicationSubscriptionVariables = {
   filter?: ModelSubscriptionApplicationFilterInput | null,
-  candidateId?: string | null,
 };
 
 export type OnDeleteApplicationSubscription = {
@@ -4973,7 +4967,7 @@ export type OnDeleteApplicationSubscription = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -5199,7 +5193,7 @@ export type OnCreateTestAttemptSubscription = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -5279,7 +5273,7 @@ export type OnUpdateTestAttemptSubscription = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -5359,7 +5353,7 @@ export type OnDeleteTestAttemptSubscription = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -5563,7 +5557,7 @@ export type OnCreateVideoTestAttemptSubscription = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -5640,7 +5634,7 @@ export type OnUpdateVideoTestAttemptSubscription = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -5717,7 +5711,7 @@ export type OnDeleteVideoTestAttemptSubscription = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -5780,7 +5774,7 @@ export type OnCreateInterviewSubscription = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -5846,7 +5840,7 @@ export type OnUpdateInterviewSubscription = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,
@@ -5912,7 +5906,7 @@ export type OnDeleteInterviewSubscription = {
       lastLoginAt?: string | null,
       createdAt: string,
       updatedAt: string,
-      approvalStatus: ApprovalStatus,
+      approvalStatus?: ApprovalStatus | null,
       approvedAt?: string | null,
       approvedBy?: string | null,
       approvalNotes?: string | null,

@@ -1,6 +1,177 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateUser = /* GraphQL */ `
+  subscription OnCreateUser($filter: ModelSubscriptionUserFilterInput) {
+    onCreateUser(filter: $filter) {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      company {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
+      resume
+      applications {
+        nextToken
+        __typename
+      }
+      testAttempts {
+        nextToken
+        __typename
+      }
+      videoTestAttempts {
+        nextToken
+        __typename
+      }
+      interviews {
+        nextToken
+        __typename
+      }
+      __typename
+    }
+  }
+`;
+export const onUpdateUser = /* GraphQL */ `
+  subscription OnUpdateUser($filter: ModelSubscriptionUserFilterInput) {
+    onUpdateUser(filter: $filter) {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      company {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
+      resume
+      applications {
+        nextToken
+        __typename
+      }
+      testAttempts {
+        nextToken
+        __typename
+      }
+      videoTestAttempts {
+        nextToken
+        __typename
+      }
+      interviews {
+        nextToken
+        __typename
+      }
+      __typename
+    }
+  }
+`;
+export const onDeleteUser = /* GraphQL */ `
+  subscription OnDeleteUser($filter: ModelSubscriptionUserFilterInput) {
+    onDeleteUser(filter: $filter) {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      company {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
+      resume
+      applications {
+        nextToken
+        __typename
+      }
+      testAttempts {
+        nextToken
+        __typename
+      }
+      videoTestAttempts {
+        nextToken
+        __typename
+      }
+      interviews {
+        nextToken
+        __typename
+      }
+      __typename
+    }
+  }
+`;
 export const onCreateCompany = /* GraphQL */ `
   subscription OnCreateCompany($filter: ModelSubscriptionCompanyFilterInput) {
     onCreateCompany(filter: $filter) {
@@ -223,192 +394,11 @@ export const onDeleteJob = /* GraphQL */ `
     }
   }
 `;
-export const onCreateUser = /* GraphQL */ `
-  subscription OnCreateUser(
-    $filter: ModelSubscriptionUserFilterInput
-    $sub: String
-  ) {
-    onCreateUser(filter: $filter, sub: $sub) {
-      id
-      sub
-      email
-      firstName
-      lastName
-      phone
-      role
-      companyId
-      company {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      isActive
-      lastLoginAt
-      createdAt
-      updatedAt
-      approvalStatus
-      approvedAt
-      approvedBy
-      approvalNotes
-      rejectedAt
-      rejectedBy
-      rejectionReason
-      resume
-      applications {
-        nextToken
-        __typename
-      }
-      testAttempts {
-        nextToken
-        __typename
-      }
-      videoTestAttempts {
-        nextToken
-        __typename
-      }
-      interviews {
-        nextToken
-        __typename
-      }
-      __typename
-    }
-  }
-`;
-export const onUpdateUser = /* GraphQL */ `
-  subscription OnUpdateUser(
-    $filter: ModelSubscriptionUserFilterInput
-    $sub: String
-  ) {
-    onUpdateUser(filter: $filter, sub: $sub) {
-      id
-      sub
-      email
-      firstName
-      lastName
-      phone
-      role
-      companyId
-      company {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      isActive
-      lastLoginAt
-      createdAt
-      updatedAt
-      approvalStatus
-      approvedAt
-      approvedBy
-      approvalNotes
-      rejectedAt
-      rejectedBy
-      rejectionReason
-      resume
-      applications {
-        nextToken
-        __typename
-      }
-      testAttempts {
-        nextToken
-        __typename
-      }
-      videoTestAttempts {
-        nextToken
-        __typename
-      }
-      interviews {
-        nextToken
-        __typename
-      }
-      __typename
-    }
-  }
-`;
-export const onDeleteUser = /* GraphQL */ `
-  subscription OnDeleteUser(
-    $filter: ModelSubscriptionUserFilterInput
-    $sub: String
-  ) {
-    onDeleteUser(filter: $filter, sub: $sub) {
-      id
-      sub
-      email
-      firstName
-      lastName
-      phone
-      role
-      companyId
-      company {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      isActive
-      lastLoginAt
-      createdAt
-      updatedAt
-      approvalStatus
-      approvedAt
-      approvedBy
-      approvalNotes
-      rejectedAt
-      rejectedBy
-      rejectionReason
-      resume
-      applications {
-        nextToken
-        __typename
-      }
-      testAttempts {
-        nextToken
-        __typename
-      }
-      videoTestAttempts {
-        nextToken
-        __typename
-      }
-      interviews {
-        nextToken
-        __typename
-      }
-      __typename
-    }
-  }
-`;
 export const onCreateApplication = /* GraphQL */ `
   subscription OnCreateApplication(
     $filter: ModelSubscriptionApplicationFilterInput
-    $candidateId: String
   ) {
-    onCreateApplication(filter: $filter, candidateId: $candidateId) {
+    onCreateApplication(filter: $filter) {
       id
       candidateId
       candidate {
@@ -483,9 +473,8 @@ export const onCreateApplication = /* GraphQL */ `
 export const onUpdateApplication = /* GraphQL */ `
   subscription OnUpdateApplication(
     $filter: ModelSubscriptionApplicationFilterInput
-    $candidateId: String
   ) {
-    onUpdateApplication(filter: $filter, candidateId: $candidateId) {
+    onUpdateApplication(filter: $filter) {
       id
       candidateId
       candidate {
@@ -560,9 +549,8 @@ export const onUpdateApplication = /* GraphQL */ `
 export const onDeleteApplication = /* GraphQL */ `
   subscription OnDeleteApplication(
     $filter: ModelSubscriptionApplicationFilterInput
-    $candidateId: String
   ) {
-    onDeleteApplication(filter: $filter, candidateId: $candidateId) {
+    onDeleteApplication(filter: $filter) {
       id
       candidateId
       candidate {

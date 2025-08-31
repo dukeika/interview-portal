@@ -5,11 +5,101 @@ import { createApplication, updateApplication } from '@/graphql/mutations';
 import { Application, CreateApplicationInput, UpdateApplicationInput, ApplicationStatus, StageStatus } from '@/API';
 import { NotificationService } from './notificationService';
 
+
+// Simplified createApplication mutation that doesn't fetch the candidate and job relations
+const createApplicationSimplified = /* GraphQL */ `mutation CreateApplication(
+  $input: CreateApplicationInput!
+  $condition: ModelApplicationConditionInput
+) {
+  createApplication(input: $input, condition: $condition) {
+    id
+    candidateId
+    jobId
+    appliedAt
+    currentStage
+    overallStatus
+    applicationStatus
+    writtenTestStatus
+    videoTestStatus
+    interviewStatus
+    feedback
+    internalNotes
+    createdAt
+    updatedAt
+    __typename
+  }
+}`;
+
 const client = generateClient({
-  authMode: 'userPool'
+  authMode: 'apiKey'
 });
 
 export const applicationService = {
+  // Get all applications (for super admin)
+  async getAllApplications(): Promise<Application[]> {
+    try {
+      const result = await client.graphql({ 
+        query: listApplications
+      });
+      const applications = (result.data as any).listApplications.items as Application[];
+      
+      console.log(`📋 Found ${applications.length} applications, enriching with candidate and job details...`);
+      
+      // Manually enrich each application with candidate and job details
+      const enrichedApplications = await Promise.all(
+        applications.map(async (app, index) => {
+          try {
+            console.log(`🔄 Enriching application ${index + 1}/${applications.length}: ${app.id}`);
+            
+            // Get candidate details
+            let candidate = null;
+            if (app.candidateId) {
+              try {
+                const { userService } = await import('./userService');
+                candidate = await userService.getUserById(app.candidateId);
+                console.log(`✅ Found candidate: ${candidate?.firstName} ${candidate?.lastName}`);
+              } catch (err) {
+                console.warn(`⚠️ Could not fetch candidate ${app.candidateId}:`, err);
+              }
+            } else {
+              console.warn(`⚠️ Application ${app.id} has no candidateId`);
+            }
+            
+            // Get job details
+            let job = null;
+            if (app.jobId) {
+              try {
+                const { jobService } = await import('./jobService');
+                job = await jobService.getJobById(app.jobId);
+                console.log(`✅ Found job: ${job?.title} at ${job?.company?.name || 'Unknown Company'}`);
+              } catch (err) {
+                console.warn(`⚠️ Could not fetch job ${app.jobId}:`, err);
+              }
+            } else {
+              console.warn(`⚠️ Application ${app.id} has no jobId`);
+            }
+            
+            return {
+              ...app,
+              candidate,
+              job
+            } as Application;
+          } catch (err) {
+            console.warn('❌ Error enriching application:', app.id, err);
+            return app;
+          }
+        })
+      );
+      
+      console.log(`✅ Successfully enriched ${enrichedApplications.length} applications`);
+      
+      return enrichedApplications;
+    } catch (error) {
+      console.error('Error fetching all applications:', error);
+      throw error;
+    }
+  },
+
   // Get applications for a specific candidate
   async getApplicationsByCandidate(candidateId: string): Promise<Application[]> {
     try {
@@ -21,7 +111,7 @@ export const applicationService = {
           }
         }
       });
-      return result.data.listApplications.items as Application[];
+      return (result.data as any).listApplications.items as Application[];
     } catch (error) {
       console.error('Error fetching candidate applications:', error);
       throw error;
@@ -39,7 +129,7 @@ export const applicationService = {
           }
         }
       });
-      return result.data.listApplications.items as Application[];
+      return (result.data as any).listApplications.items as Application[];
     } catch (error) {
       console.error('Error fetching job applications:', error);
       throw error;
@@ -49,20 +139,28 @@ export const applicationService = {
   // Get applications for a company (all jobs under that company)
   async getApplicationsByCompany(companyId: string): Promise<Application[]> {
     try {
-      // First get all jobs for the company, then get applications for those jobs
-      // This might need to be optimized with a better query structure
+      // First get all jobs for the company
+      const { jobService } = await import('./jobService');
+      const companyJobs = await jobService.getJobsByCompany(companyId);
+      const jobIds = companyJobs.map(job => job.id);
+      
+      if (jobIds.length === 0) {
+        return []; // No jobs for this company
+      }
+      
+      // Get all applications and filter for company jobs
       const result = await client.graphql({ 
-        query: listApplications,
-        variables: {
-          filter: {
-            // We'll need to add a GSI for this or restructure the query
-            // For now, we'll fetch all and filter client-side (not ideal for production)
-          }
-        }
+        query: listApplicationsWithDetails
       });
       
-      // TODO: Implement proper company-based filtering
-      return result.data.listApplications.items as Application[];
+      const allApplications = (result.data as any).listApplications.items as Application[];
+      
+      // Filter applications that belong to jobs from this company
+      const companyApplications = allApplications.filter(app => 
+        jobIds.includes(app.jobId)
+      );
+      
+      return companyApplications;
     } catch (error) {
       console.error('Error fetching company applications:', error);
       throw error;
@@ -76,7 +174,7 @@ export const applicationService = {
         query: getApplication,
         variables: { id }
       });
-      return result.data.getApplication as Application;
+      return (result.data as any).getApplication as Application;
     } catch (error) {
       console.error('Error fetching application:', error);
       throw error;
@@ -87,30 +185,46 @@ export const applicationService = {
   async createApplication(input: CreateApplicationInput): Promise<Application> {
     try {
       const result = await client.graphql({ 
-        query: createApplication,
+        query: createApplicationSimplified,
         variables: { input }
       });
       
       const application = result.data.createApplication as Application;
       
-      // Send notification about new application
+      // Send notification about new application (temporarily disabled for debugging)
       try {
-        await NotificationService.notifyApplicationStatusChange({
-          candidateId: input.candidateId,
-          applicationId: application.id,
-          jobTitle: 'Position', // TODO: Get from job data
-          companyName: 'Company', // TODO: Get from company data  
-          oldStatus: 'Not Applied',
-          newStatus: 'Applied',
-          nextSteps: 'Your application has been submitted successfully. We will review it and get back to you soon.'
-        });
+        console.log('📬 Application notification temporarily disabled for debugging');
+        // await NotificationService.notifyApplicationStatusChange({
+        //   candidateId: input.candidateId,
+        //   applicationId: application.id,
+        //   jobTitle: 'Position', // TODO: Get from job data
+        //   companyName: 'Company', // TODO: Get from company data  
+        //   oldStatus: 'Not Applied',
+        //   newStatus: 'Applied',
+        //   nextSteps: 'Your application has been submitted successfully. We will review it and get back to you soon.'
+        // });
       } catch (notificationError) {
         console.warn('Failed to send application notification:', notificationError);
       }
       
       return application;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating application:', error);
+      
+      // Log individual GraphQL errors for debugging
+      if (error.errors && Array.isArray(error.errors)) {
+        console.error('🔍 GraphQL errors breakdown:');
+        error.errors.forEach((err: any, index: number) => {
+          console.error(`  Error ${index + 1}:`, {
+            message: err.message,
+            errorType: err.errorType,
+            errorInfo: err.errorInfo,
+            locations: err.locations,
+            path: err.path
+          });
+        });
+      }
+      
       throw error;
     }
   },

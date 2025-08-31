@@ -8,57 +8,13 @@ import VideoTestTab from "./VideoTestTab";
 import InterviewTab from "./InterviewTab";
 import CandidateProfile from "./CandidateProfile";
 import NotificationsTab from "./NotificationsTab";
+import EnhancedApplicationsTab from "./EnhancedApplicationsTab";
+import JobBrowser from "./JobBrowser";
+import NotificationSystem, { Notification } from "../shared/NotificationSystem";
 import { CandidateTabType, Job, CandidateApplication } from "./types";
 import { useAuth } from "@/contexts/AuthContext";
 import { userService } from "@/services/userService";
 
-// Job Browse Tab Component
-interface JobBrowseTabProps {
-  jobs: Job[];
-  onApply: (jobId: string) => void;
-  hasApplied: (jobId: string) => boolean;
-}
-
-function JobBrowseTab({ jobs, onApply, hasApplied }: JobBrowseTabProps) {
-  return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Browse Jobs</h2>
-      <div className="space-y-4">
-        {jobs.map((job: Job) => (
-          <div key={job.id} className="border border-gray-200 rounded-lg p-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="font-semibold text-gray-900">{job.title}</h3>
-                <p className="text-gray-600">{job.company}</p>
-                <p className="text-sm text-gray-500">
-                  {job.location} • {job.type}
-                </p>
-                {job.salary && (
-                  <p className="text-sm text-green-600 font-medium">
-                    {job.salary}
-                  </p>
-                )}
-              </div>
-              {hasApplied(job.id) ? (
-                <span className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
-                  Applied
-                </span>
-              ) : (
-                <button
-                  onClick={() => onApply(job.id)}
-                  className="px-4 py-2 bg-abhh-teal-600 text-white rounded hover:bg-abhh-teal-700"
-                >
-                  Apply
-                </button>
-              )}
-            </div>
-            <p className="text-gray-600 mt-2">{job.description}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 // Applications Tab Component
 interface ApplicationsTabProps {
@@ -196,6 +152,7 @@ export default function CandidateDashboard() {
     string | null
   >(null);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const { user } = useAuth();
   const { jobs, applications, stats, loading, applyToJob, hasApplied } =
@@ -258,23 +215,64 @@ export default function CandidateDashboard() {
     setActiveTab("interview");
   };
 
+  const handleTakeTest = (applicationId: string, testType: 'written' | 'video') => {
+    if (testType === 'written') {
+      handleStartTest(applicationId);
+    } else {
+      handleStartVideoTest(applicationId);
+    }
+  };
+
+  const handleMarkNotificationRead = (notificationId: string) => {
+    setNotifications(prev => 
+      prev.map(n => n.id === notificationId ? { ...n, read: true } : n)
+    );
+  };
+
+  const handleMarkAllNotificationsRead = () => {
+    setNotifications(prev => 
+      prev.map(n => ({ ...n, read: true }))
+    );
+  };
+
+  const handleDeleteNotification = (notificationId: string) => {
+    setNotifications(prev => 
+      prev.filter(n => n.id !== notificationId)
+    );
+  };
+
+  const handleNotificationAction = (notification: Notification) => {
+    if (notification.actionUrl) {
+      if (notification.actionUrl.includes('/test/written/')) {
+        const applicationId = notification.applicationId;
+        if (applicationId) handleStartTest(applicationId);
+      } else if (notification.actionUrl.includes('/test/video/')) {
+        const applicationId = notification.applicationId;
+        if (applicationId) handleStartVideoTest(applicationId);
+      } else if (notification.actionUrl.includes('/interview/')) {
+        const applicationId = notification.applicationId;
+        if (applicationId) handleJoinInterview(applicationId);
+      }
+    }
+  };
+
   const renderActiveTab = () => {
     switch (activeTab) {
       case "browse":
         return (
-          <JobBrowseTab
+          <JobBrowser
             jobs={jobs}
             onApply={applyToJob}
             hasApplied={hasApplied}
+            loading={loading}
           />
         );
       case "applications":
         return (
-          <ApplicationsTab
+          <EnhancedApplicationsTab
             applications={applications}
-            onStartTest={handleStartTest}
-            onStartVideoTest={handleStartVideoTest}
-            onJoinInterview={handleJoinInterview}
+            onTakeTest={handleTakeTest}
+            onRefresh={() => window.location.reload()}
           />
         );
       case "test":
@@ -321,7 +319,19 @@ export default function CandidateDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <CandidateDashboardHeader />
+      <div className="relative">
+        <CandidateDashboardHeader />
+        <div className="absolute top-4 right-8 z-50">
+          <NotificationSystem
+            notifications={notifications}
+            onMarkAsRead={handleMarkNotificationRead}
+            onMarkAllAsRead={handleMarkAllNotificationsRead}
+            onDeleteNotification={handleDeleteNotification}
+            onActionClick={handleNotificationAction}
+            userRole="candidate"
+          />
+        </div>
+      </div>
       <CandidateDashboardNavigation
         activeTab={activeTab}
         setActiveTab={setActiveTab}

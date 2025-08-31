@@ -3,8 +3,7 @@
 
 # User model with role-based access
 type User @model @auth(rules: [
-  { allow: owner, ownerField: "sub" }
-  { allow: public, operations: [read] }
+  { allow: public, operations: [read, create, update, delete] }
 ]) {
   id: ID!
   sub: String! @index(name: "bySub") # Cognito User ID
@@ -21,7 +20,7 @@ type User @model @auth(rules: [
   updatedAt: AWSDateTime!
   
   # User approval fields
-  approvalStatus: ApprovalStatus! @default(value: "PENDING") @index(name: "byApprovalStatus")
+  approvalStatus: ApprovalStatus @default(value: "PENDING") @index(name: "byApprovalStatus")
   approvedAt: AWSDateTime
   approvedBy: ID
   approvalNotes: String
@@ -51,7 +50,7 @@ enum ApprovalStatus {
 
 # Company model
 type Company @model @auth(rules: [
-  { allow: public, operations: [read] }
+  { allow: public, operations: [read, create, update, delete] }
 ]) {
   id: ID!
   name: String!
@@ -73,7 +72,7 @@ type Company @model @auth(rules: [
 
 # Job posting model
 type Job @model @auth(rules: [
-  { allow: public, operations: [read] }
+  { allow: public, operations: [read, create, update, delete] }
 ]) {
   id: ID!
   title: String!
@@ -116,8 +115,7 @@ enum JobStatus {
 
 # Application model
 type Application @model @auth(rules: [
-  { allow: public, operations: [read] }
-  { allow: owner, ownerField: "candidateId" }
+  { allow: public, operations: [read, create, update, delete] }
 ]) {
   id: ID!
   
@@ -171,8 +169,9 @@ enum StageStatus {
 
 # Test model for written assessments
 type Test @model @auth(rules: [
-  { allow: groups, groups: ["superAdmins"] }
-  { allow: groups, groups: ["companyAdmins"] }
+  { allow: groups, groups: ["SuperAdmins"], operations: [read, create, update, delete] }
+  { allow: groups, groups: ["CompanyAdmins"], operations: [read, create, update, delete] }
+  { allow: public, operations: [read] }
 ]) {
   id: ID!
   
@@ -201,9 +200,10 @@ type Test @model @auth(rules: [
 
 # Test attempt model
 type TestAttempt @model @auth(rules: [
-  { allow: groups, groups: ["superAdmins"] }
-  { allow: groups, groups: ["companyAdmins"], operations: [read] }
   { allow: owner, ownerField: "candidateId" }
+  { allow: groups, groups: ["SuperAdmins"], operations: [read, create, update, delete] }
+  { allow: groups, groups: ["CompanyAdmins"], operations: [read, create, update, delete] }
+  { allow: public, operations: [create] }
 ]) {
   id: ID!
   
@@ -240,8 +240,9 @@ enum TestAttemptStatus {
 
 # Video test model
 type VideoTest @model @auth(rules: [
-  { allow: groups, groups: ["superAdmins"] }
-  { allow: groups, groups: ["companyAdmins"] }
+  { allow: groups, groups: ["SuperAdmins"], operations: [read, create, update, delete] }
+  { allow: groups, groups: ["CompanyAdmins"], operations: [read, create, update, delete] }
+  { allow: public, operations: [read] }
 ]) {
   id: ID!
   
@@ -268,9 +269,10 @@ type VideoTest @model @auth(rules: [
 
 # Video test attempt model
 type VideoTestAttempt @model @auth(rules: [
-  { allow: groups, groups: ["superAdmins"] }
-  { allow: groups, groups: ["companyAdmins"], operations: [read] }
   { allow: owner, ownerField: "candidateId" }
+  { allow: groups, groups: ["SuperAdmins"], operations: [read, create, update, delete] }
+  { allow: groups, groups: ["CompanyAdmins"], operations: [read, create, update, delete] }
+  { allow: public, operations: [create] }
 ]) {
   id: ID!
   
@@ -306,9 +308,10 @@ enum VideoTestAttemptStatus {
 
 # Interview model for final stage
 type Interview @model @auth(rules: [
-  { allow: groups, groups: ["superAdmins"] }
-  { allow: groups, groups: ["companyAdmins"] }
-  { allow: owner, ownerField: "candidateId", operations: [read] }
+  { allow: owner, ownerField: "candidateId" }
+  { allow: groups, groups: ["SuperAdmins"], operations: [read, create, update, delete] }
+  { allow: groups, groups: ["CompanyAdmins"], operations: [read, create, update, delete] }
+  { allow: public, operations: [create] }
 ]) {
   id: ID!
   

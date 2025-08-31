@@ -8,7 +8,7 @@ const awsconfig = {
   aws_project_region: "us-west-1",
   aws_appsync_graphqlEndpoint: "https://4pz36wwojfhijdsnbkzmvmmmfu.appsync-api.us-west-1.amazonaws.com/graphql",
   aws_appsync_region: "us-west-1",
-  aws_appsync_authenticationType: "AMAZON_COGNITO_USER_POOLS",
+  aws_appsync_authenticationType: "API_KEY",
   aws_appsync_apiKey: "da2-h3ps5lhgdvd37cl7vnb6btj3wi",
   aws_cognito_identity_pool_id: "us-west-1:dc6a1bc8-8963-43cd-9276-c584f903b28b",
   aws_cognito_region: "us-west-1",

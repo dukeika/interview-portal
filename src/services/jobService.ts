@@ -5,10 +5,23 @@ import { createJob, updateJob, deleteJob } from '@/graphql/mutations';
 import { Job, CreateJobInput, UpdateJobInput, JobStatus } from '@/API';
 
 const client = generateClient({
-  authMode: 'userPool'
+  authMode: 'apiKey'
 });
 
 export const jobService = {
+  // Get all jobs (for super admin)
+  async getAllJobs(): Promise<Job[]> {
+    try {
+      const result = await client.graphql({ 
+        query: listJobs
+      });
+      return result.data.listJobs.items as Job[];
+    } catch (error) {
+      console.error('Error fetching all jobs:', error);
+      throw error;
+    }
+  },
+
   // Get all active jobs for candidates
   async getActiveJobs(): Promise<Job[]> {
     try {
@@ -62,13 +75,20 @@ export const jobService = {
   // Create a new job (company admin only)
   async createJob(input: CreateJobInput): Promise<Job> {
     try {
+      console.log('🔍 Creating job with input:', input);
       const result = await client.graphql({ 
         query: createJob,
         variables: { input }
       });
+      console.log('✅ Job creation result:', result);
       return result.data.createJob as Job;
-    } catch (error) {
-      console.error('Error creating job:', error);
+    } catch (error: any) {
+      console.error('❌ Error creating job:', error);
+      console.error('❌ Error details:', {
+        message: error.message,
+        errors: error.errors,
+        data: error.data
+      });
       throw error;
     }
   },

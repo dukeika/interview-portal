@@ -9,6 +9,8 @@ interface AddCompanyModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (companyData: CompanyFormData) => Promise<void>;
+  initialData?: Partial<CompanyFormData>;
+  title?: string;
 }
 
 interface CompanyFormData {
@@ -24,14 +26,16 @@ export default function AddCompanyModal({
   isOpen,
   onClose,
   onSubmit,
+  initialData,
+  title = "Add New Company",
 }: AddCompanyModalProps) {
   const [formData, setFormData] = useState<CompanyFormData>({
-    name: "",
-    email: "",
-    phone: "",
-    website: "",
-    address: "",
-    description: "",
+    name: initialData?.name || "",
+    email: initialData?.email || "",
+    phone: initialData?.phone || "",
+    website: initialData?.website || "",
+    address: initialData?.address || "",
+    description: initialData?.description || "",
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<CompanyFormData>>({});
@@ -114,7 +118,7 @@ export default function AddCompanyModal({
             <div className="flex items-center">
               <Building className="w-6 h-6 text-blue-600 mr-3" />
               <h3 className="text-lg font-semibold text-gray-900">
-                Add New Company
+                {title}
               </h3>
             </div>
             <button
@@ -138,7 +142,7 @@ export default function AddCompanyModal({
                   type="text"
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
-                  className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                  className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 ${
                     errors.name ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Enter company name"
@@ -160,7 +164,7 @@ export default function AddCompanyModal({
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                  className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 ${
                     errors.email ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Enter company email"
@@ -182,7 +186,7 @@ export default function AddCompanyModal({
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => handleInputChange("phone", e.target.value)}
-                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400"
                   placeholder="Enter phone number"
                 />
               </div>
@@ -199,7 +203,7 @@ export default function AddCompanyModal({
                   type="url"
                   value={formData.website}
                   onChange={(e) => handleInputChange("website", e.target.value)}
-                  className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                  className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 ${
                     errors.website ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="https://company-website.com"
@@ -221,7 +225,7 @@ export default function AddCompanyModal({
                   value={formData.address}
                   onChange={(e) => handleInputChange("address", e.target.value)}
                   rows={3}
-                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none bg-white text-gray-900 placeholder-gray-400"
                   placeholder="Enter company address"
                 />
               </div>
@@ -238,7 +242,7 @@ export default function AddCompanyModal({
                   value={formData.description}
                   onChange={(e) => handleInputChange("description", e.target.value)}
                   rows={4}
-                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none bg-white text-gray-900 placeholder-gray-400"
                   placeholder="Enter company description"
                 />
               </div>

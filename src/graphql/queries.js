@@ -1,6 +1,98 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getUser = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      sub
+      email
+      firstName
+      lastName
+      phone
+      role
+      companyId
+      company {
+        id
+        name
+        email
+        phone
+        address
+        website
+        logo
+        description
+        isActive
+        createdAt
+        updatedAt
+        __typename
+      }
+      isActive
+      lastLoginAt
+      createdAt
+      updatedAt
+      approvalStatus
+      approvedAt
+      approvedBy
+      approvalNotes
+      rejectedAt
+      rejectedBy
+      rejectionReason
+      resume
+      applications {
+        nextToken
+        __typename
+      }
+      testAttempts {
+        nextToken
+        __typename
+      }
+      videoTestAttempts {
+        nextToken
+        __typename
+      }
+      interviews {
+        nextToken
+        __typename
+      }
+      __typename
+    }
+  }
+`;
+export const listUsers = /* GraphQL */ `
+  query ListUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        sub
+        email
+        firstName
+        lastName
+        phone
+        role
+        companyId
+        isActive
+        lastLoginAt
+        createdAt
+        updatedAt
+        approvalStatus
+        approvedAt
+        approvedBy
+        approvalNotes
+        rejectedAt
+        rejectedBy
+        rejectionReason
+        resume
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
 export const getCompany = /* GraphQL */ `
   query GetCompany($id: ID!) {
     getCompany(id: $id) {
@@ -131,143 +223,12 @@ export const listJobs = /* GraphQL */ `
     }
   }
 `;
-export const companiesByEmail = /* GraphQL */ `
-  query CompaniesByEmail(
-    $email: String!
-    $sortDirection: ModelSortDirection
-    $filter: ModelCompanyFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    companiesByEmail(
-      email: $email
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const jobsByCompanyId = /* GraphQL */ `
-  query JobsByCompanyId(
-    $companyId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelJobFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    jobsByCompanyId(
-      companyId: $companyId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        title
-        department
-        location
-        type
-        salary
-        description
-        requirements
-        responsibilities
-        benefits
-        status
-        companyId
-        createdAt
-        updatedAt
-        closingDate
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!) {
-    getUser(id: $id) {
+export const getApplication = /* GraphQL */ `
+  query GetApplication($id: ID!) {
+    getApplication(id: $id) {
       id
-      sub
-      email
-      firstName
-      lastName
-      phone
-      role
-      companyId
-      company {
-        id
-        name
-        email
-        phone
-        address
-        website
-        logo
-        description
-        isActive
-        createdAt
-        updatedAt
-        __typename
-      }
-      isActive
-      lastLoginAt
-      createdAt
-      updatedAt
-      approvalStatus
-      approvedAt
-      approvedBy
-      approvalNotes
-      rejectedAt
-      rejectedBy
-      rejectionReason
-      resume
-      applications {
-        nextToken
-        __typename
-      }
-      testAttempts {
-        nextToken
-        __typename
-      }
-      videoTestAttempts {
-        nextToken
-        __typename
-      }
-      interviews {
-        nextToken
-        __typename
-      }
-      __typename
-    }
-  }
-`;
-export const listUsers = /* GraphQL */ `
-  query ListUsers(
-    $filter: ModelUserFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
+      candidateId
+      candidate {
         id
         sub
         email
@@ -288,6 +249,76 @@ export const listUsers = /* GraphQL */ `
         rejectedBy
         rejectionReason
         resume
+        __typename
+      }
+      jobId
+      job {
+        id
+        title
+        department
+        location
+        type
+        salary
+        description
+        requirements
+        responsibilities
+        benefits
+        status
+        companyId
+        createdAt
+        updatedAt
+        closingDate
+        __typename
+      }
+      appliedAt
+      currentStage
+      overallStatus
+      applicationStatus
+      writtenTestStatus
+      videoTestStatus
+      interviewStatus
+      feedback
+      internalNotes
+      testAttempts {
+        nextToken
+        __typename
+      }
+      videoTestAttempts {
+        nextToken
+        __typename
+      }
+      interviews {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listApplications = /* GraphQL */ `
+  query ListApplications(
+    $filter: ModelApplicationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listApplications(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        candidateId
+        jobId
+        appliedAt
+        currentStage
+        overallStatus
+        applicationStatus
+        writtenTestStatus
+        videoTestStatus
+        interviewStatus
+        feedback
+        internalNotes
+        createdAt
+        updatedAt
         __typename
       }
       nextToken
@@ -467,36 +498,56 @@ export const usersByApprovalStatus = /* GraphQL */ `
     }
   }
 `;
-export const getApplication = /* GraphQL */ `
-  query GetApplication($id: ID!) {
-    getApplication(id: $id) {
-      id
-      candidateId
-      candidate {
+export const companiesByEmail = /* GraphQL */ `
+  query CompaniesByEmail(
+    $email: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCompanyFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    companiesByEmail(
+      email: $email
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
         id
-        sub
+        name
         email
-        firstName
-        lastName
         phone
-        role
-        companyId
+        address
+        website
+        logo
+        description
         isActive
-        lastLoginAt
         createdAt
         updatedAt
-        approvalStatus
-        approvedAt
-        approvedBy
-        approvalNotes
-        rejectedAt
-        rejectedBy
-        rejectionReason
-        resume
         __typename
       }
-      jobId
-      job {
+      nextToken
+      __typename
+    }
+  }
+`;
+export const jobsByCompanyId = /* GraphQL */ `
+  query JobsByCompanyId(
+    $companyId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelJobFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    jobsByCompanyId(
+      companyId: $companyId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
         id
         title
         department
@@ -512,57 +563,6 @@ export const getApplication = /* GraphQL */ `
         createdAt
         updatedAt
         closingDate
-        __typename
-      }
-      appliedAt
-      currentStage
-      overallStatus
-      applicationStatus
-      writtenTestStatus
-      videoTestStatus
-      interviewStatus
-      feedback
-      internalNotes
-      testAttempts {
-        nextToken
-        __typename
-      }
-      videoTestAttempts {
-        nextToken
-        __typename
-      }
-      interviews {
-        nextToken
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const listApplications = /* GraphQL */ `
-  query ListApplications(
-    $filter: ModelApplicationFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listApplications(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        candidateId
-        jobId
-        appliedAt
-        currentStage
-        overallStatus
-        applicationStatus
-        writtenTestStatus
-        videoTestStatus
-        interviewStatus
-        feedback
-        internalNotes
-        createdAt
-        updatedAt
         __typename
       }
       nextToken

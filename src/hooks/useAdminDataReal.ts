@@ -2,7 +2,8 @@
 import { useState, useEffect } from "react";
 import { generateClient } from "aws-amplify/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { listCompanies, listUsers, listJobs, listApplications } from "@/graphql/queries";
+import { listUsers, listJobs, listApplications } from "@/graphql/queries";
+import { companyService } from "@/services/companyService";
 import { UserRole, ApprovalStatus } from "@/API";
 import {
   Company,
@@ -32,16 +33,17 @@ export function useAdminDataReal() {
   const [recentActivity, setRecentActivity] = useState<ActivityLog[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchCompanies = async () => {
+  const fetchCompanies = async (adminsData?: CompanyAdmin[]) => {
     try {
-      const response = await client.graphql({
-        query: listCompanies,
-        variables: {
-          limit: 1000,
-        },
-      });
-
-      const companiesData = response.data.listCompanies.items;
+      // Use companyService instead of direct GraphQL call for consistency
+      const companiesData = await companyService.getAllCompanies();
+      
+      // Calculate admin counts from admins data if available
+      const adminCountByCompany = adminsData ? 
+        adminsData.reduce((counts, admin) => {
+          counts[admin.companyId] = (counts[admin.companyId] || 0) + 1;
+          return counts;
+        }, {} as Record<string, number>) : {};
       
       // Transform GraphQL data to component format
       const transformedCompanies: Company[] = companiesData.map((company: any) => ({
@@ -56,20 +58,21 @@ export function useAdminDataReal() {
         isActive: company.isActive,
         createdAt: company.createdAt,
         updatedAt: company.updatedAt,
-        adminCount: company.admins?.items?.length || 0,
+        adminCount: adminCountByCompany[company.id] || 0,
         jobCount: company.jobs?.items?.length || 0,
         applicationCount: 0, // Will be calculated separately
       }));
-
       setCompanies(transformedCompanies);
       return transformedCompanies;
     } catch (error) {
       handleError('Failed to fetch companies', error);
+      // Set empty array instead of leaving previous data
+      setCompanies([]);
       return [];
     }
   };
 
-  const fetchCompanyAdmins = async () => {
+  const fetchCompanyAdmins = async (companiesData: Company[]) => {
     try {
       const response = await client.graphql({
         query: listUsers,
@@ -84,6 +87,12 @@ export function useAdminDataReal() {
 
       const adminsData = response.data.listUsers.items;
       
+      console.log('📊 Raw admin data from GraphQL:', adminsData);
+      console.log('📊 Number of admins found:', adminsData.length);
+      
+      // Create company lookup map for efficient name resolution
+      const companyLookup = new Map(companiesData.map(company => [company.id, company.name]));
+      
       // Transform GraphQL data to component format
       const transformedAdmins: CompanyAdmin[] = adminsData.map((admin: any) => ({
         id: admin.id,
@@ -94,11 +103,12 @@ export function useAdminDataReal() {
         phone: admin.phone || '',
         isActive: admin.isActive,
         companyId: admin.companyId || '',
-        companyName: admin.company?.name || '',
+        companyName: companyLookup.get(admin.companyId) || 'Unknown Company',
         createdAt: admin.createdAt,
         lastLoginAt: admin.lastLoginAt || null,
       }));
 
+      console.log('✅ Transformed admins with company names:', transformedAdmins);
       setCompanyAdmins(transformedAdmins);
       return transformedAdmins;
     } catch (error) {
@@ -200,12 +210,18 @@ export function useAdminDataReal() {
 
     try {
       setLoading(true);
+      
+      // Clear any demo mode remnants
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('demo_user');
+      }
 
-      // Fetch all data in parallel
-      const [companiesData, adminsData] = await Promise.all([
-        fetchCompanies(),
-        fetchCompanyAdmins(),
-      ]);
+      // Fetch companies first, then admins (so we can populate company names)
+      const initialCompaniesData = await fetchCompanies();
+      const adminsData = await fetchCompanyAdmins(initialCompaniesData);
+      
+      // Re-fetch companies with correct admin counts now that we have admins data
+      const companiesData = await fetchCompanies(adminsData);
 
       // Calculate stats based on fetched data
       await fetchPlatformStats(companiesData, adminsData);

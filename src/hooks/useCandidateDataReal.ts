@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { jobService } from "@/services/jobService";
 import { applicationService } from "@/services/applicationService";
-import { Job, Application } from "@/API";
+import { Job, Application, StageStatus } from "@/API";
+import { CandidateApplication, ApplicationStage, TestStage, InterviewStage } from "@/components/candidate/types";
 
 // Type transformations from GraphQL types to component types
 interface TransformedJob {
@@ -24,24 +25,6 @@ interface TransformedJob {
   companyLogo?: string;
 }
 
-interface TransformedApplication {
-  id: string;
-  jobId: string;
-  jobTitle: string;
-  company: string;
-  appliedAt: string;
-  currentStage: 1 | 2 | 3 | 4;
-  stageStatus: "pending" | "in_progress" | "completed" | "failed";
-  overallStatus: "active" | "rejected" | "hired" | "withdrawn";
-  stages: {
-    application: { status: string; completedAt?: string };
-    written_test: { status: string; completedAt?: string; score?: number };
-    video_test: { status: string; completedAt?: string; score?: number };
-    interview: { status: string; scheduledAt?: string };
-  };
-  nextAction?: string;
-  feedback?: string;
-}
 
 interface CandidateStats {
   totalApplications: number;
@@ -71,7 +54,7 @@ const transformJob = (job: Job): TransformedJob => ({
 });
 
 // Transform GraphQL Application to component Application
-const transformApplication = (app: Application): TransformedApplication => ({
+const transformApplication = (app: Application): CandidateApplication => ({
   id: app.id,
   jobId: app.jobId,
   jobTitle: app.job?.title || "Unknown Job",
@@ -79,27 +62,46 @@ const transformApplication = (app: Application): TransformedApplication => ({
   appliedAt: app.appliedAt,
   currentStage: app.currentStage as 1 | 2 | 3 | 4,
   stageStatus: getStageStatus(app),
-  overallStatus: app.overallStatus.toLowerCase() as "active" | "rejected" | "hired" | "withdrawn",
+  overallStatus: mapOverallStatus(app.overallStatus),
   stages: {
-    application: { 
-      status: app.applicationStatus.toLowerCase().replace('_', '_'),
-      completedAt: app.appliedAt 
-    },
-    written_test: { 
-      status: app.writtenTestStatus.toLowerCase().replace('_', '_'),
-      // TODO: Add score from test attempts
-    },
-    video_test: { 
-      status: app.videoTestStatus.toLowerCase().replace('_', '_'),
-      // TODO: Add score from video test attempts
-    },
-    interview: { 
-      status: app.interviewStatus.toLowerCase().replace('_', '_'),
-      // TODO: Add scheduled time from interviews
-    }
+    application: mapApplicationStage(app.applicationStatus, app.appliedAt),
+    written_test: mapTestStage(app.writtenTestStatus),
+    video_test: mapTestStage(app.videoTestStatus),
+    interview: mapInterviewStage(app.interviewStatus)
   },
   nextAction: getNextAction(app),
   feedback: app.feedback || undefined,
+});
+
+// Helper functions to map GraphQL enums to component interfaces
+const mapOverallStatus = (status: string): "active" | "rejected" | "hired" | "withdrawn" => {
+  switch (status?.toUpperCase()) {
+    case 'HIRED':
+      return 'hired';
+    case 'REJECTED':
+      return 'rejected';
+    case 'WITHDRAWN':
+      return 'withdrawn';
+    case 'ACTIVE':
+    default:
+      return 'active';
+  }
+};
+
+const mapApplicationStage = (status: StageStatus, completedAt?: string): ApplicationStage => ({
+  status: status === StageStatus.COMPLETED ? 'completed' : 'pending',
+  completedAt
+});
+
+const mapTestStage = (status: StageStatus): TestStage => ({
+  status: status === StageStatus.COMPLETED ? 'completed' : 
+          status === StageStatus.IN_PROGRESS ? 'pending' : 'not_started'
+});
+
+const mapInterviewStage = (status: StageStatus): InterviewStage => ({
+  status: status === StageStatus.COMPLETED ? 'completed' :
+          status === StageStatus.SCHEDULED ? 'scheduled' :
+          status === StageStatus.IN_PROGRESS ? 'pending' : 'not_started'
 });
 
 // Helper function to determine stage status
@@ -108,16 +110,16 @@ const getStageStatus = (app: Application): "pending" | "in_progress" | "complete
   
   switch (stage) {
     case 1:
-      return app.applicationStatus === 'COMPLETED' ? 'completed' : 'pending';
+      return app.applicationStatus === StageStatus.COMPLETED ? 'completed' : 'pending';
     case 2:
-      return app.writtenTestStatus === 'COMPLETED' ? 'completed' : 
-             app.writtenTestStatus === 'IN_PROGRESS' ? 'in_progress' : 'pending';
+      return app.writtenTestStatus === StageStatus.COMPLETED ? 'completed' : 
+             app.writtenTestStatus === StageStatus.IN_PROGRESS ? 'in_progress' : 'pending';
     case 3:
-      return app.videoTestStatus === 'COMPLETED' ? 'completed' : 
-             app.videoTestStatus === 'IN_PROGRESS' ? 'in_progress' : 'pending';
+      return app.videoTestStatus === StageStatus.COMPLETED ? 'completed' : 
+             app.videoTestStatus === StageStatus.IN_PROGRESS ? 'in_progress' : 'pending';
     case 4:
-      return app.interviewStatus === 'COMPLETED' ? 'completed' : 
-             app.interviewStatus === 'IN_PROGRESS' ? 'in_progress' : 'pending';
+      return app.interviewStatus === StageStatus.COMPLETED ? 'completed' : 
+             app.interviewStatus === StageStatus.IN_PROGRESS ? 'in_progress' : 'pending';
     default:
       return 'pending';
   }
@@ -129,15 +131,15 @@ const getNextAction = (app: Application): string => {
     case 1:
       return "Wait for application review";
     case 2:
-      return app.writtenTestStatus === 'PENDING' 
+      return app.writtenTestStatus === StageStatus.PENDING 
         ? "Complete written assessment" 
         : "Wait for test results";
     case 3:
-      return app.videoTestStatus === 'PENDING' 
+      return app.videoTestStatus === StageStatus.PENDING 
         ? "Record video responses" 
         : "Wait for video review";
     case 4:
-      return app.interviewStatus === 'SCHEDULED' 
+      return app.interviewStatus === StageStatus.SCHEDULED 
         ? "Attend interview" 
         : "Wait for interview scheduling";
     default:
@@ -148,7 +150,7 @@ const getNextAction = (app: Application): string => {
 export function useCandidateData() {
   const { user } = useAuth();
   const [jobs, setJobs] = useState<TransformedJob[]>([]);
-  const [applications, setApplications] = useState<TransformedApplication[]>([]);
+  const [applications, setApplications] = useState<CandidateApplication[]>([]);
   const [stats, setStats] = useState<CandidateStats>({
     totalApplications: 0,
     activeApplications: 0,
@@ -170,7 +172,7 @@ export function useCandidateData() {
       setError(null);
 
       try {
-        // Load jobs and applications in parallel
+        // Load real data from GraphQL
         const [jobsData, applicationsData] = await Promise.all([
           jobService.getActiveJobs(),
           applicationService.getApplicationsByCandidate(user.userId || user.username),

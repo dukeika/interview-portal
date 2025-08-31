@@ -2,11 +2,10 @@
 "use client";
 
 import React, { useState } from 'react';
-import { User, Mail, Phone, Building2, Eye, EyeOff, Lock } from 'lucide-react';
+import { User, Mail, Phone, Eye, EyeOff, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { signUp, confirmSignUp } from 'aws-amplify/auth';
+import { signUp, confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
 import { userService } from '@/services/userService';
-import { companyService } from '@/services/companyService';
 import { UserRole, ApprovalStatus } from '@/API';
 
 export interface RegistrationData {
@@ -16,12 +15,6 @@ export interface RegistrationData {
   firstName: string;
   lastName: string;
   phone?: string;
-  userType: 'candidate' | 'company';
-  // Company-specific fields
-  companyName?: string;
-  companyWebsite?: string;
-  companyPhone?: string;
-  companyAddress?: string;
 }
 
 export interface RegistrationFormProps {
@@ -37,6 +30,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
 }) => {
   const [step, setStep] = useState<'register' | 'confirm'>('register');
   const [isLoading, setIsLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [confirmationCode, setConfirmationCode] = useState('');
@@ -46,14 +40,34 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    phone: '',
-    userType: 'candidate',
-    companyName: '',
-    companyWebsite: '',
-    companyPhone: '',
-    companyAddress: ''
+    phone: ''
   });
   const [errors, setErrors] = useState<Partial<RegistrationData>>({});
+
+  const formatPhoneNumber = (phone: string): string => {
+    if (!phone || !phone.trim()) return '';
+    
+    // Remove all non-digits
+    let digits = phone.replace(/\D/g, '');
+    
+    // If it starts with 1 and has 11 digits, it's likely US/Canada
+    if (digits.length === 11 && digits.startsWith('1')) {
+      return `+${digits}`;
+    }
+    
+    // If it has 10 digits, assume US/Canada and add +1
+    if (digits.length === 10) {
+      return `+1${digits}`;
+    }
+    
+    // If it has more than 10 digits, assume it includes country code
+    if (digits.length > 10) {
+      return `+${digits}`;
+    }
+    
+    // If less than 10 digits, return as is with + (user might still be typing)
+    return digits.length > 0 ? `+${digits}` : '';
+  };
 
   const handleInputChange = (field: keyof RegistrationData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -102,15 +116,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
       newErrors.phone = 'Please enter a valid phone number';
     }
 
-    // Company-specific validation
-    if (formData.userType === 'company') {
-      if (!formData.companyName?.trim()) {
-        newErrors.companyName = 'Company name is required';
-      }
-      if (formData.companyWebsite && !/^https?:\/\/.+/.test(formData.companyWebsite)) {
-        newErrors.companyWebsite = 'Please enter a valid website URL (including http:// or https://)';
-      }
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -124,6 +129,10 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     setIsLoading(true);
     
     try {
+      // Format phone number for Cognito (E.164 format)
+      const formattedPhone = formData.phone ? formatPhoneNumber(formData.phone) : undefined;
+      console.log('📞 Phone formatting:', formData.phone, '->', formattedPhone);
+
       // Step 1: Create Cognito user
       await signUp({
         username: formData.email,
@@ -133,7 +142,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             email: formData.email,
             given_name: formData.firstName,
             family_name: formData.lastName,
-            phone_number: formData.phone || undefined
+            ...(formattedPhone && { phone_number: formattedPhone })
           }
         }
       });
@@ -166,34 +175,32 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
         confirmationCode: confirmationCode.trim()
       });
 
-      // Step 2: Create user record in our database
-      await userService.createUser({
-        sub: '', // This will be set after first login
-        email: formData.email,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        phone: formData.phone || undefined,
-        role: formData.userType === 'company' ? UserRole.COMPANY_ADMIN : UserRole.CANDIDATE,
-        isActive: true,
-        approvalStatus: ApprovalStatus.PENDING
-      });
+      console.log('✅ Email confirmed successfully:', result);
 
-      // Step 3: If company registration, create company record
-      if (formData.userType === 'company' && formData.companyName) {
-        await companyService.createCompany({
-          name: formData.companyName,
-          email: formData.email, // Use admin email as company email
-          phone: formData.companyPhone,
-          address: formData.companyAddress,
-          website: formData.companyWebsite,
-          description: '',
-          isActive: true
-        });
-      }
-
+      // The user record will be created automatically when they first log in
+      // through the AuthContext ensureUserRecord function
+      
       onSuccess?.();
     } catch (error: any) {
       console.error('Confirmation error:', error);
+      
+      // Handle specific error cases
+      if (error.name === 'NotAuthorizedException' && error.message.includes('Current status is CONFIRMED')) {
+        console.log('✅ User already confirmed, proceeding to success');
+        onSuccess?.();
+        return;
+      }
+      
+      if (error.name === 'CodeMismatchException') {
+        onError?.('Invalid confirmation code. Please check the code and try again.');
+        return;
+      }
+      
+      if (error.name === 'ExpiredCodeException') {
+        onError?.('Confirmation code has expired. Please request a new one.');
+        return;
+      }
+      
       const errorMessage = error.message || 'Confirmation failed. Please try again.';
       onError?.(errorMessage);
     } finally {
@@ -201,41 +208,32 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     }
   };
 
+  const handleResendCode = async () => {
+    setIsResending(true);
+    
+    try {
+      await resendSignUpCode({
+        username: formData.email
+      });
+      
+      console.log('✅ Confirmation code resent successfully');
+      // Show success message briefly - could be improved with a toast notification
+      alert('Confirmation code resent! Check your email.');
+    } catch (error: any) {
+      console.error('Resend code error:', error);
+      onError?.('Failed to resend code. Please try again.');
+    } finally {
+      setIsResending(false);
+    }
+  };
+
   const renderRegistrationForm = () => (
     <form onSubmit={handleRegister} className="space-y-6">
-      {/* User Type Selection */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          I want to register as:
-        </label>
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            type="button"
-            onClick={() => handleInputChange('userType', 'candidate')}
-            className={`p-4 border-2 rounded-lg text-center transition-colors ${
-              formData.userType === 'candidate'
-                ? 'border-blue-500 bg-blue-50 text-blue-700'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-          >
-            <User className="w-8 h-8 mx-auto mb-2" />
-            <div className="font-medium">Job Seeker</div>
-            <div className="text-xs text-gray-500">Looking for opportunities</div>
-          </button>
-          <button
-            type="button"
-            onClick={() => handleInputChange('userType', 'company')}
-            className={`p-4 border-2 rounded-lg text-center transition-colors ${
-              formData.userType === 'company'
-                ? 'border-blue-500 bg-blue-50 text-blue-700'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-          >
-            <Building2 className="w-8 h-8 mx-auto mb-2" />
-            <div className="font-medium">Employer</div>
-            <div className="text-xs text-gray-500">Hiring candidates</div>
-          </button>
-        </div>
+      {/* Candidate Registration Header */}
+      <div className="text-center mb-6">
+        <User className="w-12 h-12 mx-auto mb-3 text-blue-500" />
+        <h3 className="text-lg font-medium text-gray-900">Join as a Candidate</h3>
+        <p className="text-sm text-gray-600">Create your account to search and apply for jobs</p>
       </div>
 
       {/* Basic Information */}
@@ -248,7 +246,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             type="text"
             value={formData.firstName}
             onChange={(e) => handleInputChange('firstName', e.target.value)}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-500 ${
               errors.firstName ? 'border-red-300' : 'border-gray-300'
             }`}
             required
@@ -266,7 +264,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             type="text"
             value={formData.lastName}
             onChange={(e) => handleInputChange('lastName', e.target.value)}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-500 ${
               errors.lastName ? 'border-red-300' : 'border-gray-300'
             }`}
             required
@@ -288,7 +286,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             type="email"
             value={formData.email}
             onChange={(e) => handleInputChange('email', e.target.value)}
-            className={`w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
+            className={`w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-500 ${
               errors.email ? 'border-red-300' : 'border-gray-300'
             }`}
             required
@@ -311,7 +309,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             value={formData.phone}
             onChange={(e) => handleInputChange('phone', e.target.value)}
             placeholder="+1 (555) 123-4567"
-            className={`w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
+            className={`w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-500 ${
               errors.phone ? 'border-red-300' : 'border-gray-300'
             }`}
           />
@@ -333,7 +331,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
               type={showPassword ? 'text' : 'password'}
               value={formData.password}
               onChange={(e) => handleInputChange('password', e.target.value)}
-              className={`w-full pl-10 pr-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
+              className={`w-full pl-10 pr-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-500 ${
                 errors.password ? 'border-red-300' : 'border-gray-300'
               }`}
               required
@@ -361,7 +359,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
               type={showConfirmPassword ? 'text' : 'password'}
               value={formData.confirmPassword}
               onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-              className={`w-full pl-10 pr-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
+              className={`w-full pl-10 pr-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-500 ${
                 errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
               }`}
               required
@@ -380,74 +378,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
         </div>
       </div>
 
-      {/* Company Information (only for company users) */}
-      {formData.userType === 'company' && (
-        <div className="border-t pt-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Company Information</h3>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Company Name *
-            </label>
-            <input
-              type="text"
-              value={formData.companyName}
-              onChange={(e) => handleInputChange('companyName', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
-                errors.companyName ? 'border-red-300' : 'border-gray-300'
-              }`}
-              required
-            />
-            {errors.companyName && (
-              <p className="text-sm text-red-600 mt-1">{errors.companyName}</p>
-            )}
-          </div>
-
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Company Website
-            </label>
-            <input
-              type="url"
-              value={formData.companyWebsite}
-              onChange={(e) => handleInputChange('companyWebsite', e.target.value)}
-              placeholder="https://company.com"
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
-                errors.companyWebsite ? 'border-red-300' : 'border-gray-300'
-              }`}
-            />
-            {errors.companyWebsite && (
-              <p className="text-sm text-red-600 mt-1">{errors.companyWebsite}</p>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Company Phone
-              </label>
-              <input
-                type="tel"
-                value={formData.companyPhone}
-                onChange={(e) => handleInputChange('companyPhone', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Company Address
-              </label>
-              <input
-                type="text"
-                value={formData.companyAddress}
-                onChange={(e) => handleInputChange('companyAddress', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-              />
-            </div>
-          </div>
-        </div>
-      )}
 
       <Button
         type="submit"
@@ -480,7 +410,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
           value={confirmationCode}
           onChange={(e) => setConfirmationCode(e.target.value)}
           placeholder="Enter 6-digit code"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-lg font-mono text-gray-900"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-lg font-mono bg-white text-gray-900 placeholder-gray-500"
           required
           maxLength={6}
         />
@@ -494,14 +424,25 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
         {isLoading ? 'Confirming...' : 'Confirm Account'}
       </Button>
 
-      <div className="text-center">
+      <div className="text-center space-y-2">
         <button
           type="button"
-          onClick={() => setStep('register')}
-          className="text-blue-600 hover:text-blue-800 text-sm"
+          onClick={handleResendCode}
+          disabled={isResending}
+          className="text-blue-600 hover:text-blue-800 text-sm disabled:text-gray-400"
         >
-          ← Back to registration
+          {isResending ? 'Resending...' : 'Resend confirmation code'}
         </button>
+        
+        <div>
+          <button
+            type="button"
+            onClick={() => setStep('register')}
+            className="text-gray-600 hover:text-gray-800 text-sm"
+          >
+            ← Back to registration
+          </button>
+        </div>
       </div>
     </form>
   );

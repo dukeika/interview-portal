@@ -6,9 +6,15 @@ export interface Job {
   department: string;
   location: string;
   type: string;
+  salary?: string;
+  description: string;
+  requirements: string[];
+  responsibilities: string[];
+  benefits?: string[];
   status: "active" | "paused" | "closed";
   applicationsCount: number;
   createdAt: string;
+  closingDate?: string;
 }
 
 export interface Application {

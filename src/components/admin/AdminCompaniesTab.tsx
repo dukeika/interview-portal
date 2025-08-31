@@ -4,6 +4,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import AddCompanyModal from "./AddCompanyModal";
+import CreateCompanyWithAdminModal, { CompanyWithAdminData } from "./CreateCompanyWithAdminModal";
+import { companyService } from "@/services/companyService";
+import { companyAdminService } from "@/services/companyAdminService";
 import {
   Plus,
   Search,
@@ -17,6 +20,11 @@ import {
   XCircle,
   AlertCircle,
   Building,
+  Trash2,
+  MapPin,
+  Globe,
+  Mail,
+  Phone,
 } from "lucide-react";
 import { Company } from "./types";
 
@@ -34,6 +42,11 @@ export default function AdminCompaniesTab({
     "all" | "active" | "inactive"
   >("all");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showCreateWithAdminModal, setShowCreateWithAdminModal] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const filteredCompanies = companies.filter((company) => {
     const matchesSearch =
@@ -49,13 +62,83 @@ export default function AdminCompaniesTab({
   const handleAddCompany = async (companyData: any) => {
     try {
       console.log("Creating company:", companyData);
-      // TODO: Implement actual company creation with GraphQL
-      // For now, just refresh the list
+      
+      // Create company using GraphQL service
+      const newCompany = await companyService.createCompany({
+        name: companyData.name,
+        email: companyData.email,
+        phone: companyData.phone || undefined,
+        website: companyData.website || undefined,
+        address: companyData.address || undefined,
+        description: companyData.description || undefined,
+        isActive: true // New companies are active by default
+      });
+      
+      console.log("✅ Company created successfully:", newCompany);
+      
+      // Refresh the companies list to show the new company
       if (onRefresh) {
         onRefresh();
       }
-    } catch (error) {
-      console.error("Error creating company:", error);
+    } catch (error: any) {
+      console.error("❌ Error creating company:", error);
+      console.error("❌ Error details:", JSON.stringify(error, null, 2));
+      if (error.errors && error.errors.length > 0) {
+        console.error("❌ GraphQL errors:", error.errors);
+        error.errors.forEach((gqlError: any, index: number) => {
+          console.error(`❌ GraphQL Error ${index + 1}:`, {
+            message: gqlError.message,
+            errorType: gqlError.errorType,
+            path: gqlError.path,
+            locations: gqlError.locations
+          });
+        });
+      }
+      throw error;
+    }
+  };
+
+  const handleCreateCompanyWithAdmin = async (data: CompanyWithAdminData) => {
+    try {
+      console.log("Creating company with admin:", data);
+      
+      const result = await companyAdminService.createCompanyWithAdmin(data);
+      
+      console.log("✅ Company and admin created successfully:", result);
+      
+      // Show success message with temporary password
+      const credentialsMessage = `✅ Company and admin created successfully!
+
+📧 Admin Email: ${data.admin.email}
+🔑 Temporary Password: ${result.tempPassword}
+🌐 Login URL: ${window.location.origin}/login
+
+⚠️  Important Notes:
+• The admin must change this password on first login
+• Please share these credentials securely with the admin
+• You can also check the server console for the full welcome email content
+
+💡 Tip: Copy this information before closing the alert!`;
+
+      // Copy to clipboard for easy sharing
+      try {
+        navigator.clipboard.writeText(`Admin Login Details:
+Email: ${data.admin.email}
+Password: ${result.tempPassword}
+Login URL: ${window.location.origin}/login`);
+        
+        alert(credentialsMessage + '\n\n✅ Credentials copied to clipboard!');
+      } catch (e) {
+        alert(credentialsMessage);
+      }
+      
+      // Refresh the companies list
+      if (onRefresh) {
+        onRefresh();
+      }
+    } catch (error: any) {
+      console.error("❌ Error creating company with admin:", error);
+      alert(`❌ Error creating company with admin: ${error.message}`);
       throw error;
     }
   };
@@ -78,11 +161,102 @@ export default function AdminCompaniesTab({
     }
   };
 
-  const handleToggleStatus = (companyId: string, currentStatus: boolean) => {
-    // TODO: Implement status toggle
-    console.log(
-      `Toggle company ${companyId} from ${currentStatus} to ${!currentStatus}`
-    );
+  const handleViewCompany = (company: Company) => {
+    setSelectedCompany(company);
+    setShowViewModal(true);
+  };
+
+  const handleEditCompany = (company: Company) => {
+    setSelectedCompany(company);
+    setShowEditModal(true);
+  };
+
+  const handleDeleteCompany = (company: Company) => {
+    setSelectedCompany(company);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleToggleStatus = async (companyId: string, currentStatus: boolean) => {
+    try {
+      console.log(`Toggling company ${companyId} from ${currentStatus} to ${!currentStatus}`);
+      
+      await companyService.updateCompany({
+        id: companyId,
+        isActive: !currentStatus
+      });
+      
+      console.log('✅ Company status updated successfully');
+      
+      // Refresh the companies list
+      if (onRefresh) {
+        onRefresh();
+      }
+    } catch (error: any) {
+      console.error('❌ Error updating company status:', error);
+      alert(`Error updating company status: ${error.message}`);
+    }
+  };
+
+  const confirmDeleteCompany = async () => {
+    if (!selectedCompany) return;
+    
+    try {
+      console.log(`Deleting company ${selectedCompany.id}`);
+      
+      // Check if company has any admins or jobs first
+      if (selectedCompany.adminCount > 0) {
+        alert(`Cannot delete company "${selectedCompany.name}" because it has ${selectedCompany.adminCount} admin(s). Please remove or reassign the admins first.`);
+        return;
+      }
+      
+      if (selectedCompany.jobCount > 0) {
+        alert(`Cannot delete company "${selectedCompany.name}" because it has ${selectedCompany.jobCount} job(s). Please delete the jobs first.`);
+        return;
+      }
+      
+      await companyService.deleteCompany(selectedCompany.id);
+      
+      console.log('✅ Company deleted successfully');
+      
+      // Close modal and refresh list
+      setShowDeleteConfirm(false);
+      setSelectedCompany(null);
+      
+      if (onRefresh) {
+        onRefresh();
+      }
+      
+      alert(`Company "${selectedCompany.name}" has been deleted successfully.`);
+    } catch (error: any) {
+      console.error('❌ Error deleting company:', error);
+      alert(`Error deleting company: ${error.message}`);
+    }
+  };
+
+  const handleEditSubmit = async (updatedData: any) => {
+    if (!selectedCompany) return;
+    
+    try {
+      console.log('Updating company:', updatedData);
+      
+      await companyService.updateCompany({
+        id: selectedCompany.id,
+        ...updatedData
+      });
+      
+      console.log('✅ Company updated successfully');
+      
+      // Close modal and refresh list
+      setShowEditModal(false);
+      setSelectedCompany(null);
+      
+      if (onRefresh) {
+        onRefresh();
+      }
+    } catch (error: any) {
+      console.error('❌ Error updating company:', error);
+      throw error;
+    }
   };
 
   return (
@@ -97,10 +271,16 @@ export default function AdminCompaniesTab({
             Manage registered companies and their settings
           </p>
         </div>
-        <Button onClick={() => setShowAddModal(true)}>
-          <Plus className="mr-2 h-4 w-4" />
-          Add Company
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => setShowAddModal(true)} variant="outline">
+            <Plus className="mr-2 h-4 w-4" />
+            Add Company Only
+          </Button>
+          <Button onClick={() => setShowCreateWithAdminModal(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Create Company & Admin
+          </Button>
+        </div>
       </div>
 
       {/* Filters and Search */}
@@ -114,7 +294,7 @@ export default function AdminCompaniesTab({
                 placeholder="Search companies..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400"
               />
             </div>
           </div>
@@ -122,7 +302,7 @@ export default function AdminCompaniesTab({
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -215,10 +395,20 @@ export default function AdminCompaniesTab({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center space-x-2">
-                      <Button variant="ghost" size="sm" title="View Details">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        title="View Details"
+                        onClick={() => handleViewCompany(company)}
+                      >
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" title="Edit Company">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        title="Edit Company"
+                        onClick={() => handleEditCompany(company)}
+                      >
                         <Edit className="h-4 w-4" />
                       </Button>
                       <Button
@@ -235,7 +425,12 @@ export default function AdminCompaniesTab({
                           <CheckCircle className="h-4 w-4 text-green-600" />
                         )}
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        title="Delete Company"
+                        onClick={() => handleDeleteCompany(company)}
+                      >
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </div>
@@ -322,6 +517,201 @@ export default function AdminCompaniesTab({
         onClose={() => setShowAddModal(false)}
         onSubmit={handleAddCompany}
       />
+
+      {/* Create Company with Admin Modal */}
+      <CreateCompanyWithAdminModal
+        isOpen={showCreateWithAdminModal}
+        onClose={() => setShowCreateWithAdminModal(false)}
+        onSubmit={handleCreateCompanyWithAdmin}
+      />
+
+      {/* View Company Details Modal */}
+      {showViewModal && selectedCompany && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-lg font-semibold text-gray-900">Company Details</h3>
+              <button
+                onClick={() => setShowViewModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="flex items-center space-x-4">
+                <div className="h-16 w-16 rounded-lg bg-blue-100 flex items-center justify-center">
+                  <Building className="h-8 w-8 text-blue-600" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-semibold text-gray-900">{selectedCompany.name}</h4>
+                  <div className="flex items-center mt-1">
+                    {selectedCompany.isActive ? (
+                      <span className="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                        <CheckCircle className="w-3 h-3 mr-1" />
+                        Active
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                        <XCircle className="w-3 h-3 mr-1" />
+                        Inactive
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h5 className="text-sm font-medium text-gray-900 mb-3">Contact Information</h5>
+                  <div className="space-y-2">
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Mail className="h-4 w-4 mr-2" />
+                      {selectedCompany.email}
+                    </div>
+                    {selectedCompany.phone && (
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Phone className="h-4 w-4 mr-2" />
+                        {selectedCompany.phone}
+                      </div>
+                    )}
+                    {selectedCompany.website && (
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Globe className="h-4 w-4 mr-2" />
+                        {selectedCompany.website}
+                      </div>
+                    )}
+                    {selectedCompany.address && (
+                      <div className="flex items-center text-sm text-gray-600">
+                        <MapPin className="h-4 w-4 mr-2" />
+                        {selectedCompany.address}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <h5 className="text-sm font-medium text-gray-900 mb-3">Statistics</h5>
+                  <div className="space-y-2">
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Users className="h-4 w-4 mr-2" />
+                      {selectedCompany.adminCount} Admins
+                    </div>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Briefcase className="h-4 w-4 mr-2" />
+                      {selectedCompany.jobCount} Jobs
+                    </div>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <AlertCircle className="h-4 w-4 mr-2" />
+                      {selectedCompany.applicationCount} Applications
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {selectedCompany.description && (
+                <div>
+                  <h5 className="text-sm font-medium text-gray-900 mb-2">Description</h5>
+                  <p className="text-sm text-gray-600">{selectedCompany.description}</p>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t text-sm text-gray-500">
+                <div>
+                  <span className="font-medium">Created:</span> {new Date(selectedCompany.createdAt).toLocaleDateString()}
+                </div>
+                <div>
+                  <span className="font-medium">Updated:</span> {new Date(selectedCompany.updatedAt).toLocaleDateString()}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-6 space-x-3">
+              <Button variant="outline" onClick={() => setShowViewModal(false)}>
+                Close
+              </Button>
+              <Button onClick={() => {
+                setShowViewModal(false);
+                handleEditCompany(selectedCompany);
+              }}>
+                Edit Company
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Company Modal */}
+      {showEditModal && selectedCompany && (
+        <AddCompanyModal
+          isOpen={showEditModal}
+          onClose={() => {
+            setShowEditModal(false);
+            setSelectedCompany(null);
+          }}
+          onSubmit={handleEditSubmit}
+          initialData={{
+            name: selectedCompany.name,
+            email: selectedCompany.email,
+            phone: selectedCompany.phone,
+            website: selectedCompany.website,
+            address: selectedCompany.address,
+            description: selectedCompany.description
+          }}
+          title="Edit Company"
+        />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && selectedCompany && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <div className="flex items-center mb-4">
+              <div className="flex-shrink-0">
+                <Trash2 className="h-6 w-6 text-red-600" />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-lg font-medium text-gray-900">Delete Company</h3>
+              </div>
+            </div>
+            
+            <div className="mb-6">
+              <p className="text-sm text-gray-600">
+                Are you sure you want to delete <strong>"{selectedCompany.name}"</strong>? 
+                This action cannot be undone.
+              </p>
+              
+              {(selectedCompany.adminCount > 0 || selectedCompany.jobCount > 0) && (
+                <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                  <p className="text-sm text-yellow-800">
+                    <strong>Warning:</strong> This company has {selectedCompany.adminCount} admin(s) 
+                    and {selectedCompany.jobCount} job(s). You must remove these first before deleting.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end space-x-3">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setShowDeleteConfirm(false);
+                  setSelectedCompany(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button 
+                className="bg-red-600 hover:bg-red-700 text-white"
+                onClick={confirmDeleteCompany}
+              >
+                Delete Company
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,12 +1,33 @@
 // src/components/company/DashboardHeader.tsx
 "use client";
 
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Plus, Brain, Heart, LogOut } from "lucide-react";
+import CompanySelector from "./CompanySelector";
 
-export default function DashboardHeader() {
+interface Company {
+  id: string;
+  name: string;
+  email: string;
+  isActive: boolean;
+}
+
+interface DashboardHeaderProps {
+  selectedCompanyId?: string;
+  onCompanyChange?: (companyId: string, company: Company) => void;
+}
+
+export default function DashboardHeader({ 
+  selectedCompanyId, 
+  onCompanyChange 
+}: DashboardHeaderProps) {
   const { user, signOut } = useAuth();
+  
+  const handleCompanyChange = (companyId: string, company: Company) => {
+    onCompanyChange?.(companyId, company);
+  };
 
   return (
     <div className="bg-white shadow-sm border-b border-abhh-teal-100">
@@ -27,6 +48,15 @@ export default function DashboardHeader() {
                 </h1>
                 <p className="text-xs text-abhh-teal-500">Company Dashboard</p>
               </div>
+            </div>
+            
+            {/* Company Selector */}
+            <div className="ml-8">
+              <CompanySelector
+                selectedCompanyId={selectedCompanyId}
+                onCompanyChange={handleCompanyChange}
+                className="border-l border-abhh-teal-200 pl-4"
+              />
             </div>
           </div>
 

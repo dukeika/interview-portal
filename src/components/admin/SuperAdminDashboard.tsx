@@ -3,13 +3,14 @@
 
 import { useState } from "react";
 import { useAdminDataReal } from "@/hooks/useAdminDataReal";
-import { usePendingUsers } from "@/hooks/usePendingUsers";
 import AdminDashboardHeader from "@/components/admin/AdminDashboardHeader";
 import AdminDashboardNavigation from "@/components/admin/AdminDashboardNavigation";
 import AdminOverviewTab from "@/components/admin/AdminOverviewTab";
 import AdminCompaniesTab from "@/components/admin/AdminCompaniesTab";
 import AdminUsersTab from "@/components/admin/AdminUsersTab";
-import PendingUsersTab from "@/components/admin/PendingUsersTab";
+import JobsTab from "@/components/admin/JobsTab";
+import EnhancedApplicationsTab from "@/components/admin/EnhancedApplicationsTab";
+import NotificationSystem, { Notification } from "@/components/shared/NotificationSystem";
 import PlatformReportsTab from "@/components/admin/PlatformReportsTab";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
 import NotificationsSettingsTab from "@/components/admin/NotificationsSettingsTab";
@@ -18,6 +19,7 @@ import { AdminTabType } from "@/components/admin/types";
 
 export default function SuperAdminDashboard() {
   const [activeTab, setActiveTab] = useState<AdminTabType>("overview");
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   
   const handleTabChange = (tab: AdminTabType) => {
     console.log(`🔄 handleTabChange called - Switching from ${activeTab} to ${tab}`);
@@ -27,16 +29,31 @@ export default function SuperAdminDashboard() {
   const { companies, companyAdmins, platformStats, recentActivity, loading, refreshData } =
     useAdminDataReal();
   
-  const { 
-    pendingUsers, 
-    loading: pendingUsersLoading, 
-    error: pendingUsersError,
-    approvalStats,
-    refreshPendingUsers,
-    approveUser,
-    rejectUser,
-    bulkApproveUsers
-  } = usePendingUsers();
+
+  const handleMarkNotificationRead = (notificationId: string) => {
+    setNotifications(prev => 
+      prev.map(n => n.id === notificationId ? { ...n, read: true } : n)
+    );
+  };
+
+  const handleMarkAllNotificationsRead = () => {
+    setNotifications(prev => 
+      prev.map(n => ({ ...n, read: true }))
+    );
+  };
+
+  const handleDeleteNotification = (notificationId: string) => {
+    setNotifications(prev => 
+      prev.filter(n => n.id !== notificationId)
+    );
+  };
+
+  const handleNotificationAction = (notification: Notification) => {
+    // Navigate to relevant application review section
+    if (notification.applicationId) {
+      setActiveTab("applications");
+    }
+  };
 
   if (loading) {
     return (
@@ -73,28 +90,23 @@ export default function SuperAdminDashboard() {
             onRefresh={refreshData}
           />
         );
-      case "pending":
+      case "jobs":
+        return <JobsTab onRefresh={refreshData} />;
+      case "applications":
+        return <EnhancedApplicationsTab onRefresh={refreshData} />;
+      case "tests":
         return (
-          <PendingUsersTab 
-            pendingUsers={pendingUsers.map(user => ({
-              id: user.id,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email,
-              phone: user.phone,
-              role: user.role,
-              companyName: user.companyName,
-              companyEmail: user.companyEmail,
-              companyWebsite: user.companyWebsite,
-              registeredAt: user.registeredAt,
-              verificationStatus: user.verificationStatus,
-              documents: user.documents
-            }))}
-            onRefresh={refreshPendingUsers}
-            loading={pendingUsersLoading}
-            onApproveUser={approveUser}
-            onRejectUser={rejectUser}
-          />
+          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Written Tests Management</h2>
+            <p className="text-gray-600">Coming soon - Create and manage written tests for Stage 2</p>
+          </div>
+        );
+      case "interviews":
+        return (
+          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Interview Management</h2>
+            <p className="text-gray-600">Coming soon - Schedule and manage video interviews for Stage 4</p>
+          </div>
         );
       case "reports":
         return <PlatformReportsTab />;
@@ -116,7 +128,19 @@ export default function SuperAdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-abhh-teal-50 to-white">
-      <AdminDashboardHeader onNavigateToTab={handleTabChange} />
+      <div className="relative">
+        <AdminDashboardHeader onNavigateToTab={handleTabChange} />
+        <div className="absolute top-4 right-8 z-50">
+          <NotificationSystem
+            notifications={notifications}
+            onMarkAsRead={handleMarkNotificationRead}
+            onMarkAllAsRead={handleMarkAllNotificationsRead}
+            onDeleteNotification={handleDeleteNotification}
+            onActionClick={handleNotificationAction}
+            userRole="super_admin"
+          />
+        </div>
+      </div>
       <AdminDashboardNavigation
         activeTab={activeTab}
         setActiveTab={handleTabChange}

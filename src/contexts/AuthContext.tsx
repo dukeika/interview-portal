@@ -4,7 +4,6 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { userService } from "@/services/userService";
 import { UserRole, ApprovalStatus } from "@/API";
-import { setMockMode, clearMockMode } from "@/lib/mockServices";
 
 interface AuthContextType {
   user: any | null;
@@ -45,12 +44,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        // Skip demo mode - we want to use real authentication now
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('demo_user');
-        }
-
-        // Try to initialize real Amplify
+        // Initialize real Amplify authentication
         const amplifyConfig = await import("@/lib/amplify-config");
         const isRealAmplify = amplifyConfig.configureAmplify();
         setAmplifyReady(isRealAmplify);
@@ -58,12 +52,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         if (isRealAmplify) {
           await checkUser();
         } else {
-          // Use mock mode
-          console.log("Running in mock authentication mode");
+          console.warn("Amplify configuration failed - check AWS configuration");
           setLoading(false);
         }
       } catch (error) {
-        console.warn("Failed to initialize auth, using mock mode:", error);
+        console.error("Failed to initialize authentication:", error);
         setAmplifyReady(false);
         setLoading(false);
       }
@@ -81,7 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       console.log("✅ Current user found:", currentUser);
 
-      // Try to get user role from attributes first, then fall back to email pattern
+      // Try to get user role from Cognito groups first, then attributes, then database, then email pattern
       let role: "super_admin" | "company_admin" | "candidate" | null = null;
       let attributes: any = {};
       
@@ -89,34 +82,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         attributes = await amplifyAuth.fetchUserAttributes();
         console.log("📋 User attributes:", attributes);
         
-        // Check for custom role attribute first
-        const roleAttribute = attributes["custom:role"];
-        if (roleAttribute) {
-          role = roleAttribute as "super_admin" | "company_admin" | "candidate";
+        // Check Cognito groups first (most reliable)
+        try {
+          const session = await amplifyAuth.fetchAuthSession();
+          const groups = (session as any)?.tokens?.accessToken?.payload?.["cognito:groups"] || [];
+          console.log("🔍 User groups from JWT:", groups);
+          
+          if (groups.includes('SuperAdmins')) {
+            role = 'super_admin';
+          } else if (groups.includes('CompanyAdmins')) {
+            role = 'company_admin';
+          } else if (groups.includes('Candidates')) {
+            role = 'candidate';
+          }
+        } catch (groupError) {
+          console.log("ℹ️ Could not get groups from JWT, continuing with other methods");
         }
-
-        // If no custom role, check Cognito groups
+        
+        // If no role from groups, check custom role attribute
         if (!role) {
-          try {
-            const amplifyAuth = await import('aws-amplify/auth');
-            const cognitoUser = await amplifyAuth.getCurrentUser();
-            const session = await amplifyAuth.fetchAuthSession();
-            
-            // Check groups from the JWT token
-            const groups = (session as any)?.tokens?.accessToken?.payload?.["cognito:groups"] || [];
-            console.log("🔍 User groups from JWT:", groups);
-            
-            if (groups.includes("super_admin")) {
-              role = "super_admin";
-            } else if (groups.includes("company_admin")) {
-              role = "company_admin";
-            } else if (groups.includes("candidate")) {
-              role = "candidate";
-            }
-          } catch (groupError) {
-            console.warn("⚠️ Could not fetch user groups:", groupError);
+          const roleAttribute = attributes["custom:role"];
+          if (roleAttribute) {
+            role = roleAttribute as "super_admin" | "company_admin" | "candidate";
           }
         }
+
+        // If still no role, check database record
+        if (!role) {
+          try {
+            const { userService } = await import('@/services/userService');
+            const userRecord = await userService.getUserBySub(currentUser.userId || currentUser.username);
+            
+            if (userRecord?.role) {
+              console.log("🔍 Role from database:", userRecord.role);
+              switch (userRecord.role) {
+                case 'SUPER_ADMIN':
+                  role = 'super_admin';
+                  break;
+                case 'COMPANY_ADMIN':
+                  role = 'company_admin';
+                  break;
+                case 'CANDIDATE':
+                  role = 'candidate';
+                  break;
+              }
+            }
+          } catch (dbError) {
+            console.log("ℹ️ Could not get role from database, continuing with email pattern");
+          }
+        }
+
+        
       } catch (attrError) {
         console.log("⚠️ Could not fetch user attributes:", attrError);
       }
@@ -139,10 +155,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setUserRoleState(role);
       console.log(`👤 User role set to: ${role}`);
 
-      // Ensure user record exists in our database (skip for demo mode)
-      if (!currentUser?.userId?.startsWith('demo-')) {
-        await ensureUserRecord(currentUser, role);
-      }
+      // Ensure user record exists in our database
+      await ensureUserRecord(currentUser, role);
 
       // Auto-redirect based on role if on home page or login page
       if (typeof window !== "undefined") {
@@ -151,7 +165,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         
         if (currentPath === "/" || currentPath === "/login") {
           console.log(`🎯 Redirecting user with role ${role}`);
-          redirectByRole(role);
+          await redirectByRole(role);
         }
       }
     } catch (error) {
@@ -193,7 +207,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
                 role === 'company_admin' ? UserRole.COMPANY_ADMIN :
                 UserRole.CANDIDATE,
           isActive: true,
-          approvalStatus: role === 'super_admin' ? ApprovalStatus.APPROVED : ApprovalStatus.PENDING
+          approvalStatus: ApprovalStatus.APPROVED // All users are now auto-approved
         });
 
         console.log("✅ User record created:", newUser);
@@ -206,7 +220,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const redirectByRole = (
+  const redirectByRole = async (
     role: "super_admin" | "company_admin" | "candidate" | null
   ) => {
     console.log(`🚀 Redirecting based on role: ${role}`);
@@ -217,8 +231,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         router.push("/admin/dashboard");
         break;
       case "company_admin":
-        console.log("📍 Redirecting to company dashboard");
-        router.push("/company/dashboard");
+        // Check if this is a first-time login (needs setup)
+        try {
+          const userRecord = await userService.getUserBySub(user.userId);
+          const isFirstLogin = !userRecord?.lastLoginAt || userRecord.lastLoginAt === null;
+          
+          if (isFirstLogin) {
+            console.log("📍 First-time company admin login - redirecting to setup");
+            router.push("/company/setup");
+          } else {
+            console.log("📍 Redirecting to company dashboard");
+            router.push("/company/dashboard");
+          }
+        } catch (error) {
+          console.error("Error checking first login status:", error);
+          // Fallback to dashboard
+          console.log("📍 Redirecting to company dashboard (fallback)");
+          router.push("/company/dashboard");
+        }
         break;
       case "candidate":
         console.log("📍 Redirecting to candidate dashboard");
@@ -233,56 +263,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const handleSignIn = async (email: string, password: string) => {
     console.log("🔐 Attempting authentication for:", email);
 
-    // Check if this is a demo account first
-    const isDemoAccount = [
-      'admin@abhh.demo',
-      'company@techcorp.demo', 
-      'candidate@demo.com'
-    ].includes(email);
-
-    if (isDemoAccount) {
-      console.log("🎭 Demo account detected, using mock authentication");
-      
-      // Simulate authentication delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Create mock user object
-      const mockUser = {
-        username: email,
-        userId: `demo-${Date.now()}`,
-        attributes: {
-          email: email,
-          given_name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
-          family_name: 'Demo'
-        },
-      };
-
-      setUser(mockUser);
-
-      // Set role based on demo email pattern
-      let role: "super_admin" | "company_admin" | "candidate" = "candidate";
-      if (email === 'admin@abhh.demo') {
-        role = "super_admin";
-      } else if (email === 'company@techcorp.demo') {
-        role = "company_admin";
-      } else if (email === 'candidate@demo.com') {
-        role = "candidate";
-      }
-
-      console.log(`👤 Demo user role assigned: ${role}`);
-      setUserRoleState(role);
-      
-      // Set mock mode in localStorage for services to detect
-      setMockMode(mockUser);
-      
-      redirectByRole(role);
-
-      return { isSignedIn: true, user: mockUser };
+    if (!amplifyReady) {
+      throw new Error("Authentication service not available - check AWS configuration");
     }
 
-    // For non-demo accounts, try real Cognito authentication
     try {
-      console.log("☁️ Attempting real Cognito authentication");
+      console.log("☁️ Attempting Cognito authentication");
       const amplifyAuth = await import('aws-amplify/auth');
       
       // Check if there's already a signed-in user and sign them out first
@@ -310,7 +296,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       
     } catch (error) {
       console.error('❌ Amplify sign in error:', error);
-      throw error; // Don't fall back for non-demo accounts
+      throw error;
     }
   };
 
@@ -320,29 +306,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     attributes = {}
   ) => {
     console.log("🔐 Attempting user registration for:", email);
-    if (amplifyReady) {
-      try {
-        const amplifyAuth = await import("aws-amplify/auth");
-        const result = await amplifyAuth.signUp({
-          username: email,
-          password,
-          options: {
-            userAttributes: {
-              email,
-              "custom:role": "candidate",
-              ...attributes,
-            },
+    
+    if (!amplifyReady) {
+      throw new Error("Authentication service not available - check AWS configuration");
+    }
+
+    try {
+      const amplifyAuth = await import("aws-amplify/auth");
+      const result = await amplifyAuth.signUp({
+        username: email,
+        password,
+        options: {
+          userAttributes: {
+            email,
+            "custom:role": "candidate",
+            ...attributes,
           },
-        });
-        return result;
-      } catch (error) {
-        console.error("Amplify sign up error:", error);
-        throw error;
-      }
-    } else {
-      // Mock sign up
-      console.log("Mock sign up:", email);
-      return { isSignUpComplete: false, userId: "mock-user-id" };
+        },
+      });
+      return result;
+    } catch (error) {
+      console.error("Amplify sign up error:", error);
+      throw error;
     }
   };
 
@@ -358,65 +343,63 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     setUser(null);
     setUserRoleState(null);
-    clearMockMode(); // Clear mock mode on sign out
     router.push("/login");
   };
 
   const handleConfirmSignUp = async (email: string, code: string) => {
-    if (amplifyReady) {
-      try {
-        const amplifyAuth = await import("aws-amplify/auth");
-        const result = await amplifyAuth.confirmSignUp({
-          username: email,
-          confirmationCode: code,
-        });
-        return result;
-      } catch (error) {
-        console.error("Amplify confirm sign up error:", error);
-        throw error;
-      }
-    } else {
-      console.log("Mock confirm sign up:", email, code);
-      return { isSignUpComplete: true };
+    if (!amplifyReady) {
+      throw new Error("Authentication service not available - check AWS configuration");
+    }
+
+    try {
+      const amplifyAuth = await import("aws-amplify/auth");
+      const result = await amplifyAuth.confirmSignUp({
+        username: email,
+        confirmationCode: code,
+      });
+      return result;
+    } catch (error) {
+      console.error("Amplify confirm sign up error:", error);
+      throw error;
     }
   };
 
   const handleResendConfirmation = async (email: string) => {
-    if (amplifyReady) {
-      try {
-        const amplifyAuth = await import("aws-amplify/auth");
-        const result = await amplifyAuth.resendSignUpCode({
-          username: email,
-        });
-        return result;
-      } catch (error) {
-        console.error("Amplify resend confirmation error:", error);
-        throw error;
-      }
-    } else {
-      console.log("Mock resend confirmation:", email);
-      return { deliveryMedium: "EMAIL" };
+    if (!amplifyReady) {
+      throw new Error("Authentication service not available - check AWS configuration");
+    }
+
+    try {
+      const amplifyAuth = await import("aws-amplify/auth");
+      const result = await amplifyAuth.resendSignUpCode({
+        username: email,
+      });
+      return result;
+    } catch (error) {
+      console.error("Amplify resend confirmation error:", error);
+      throw error;
     }
   };
 
   const setUserRole = async (
     role: "super_admin" | "company_admin" | "candidate"
   ) => {
-    if (amplifyReady) {
-      try {
-        const amplifyAuth = await import("aws-amplify/auth");
-        await amplifyAuth.updateUserAttributes({
-          userAttributes: {
-            "custom:role": role,
-          },
-        });
-      } catch (error) {
-        console.error("Amplify update user attributes error:", error);
-        throw error;
-      }
+    if (!amplifyReady) {
+      throw new Error("Authentication service not available - check AWS configuration");
     }
 
-    setUserRoleState(role);
+    try {
+      const amplifyAuth = await import("aws-amplify/auth");
+      await amplifyAuth.updateUserAttributes({
+        userAttributes: {
+          "custom:role": role,
+        },
+      });
+      setUserRoleState(role);
+    } catch (error) {
+      console.error("Amplify update user attributes error:", error);
+      throw error;
+    }
   };
 
   const value: AuthContextType = {

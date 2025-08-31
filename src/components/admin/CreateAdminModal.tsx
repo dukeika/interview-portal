@@ -11,6 +11,8 @@ interface CreateAdminModalProps {
   onClose: () => void;
   onSubmit: (adminData: AdminFormData) => Promise<void>;
   companies: Company[];
+  initialData?: Partial<AdminFormData>;
+  title?: string;
 }
 
 interface AdminFormData {
@@ -27,14 +29,16 @@ export default function CreateAdminModal({
   onClose,
   onSubmit,
   companies,
+  initialData,
+  title = "Create Company Admin",
 }: CreateAdminModalProps) {
   const [formData, setFormData] = useState<AdminFormData>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    companyId: "",
-    temporaryPassword: generateTemporaryPassword(),
+    firstName: initialData?.firstName || "",
+    lastName: initialData?.lastName || "",
+    email: initialData?.email || "",
+    phone: initialData?.phone || "",
+    companyId: initialData?.companyId || "",
+    temporaryPassword: initialData?.temporaryPassword || generateTemporaryPassword(),
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<AdminFormData>>({});
@@ -159,7 +163,7 @@ export default function CreateAdminModal({
             <div className="flex items-center">
               <UserPlus className="w-6 h-6 text-blue-600 mr-3" />
               <h3 className="text-lg font-semibold text-gray-900">
-                Create Company Administrator
+                {title}
               </h3>
             </div>
             <button
@@ -184,7 +188,7 @@ export default function CreateAdminModal({
                     type="text"
                     value={formData.firstName}
                     onChange={(e) => handleInputChange("firstName", e.target.value)}
-                    className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                    className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 ${
                       errors.firstName ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="Enter first name"
@@ -205,7 +209,7 @@ export default function CreateAdminModal({
                     type="text"
                     value={formData.lastName}
                     onChange={(e) => handleInputChange("lastName", e.target.value)}
-                    className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                    className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 ${
                       errors.lastName ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="Enter last name"
@@ -228,7 +232,7 @@ export default function CreateAdminModal({
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                  className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 ${
                     errors.email ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Enter email address"
@@ -250,7 +254,7 @@ export default function CreateAdminModal({
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => handleInputChange("phone", e.target.value)}
-                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400"
                   placeholder="Enter phone number"
                 />
               </div>
@@ -266,7 +270,7 @@ export default function CreateAdminModal({
                 <select
                   value={formData.companyId}
                   onChange={(e) => handleInputChange("companyId", e.target.value)}
-                  className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                  className={`pl-10 pr-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 ${
                     errors.companyId ? 'border-red-500' : 'border-gray-300'
                   }`}
                 >
@@ -301,7 +305,7 @@ export default function CreateAdminModal({
                   type={showPassword ? "text" : "password"}
                   value={formData.temporaryPassword}
                   onChange={(e) => handleInputChange("temporaryPassword", e.target.value)}
-                  className={`pr-20 pl-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                  className={`pr-20 pl-4 py-3 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 ${
                     errors.temporaryPassword ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="Temporary password"
@@ -335,18 +339,24 @@ export default function CreateAdminModal({
             </div>
 
             {/* Info Box */}
-            <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
               <div className="flex">
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-yellow-800">
-                    Important Information
+                  <h3 className="text-sm font-medium text-blue-800">
+                    Admin Setup Process
                   </h3>
-                  <div className="mt-2 text-sm text-yellow-700">
+                  <div className="mt-2 text-sm text-blue-700">
                     <ul className="list-disc list-inside space-y-1">
-                      <li>The admin will receive an email with their login credentials</li>
-                      <li>They must change their password on first login</li>
-                      <li>They will have full access to their company's data</li>
+                      <li>The admin will receive a <strong>welcome email</strong> with their temporary password</li>
+                      <li>They can log in immediately at your application login page</li>
+                      <li>They will be prompted to <strong>create a new password</strong> on first login</li>
+                      <li>After setting up their password, they'll have full access to their company's data</li>
+                      <li>No email verification required - they can start working right away!</li>
                     </ul>
+                  </div>
+                  <div className="mt-3 p-2 bg-white border border-blue-300 rounded text-xs">
+                    <strong>Login URL:</strong><br />
+                    <code className="text-blue-800">{window.location.origin}/login</code>
                   </div>
                 </div>
               </div>

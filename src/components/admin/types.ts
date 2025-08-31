@@ -57,30 +57,15 @@ export interface ActivityLog {
   metadata?: Record<string, any>;
 }
 
-export interface PendingUser {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string;
-  role: UserRole;
-  companyName?: string;
-  companyEmail?: string;
-  companyWebsite?: string;
-  registeredAt: string;
-  verificationStatus: "PENDING" | "EMAIL_VERIFIED";
-  documents?: {
-    businessLicense?: string;
-    taxId?: string;
-    incorporation?: string;
-  };
-}
 
 export type AdminTabType =
   | "overview"
   | "companies"
   | "users"
-  | "pending"
+  | "jobs"
+  | "applications"
+  | "tests"
+  | "interviews"
   | "reports"
   | "analytics"
   | "notifications"
