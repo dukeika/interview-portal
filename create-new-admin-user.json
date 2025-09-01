@@ -1,0 +1,41 @@
+{
+  "TableName": "ProRecruit-User-prod",
+  "Item": {
+    "id": {
+      "S": "admin-f6924264-b061-70b1-20d0-95cfda7faeaf"
+    },
+    "sub": {
+      "S": "366242c4-f0c1-70bd-7dce-ce720a8e88ba"
+    },
+    "email": {
+      "S": "admin@prorecruit.ng"
+    },
+    "firstName": {
+      "S": "Akabom"
+    },
+    "lastName": {
+      "S": "Kadana"
+    },
+    "phone": {
+      "S": "+2347061106212"
+    },
+    "role": {
+      "S": "SUPER_ADMIN"
+    },
+    "isActive": {
+      "BOOL": true
+    },
+    "approvalStatus": {
+      "S": "APPROVED"
+    },
+    "createdAt": {
+      "S": "2025-09-01T08:13:58.529Z"
+    },
+    "updatedAt": {
+      "S": "2025-09-01T08:13:58.529Z"
+    },
+    "__typename": {
+      "S": "User"
+    }
+  }
+}
