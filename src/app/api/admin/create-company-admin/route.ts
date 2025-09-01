@@ -34,8 +34,8 @@ const client = generateClient();
 // Server-side configuration using process.env (not NEXT_PUBLIC_)
 const COGNITO_USER_POOL_ID = process.env.NEXT_PUBLIC_AWS_USER_POOLS_ID;
 const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION || 'us-east-1';
-const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
-const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
+const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID || process.env.PRORECRUIT_ACCESS_KEY_ID;
+const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY || process.env.PRORECRUIT_SECRET_ACCESS_KEY;
 const APPSYNC_API_KEY = process.env.NEXT_PUBLIC_AWS_APPSYNC_API_KEY;
 
 // Lazy initialization function for Cognito client (only when needed)
