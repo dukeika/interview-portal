@@ -1,8 +1,8 @@
-# ABHH Interview Management Platform - Stage-Based Candidate Flow System
+# ProRecruit - Professional Recruitment Platform
 
 ## **PROJECT OVERVIEW**
 
-The ABHH Interview Management Platform is a comprehensive multi-tenant SaaS solution implementing a complete 4-stage candidate evaluation process with admin oversight at each stage. The system now features **seamless stage-based workflows** where company admins must approve progression between stages, providing full control over the hiring process.
+ProRecruit is a comprehensive multi-tenant SaaS solution implementing a complete 4-stage candidate evaluation process with admin oversight at each stage. The system features **seamless stage-based workflows** where company admins can control progression between stages, providing full control over the hiring process.
 
 ## **🚀 MAJOR UPDATE: Complete Candidate Flow System**
 

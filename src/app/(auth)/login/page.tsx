@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Brain, Heart } from "lucide-react";
+import { Users, Briefcase } from "lucide-react";
 
 export default function LoginPage() {
   const { signIn, amplifyReady } = useAuth();
@@ -135,23 +135,20 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-abhh-teal-50 to-white">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-abhh-lg border border-abhh-teal-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-xl border border-gray-200">
         {/* Logo and Brand */}
         <div className="text-center">
-          <div className="mx-auto w-16 h-16 bg-abhh-yellow-500 rounded-xl flex items-center justify-center mb-4 shadow-abhh">
+          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
             <div className="flex items-center space-x-1">
-              <Brain className="h-6 w-6 text-abhh-teal-600" />
-              <Heart className="h-4 w-4 text-abhh-teal-600" />
+              <Users className="h-6 w-6 text-white" />
+              <Briefcase className="h-5 w-5 text-white" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-abhh-teal-600 mb-2">
-            APPLIED BEHAVIORAL
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            ProRecruit
           </h1>
-          <h2 className="text-xl font-bold text-abhh-teal-600 mb-4">
-            HOLISTIC HEALTH
-          </h2>
-          <p className="text-abhh-teal-500">Interview Management Platform</p>
+          <p className="text-gray-600">Professional Recruitment Platform</p>
         </div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>

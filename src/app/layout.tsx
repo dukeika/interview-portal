@@ -8,8 +8,8 @@ import "@/lib/amplify-client"; // Initialize Amplify
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Interview Management Platform",
-  description: "Comprehensive interview management SaaS platform",
+  title: "ProRecruit - Professional Recruitment Platform",
+  description: "Streamline your hiring process with ProRecruit's comprehensive recruitment and interview management platform",
 };
 
 export default function RootLayout({
